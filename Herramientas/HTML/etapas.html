@@ -20,7 +20,7 @@
     <!-- Canvas de estrellas (encima del fondo) -->
     <canvas id="etapasCanvas" aria-hidden="true"></canvas>
 
-    <!-- ===== CONTROLES FLOTANTES ARRIBA (igual que index.html) ===== -->
+    <!-- ===== CONTROLES FLOTANTES ARRIBA ===== -->
     <div class="top-controls" role="toolbar" aria-label="Controles de vista">
         <a href="taller-presentacion.html" class="ctrl-btn" aria-label="Volver a la presentación">
             <i data-lucide="arrow-left" class="icon-lucide-sm" aria-hidden="true"></i>
@@ -35,13 +35,13 @@
     </div>
 
     <!-- ============================================================
-         OVERLAY DE GUÍA INTERACTIVA (FOCO CON AGUJERO REAL)
+         OVERLAY DE GUÍA INTERACTIVA
          ============================================================ -->
     <div class="guide-overlay" id="guideOverlay" aria-hidden="true">
         <div class="guide-spotlight" id="guideSpotlight" aria-hidden="true"></div>
         <div class="guide-tooltip" id="guideTooltip" role="dialog" aria-modal="true" aria-labelledby="guideText">
             <div class="guide-tooltip-header">
-                <span class="guide-step" id="guideStep">1/4</span>
+                <span class="guide-step" id="guideStep">1/3</span>
                 <button class="guide-close" id="guideClose" aria-label="Cerrar guía">
                     <i data-lucide="x" class="icon-lucide-sm" aria-hidden="true"></i>
                 </button>
@@ -62,7 +62,7 @@
 
     <div class="page-wrapper">
         <div class="container" id="mainContent" role="main">
-            <!-- HEADER (sin toggle, solo título y volver) -->
+            <!-- HEADER -->
             <header class="header" role="banner">
                 <div class="header-content">
                     <div class="header-left">
@@ -91,7 +91,6 @@
 
             <!-- ETAPAS -->
             <section class="etapas-grid" aria-label="Selección de etapas del taller">
-                <!-- Etapa 1: Campus Virtual -->
                 <button class="etapa-card" data-etapa="campus" data-color="#FF6B1A" data-name="Campus Virtual" data-target="campus.html" style="--link-color: #FF6B1A;">
                     <div class="etapa-number" aria-hidden="true">01</div>
                     <div class="etapa-icon" aria-hidden="true">
@@ -105,7 +104,6 @@
                     </div>
                 </button>
 
-                <!-- Etapa 2: Herramientas Digitales -->
                 <button class="etapa-card" data-etapa="herramientas" data-color="#0056B3" data-name="Herramientas Digitales" data-target="herramientas.html" style="--link-color: #0056B3;">
                     <div class="etapa-number" aria-hidden="true">02</div>
                     <div class="etapa-icon" aria-hidden="true">
@@ -119,7 +117,6 @@
                     </div>
                 </button>
 
-                <!-- Etapa 3: Inteligencia Artificial -->
                 <button class="etapa-card" data-etapa="ia" data-color="#a855f7" data-name="Inteligencia Artificial" data-target="ia.html" style="--link-color: #a855f7;">
                     <div class="etapa-number" aria-hidden="true">03</div>
                     <div class="etapa-icon" aria-hidden="true">
