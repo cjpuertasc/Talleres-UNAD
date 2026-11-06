@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menú · Talleres</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <a href="#mainContainer" class="skip-link" aria-label="Saltar al contenido principal">Saltar al contenido</a>
+
+    <canvas id="starfieldCanvas" aria-hidden="true"></canvas>
+
+    <!-- ============================================================
+         CONTROLES SUPERIORES DERECHOS (FUERA DEL HEADER)
+         ============================================================ -->
+    <div class="top-controls" role="toolbar" aria-label="Controles de vista">
+        <button class="ctrl-btn" id="guideToggle" aria-label="Activar guía interactiva de accesibilidad" aria-pressed="false">
+            <i data-lucide="help-circle" class="icon-lucide-sm" aria-hidden="true"></i>
+        </button>
+        <button class="ctrl-btn" id="themeToggle" aria-label="Cambiar tema (oscuro/claro)" aria-pressed="true">
+            <i data-lucide="moon" class="ctrl-icon-moon icon-lucide-sm" aria-hidden="true"></i>
+            <i data-lucide="sun" class="ctrl-icon-sun icon-lucide-sm" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <!-- ============================================================
+         OVERLAY DE GUÍA INTERACTIVA (FOCO CON AGUJERO REAL)
+         ============================================================ -->
+    <div class="guide-overlay" id="guideOverlay" aria-hidden="true">
+        <div class="guide-spotlight" id="guideSpotlight" aria-hidden="true"></div>
+        <div class="guide-tooltip" id="guideTooltip" role="dialog" aria-modal="true" aria-labelledby="guideText">
+            <div class="guide-tooltip-header">
+                <span class="guide-step" id="guideStep">1/4</span>
+                <button class="guide-close" id="guideClose" aria-label="Cerrar guía">
+                    <i data-lucide="x" class="icon-lucide-sm" aria-hidden="true"></i>
+                </button>
+            </div>
+            <p class="guide-text" id="guideText">Texto de la guía</p>
+            <div class="guide-actions">
+                <button class="guide-btn guide-btn-prev" id="guidePrev" aria-label="Paso anterior" disabled>
+                    <i data-lucide="chevron-left" class="icon-lucide-sm" aria-hidden="true"></i>
+                    <span>Anterior</span>
+                </button>
+                <button class="guide-btn guide-btn-next" id="guideNext" aria-label="Siguiente paso">
+                    <span>Siguiente</span>
+                    <i data-lucide="chevron-right" class="icon-lucide-sm" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="container" id="mainContainer" role="main">
+            <!-- ===== HEADER CON CLIP-PATH WAVE ===== -->
+            <header class="header" role="banner">
+                <div class="header-content">
+                    <div class="header-left">
+                        <span class="logo-icon" aria-hidden="true">
+                            <i data-lucide="book-open" class="icon-lucide"></i>
+                        </span>
+                        <h1>Menú Talleres</h1>
+                    </div>
+                </div>
+                <div class="header-waves" aria-hidden="true">
+                    <div class="wave-layer wave-yellow"></div>
+                    <div class="wave-layer wave-orange"></div>
+                    <div class="wave-layer wave-blue"></div>
+                </div>
+            </header>
+
+            <!-- ===== LISTA DE TALLERES ===== -->
+            <nav class="lista-talleres" role="navigation" aria-label="Lista de talleres disponibles">
+                <ul class="lista-talleres-ul">
+                    <li>
+                        <button class="taller-link active" data-target="Herramientas/HTML/taller-presentacion.html" data-color="#0056B3" role="button" aria-label="Abrir descripción del Taller Herramientas Digitales">
+                            <span class="link-content">
+                                <span class="link-icon" aria-hidden="true">
+                                    <i data-lucide="wrench" class="icon-lucide-lg"></i>
+                                </span>
+                                <span class="link-info">
+                                    <span class="link-title">Taller Herramientas Digitales</span>
+                                    <span class="link-desc">Ofimática · Almacenamiento · Diseño · Organización · IA</span>
+                                </span>
+                                <span class="link-arrow" aria-hidden="true">
+                                    <i data-lucide="arrow-right" class="icon-lucide-sm"></i>
+                                </span>
+                            </span>
+                        </button>
+                    </li>
+
+                    <li>
+                        <div class="taller-link disabled" data-color="#FFC72C" role="button" aria-disabled="true" aria-label="Taller próximamente disponible">
+                            <span class="link-content">
+                                <span class="link-icon" aria-hidden="true">
+                                    <i data-lucide="lock" class="icon-lucide-lg"></i>
+                                </span>
+                                <span class="link-info">
+                                    <span class="link-title">Próximamente</span>
+                                    <span class="link-desc">Nuevo taller en desarrollo</span>
+                                </span>
+                                <span class="link-badge" aria-hidden="true">pronto</span>
+                            </span>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="taller-link disabled" data-color="#FF6B1A" role="button" aria-disabled="true" aria-label="Taller próximamente disponible">
+                            <span class="link-content">
+                                <span class="link-icon" aria-hidden="true">
+                                    <i data-lucide="lock" class="icon-lucide-lg"></i>
+                                </span>
+                                <span class="link-info">
+                                    <span class="link-title">Próximamente</span>
+                                    <span class="link-desc">Nuevo taller en desarrollo</span>
+                                </span>
+                                <span class="link-badge" aria-hidden="true">pronto</span>
+                            </span>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="taller-link disabled" data-color="#0056B3" role="button" aria-disabled="true" aria-label="Taller próximamente disponible">
+                            <span class="link-content">
+                                <span class="link-icon" aria-hidden="true">
+                                    <i data-lucide="lock" class="icon-lucide-lg"></i>
+                                </span>
+                                <span class="link-info">
+                                    <span class="link-title">Próximamente</span>
+                                    <span class="link-desc">Nuevo taller en desarrollo</span>
+                                </span>
+                                <span class="link-badge" aria-hidden="true">pronto</span>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- ===== FOOTER WAVE ===== -->
+            <footer class="footer-waves" role="contentinfo" aria-label="Pie de página del menú">
+                <div class="footer-waves-container" aria-hidden="true">
+                    <div class="wave-layer wave-yellow-footer"></div>
+                    <div class="wave-layer wave-orange-footer"></div>
+                    <div class="wave-layer wave-blue-footer"></div>
+                </div>
+                <div class="footer-text">
+                    <p>✦ Selecciona un taller para comenzar ✦</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER GLASS LIQUID ===== -->
+    <footer class="glass-footer" role="contentinfo" aria-label="Pie de página global">
+        <div class="glass-footer-inner">
+            <div class="glass-footer-info">
+                <div class="glass-footer-logo">
+                    <i data-lucide="book-open" class="icon-lucide-sm" aria-hidden="true"></i>
+                    <span>Menú Talleres</span>
+                </div>
+                <p class="glass-footer-text">
+                    Desarrollado por <strong>Taller UNAD</strong> · Todos los derechos reservados © 2026
+                </p>
+            </div>
+            <div class="glass-footer-meta">
+                <span class="glass-footer-version">Taller v1.0</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-container" id="modalContainer">
+            <header class="modal-header">
+                <div class="modal-header-content">
+                    <div class="modal-header-left">
+                        <span class="modal-header-icon" aria-hidden="true">
+                            <i data-lucide="wrench" class="icon-lucide-lg"></i>
+                        </span>
+                        <div class="modal-header-title">
+                            <h2 class="modal-title" id="modalTitle">Taller Herramientas Digitales</h2>
+                            <span class="modal-header-subtitle">17 herramientas · 5 categorías</span>
+                        </div>
+                    </div>
+                    <button class="modal-close" id="modalClose" aria-label="Cerrar modal">
+                        <i data-lucide="x" class="icon-lucide-sm" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="modal-header-clip" aria-hidden="true"></div>
+            </header>
+
+            <div class="modal-body">
+                <p class="modal-description">
+                    El siguiente taller se enfoca en ampliar la información a los aspirantes y estudiantes sobre diferentes herramientas y recursos didácticos que pueden hacer uso los estudiantes para la resolución de sus actividades académicas dentro de los cursos.
+                </p>
+
+                <div class="modal-features" role="list">
+                    <div class="modal-feature" role="listitem">
+                        <i data-lucide="check-circle" class="icon-lucide-sm" aria-hidden="true"></i>
+                        <span>17 herramientas digitales</span>
+                    </div>
+                    <div class="modal-feature" role="listitem">
+                        <i data-lucide="check-circle" class="icon-lucide-sm" aria-hidden="true"></i>
+                        <span>5 categorías</span>
+                    </div>
+                    <div class="modal-feature" role="listitem">
+                        <i data-lucide="check-circle" class="icon-lucide-sm" aria-hidden="true"></i>
+                        <span>Recursos didácticos</span>
+                    </div>
+                </div>
+
+                <div class="modal-preview-grid">
+                    <div class="modal-preview-item"><i data-lucide="file-text" class="icon-lucide-sm"></i><span>Ofimáticas</span></div>
+                    <div class="modal-preview-item"><i data-lucide="cloud" class="icon-lucide-sm"></i><span>Almacenamiento</span></div>
+                    <div class="modal-preview-item"><i data-lucide="calendar" class="icon-lucide-sm"></i><span>Organizadores</span></div>
+                    <div class="modal-preview-item"><i data-lucide="presentation" class="icon-lucide-sm"></i><span>Presentaciones</span></div>
+                    <div class="modal-preview-item"><i data-lucide="bot" class="icon-lucide-sm"></i><span>Inteligencia Artificial</span></div>
+                </div>
+            </div>
+
+            <footer class="modal-footer">
+                <div class="modal-footer-clip" aria-hidden="true"></div>
+                <div class="modal-footer-content">
+                    <button class="modal-btn" id="modalBtn" aria-label="Ir al taller Herramientas Digitales">
+                        <span>Ir al taller</span>
+                        <i data-lucide="arrow-right" class="icon-lucide-sm" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Intro Overlay -->
+    <div class="intro-overlay" id="introOverlay" aria-hidden="true">
+        <div class="intro-content">
+            <div class="intro-logo" aria-hidden="true">
+                <i data-lucide="book-open" class="icon-lucide-xl"></i>
+            </div>
+            <h2>Menú Talleres</h2>
+            <p>Cargando...</p>
+            <div class="intro-loader" role="progressbar" aria-label="Cargando">
+                <div class="loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
