@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Virtual · Taller</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        (function() {
+            try {
+                var saved = localStorage.getItem('theme');
+                if (saved !== 'dark') {
+                    document.documentElement.classList.add('light-mode-preload');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
+    <link rel="stylesheet" href="../CSS/campus-styles.css" />
+</head>
+<body>
+    <a href="#mainContent" class="skip-link" aria-label="Saltar al contenido principal">Saltar al contenido</a>
+
+    <canvas id="starfieldCanvas" aria-hidden="true"></canvas>
+    <div class="campus-bg-layer" aria-hidden="true"></div>
+
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="readingProgress"></div>
+    </div>
+
+    <!-- Controles flotantes superiores -->
+    <div class="top-controls" role="toolbar" aria-label="Controles de vista">
+        <button class="ctrl-btn" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false">
+            <i data-lucide="menu" class="icon-lucide-sm menu-open-icon" aria-hidden="true"></i>
+            <i data-lucide="x" class="icon-lucide-sm menu-close-icon" aria-hidden="true"></i>
+        </button>
+        <button class="ctrl-btn" id="guideToggle" aria-label="Activar guía interactiva de accesibilidad" aria-pressed="false">
+            <i data-lucide="help-circle" class="icon-lucide-sm" aria-hidden="true"></i>
+        </button>
+        <button class="ctrl-btn" id="themeToggle" aria-label="Cambiar tema (oscuro/claro)" aria-pressed="true">
+            <i data-lucide="moon" class="ctrl-icon-moon icon-lucide-sm" aria-hidden="true"></i>
+            <i data-lucide="sun" class="ctrl-icon-sun icon-lucide-sm" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div class="app-container" id="mainContent" role="main">
+
+        <header class="header" role="banner">
+            <div class="header-content">
+                <div class="header-left">
+                    <button class="btn-back" id="btnBack" aria-label="Volver a seleccionar etapas">
+                        <i data-lucide="arrow-left" class="icon-lucide-lg" aria-hidden="true"></i>
+                    </button>
+                    <div class="header-title">
+                        <span class="logo-icon" aria-hidden="true">
+                            <i data-lucide="graduation-cap" class="icon-lucide"></i>
+                        </span>
+                        <h1>Campus Virtual</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-wave" aria-hidden="true">
+                <svg class="header-waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                    <defs><path id="header-gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
+                    <g class="parallax-header">
+                        <use href="#header-gentle-wave" x="48" y="0" fill="var(--wave-1)" />
+                        <use href="#header-gentle-wave" x="48" y="3" fill="var(--wave-2)" />
+                        <use href="#header-gentle-wave" x="48" y="5" fill="var(--wave-3)" />
+                        <use href="#header-gentle-wave" x="48" y="7" fill="var(--wave-4)" />
+                    </g>
+                </svg>
+            </div>
+        </header>
+
+        <!-- MENÚ LATERAL (Ahora a la izquierda) -->
+        <nav class="side-menu" id="sideMenu" role="navigation" aria-label="Navegación entre etapas">
+            <div class="side-menu-header">
+                <span class="side-menu-title">Menú de etapas</span>
+                <button class="side-menu-close" id="sideMenuClose" aria-label="Cerrar menú">
+                    <i data-lucide="x" class="icon-lucide-sm" aria-hidden="true"></i>
+                </button>
+            </div>
+            
+            <div class="side-menu-profile">
+                <div class="side-menu-profile-avatar">
+                    <i data-lucide="user" class="icon-lucide-lg"></i>
+                </div>
+                <div class="side-menu-profile-info">
+                    <span class="side-menu-profile-title">Explorando el taller</span>
+                    <span class="side-menu-profile-sub">Campus Virtual</span>
+                </div>
+            </div>
+
+            <ul class="side-menu-list">
+                <li>
+                    <a href="#" class="side-menu-link active" data-etapa="campus">
+                        <span class="side-menu-dot" style="background: #FF6B1A;"></span>
+                        <span class="side-menu-text">Campus Virtual</span>
+                        <i data-lucide="check-circle" class="side-menu-status icon-lucide-sm"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="herramientas.html" class="side-menu-link" data-etapa="herramientas">
+                        <span class="side-menu-dot" style="background: #0056B3;"></span>
+                        <span class="side-menu-text">Herramientas Digitales</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ia.html" class="side-menu-link" data-etapa="ia">
+                        <span class="side-menu-dot" style="background: #a855f7;"></span>
+                        <span class="side-menu-text">Inteligencia Artificial</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="side-menu-footer">
+                <span class="side-menu-version">Taller v1.2</span>
+            </div>
+        </nav>
+
+        <div class="menu-overlay" id="menuOverlay"></div>
+
+        <main class="main-content" id="mainContentScroll">
+            <div class="hero-section" id="heroSection">
+                <div class="hero-content">
+                    <h2 class="hero-title">Campus Virtual</h2>
+                    <p class="hero-description">El Campus Virtual de la UNAD es el entorno principal donde se desarrollan los procesos académicos. Es el espacio digital donde el estudiante tiene acceso a los cursos, materiales de estudio, actividades, foros y toda la información relacionada con su proceso de aprendizaje.</p>
+                    <p class="hero-description" style="margin-top: 0.5rem;">Conocer a fondo el Campus Virtual es fundamental para aprovechar al máximo la metodología de la universidad, ya que es el punto de encuentro entre estudiantes, tutores y contenidos académicos.</p>
+                    <p class="hero-description" style="margin-top: 0.5rem;">En esta sección encontrarás toda la información sobre las herramientas y funcionalidades que ofrece el Campus Virtual para el desarrollo de tus actividades académicas.</p>
+                    <button class="hero-toggle" id="heroToggle" aria-label="Ocultar o mostrar descripción">
+                        <span class="hero-toggle-text">Ocultar descripción</span>
+                        <i data-lucide="chevron-up" class="icon-lucide-sm" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="natural-divider" aria-hidden="true"></div>
+
+            <section class="campus-main-section" id="campusMainSection">
+                <div class="campus-main-tabs reveal" data-reveal="fade-up" role="tablist" aria-label="Secciones del Campus Virtual">
+                    <button class="campus-main-tab active" role="tab" data-panel="panel-cursos" aria-selected="true">
+                        <span class="campus-main-tab-icon"><i data-lucide="book-open" class="icon-lucide-sm"></i></span>
+                        <span class="campus-main-tab-text">
+                            <span class="campus-main-tab-title">Campus Virtual</span>
+                            <span class="campus-main-tab-sub">Mis cursos virtuales</span>
+                        </span>
+                    </button>
+                    <button class="campus-main-tab" role="tab" data-panel="panel-tips" aria-selected="false">
+                        <span class="campus-main-tab-icon"><i data-lucide="lightbulb" class="icon-lucide-sm"></i></span>
+                        <span class="campus-main-tab-text">
+                            <span class="campus-main-tab-title">Tips y recomendaciones</span>
+                            <span class="campus-main-tab-sub">Consejos prácticos</span>
+                        </span>
+                    </button>
+                </div>
+
+                <div class="campus-main-panels">
+                    <div class="campus-main-panel active" id="panel-cursos" role="tabpanel">
+                        <div class="campus-intro reveal" data-reveal="fade-up">
+                            <p class="campus-intro-text">En el apartado de <strong>Mis cursos virtuales</strong> se podrá encontrar todo el apartado para poder acceder a cada uno de los cursos inscritos.</p>
+                        </div>
+
+                        <div class="slides-container reveal" data-reveal="fade-up" data-delay="150" id="slidesContainer">
+                            <div class="slides-tabs" role="tablist" aria-label="Diapositivas" id="miniTabs">
+                                <button class="slide-tab active" role="tab" data-slide="slide-campus"><span class="slide-tab-num">01</span><span class="slide-tab-label">Campus Virtual</span></button>
+                                <button class="slide-tab" role="tab" data-slide="slide-unagenda"><span class="slide-tab-num">02</span><span class="slide-tab-label">UNAgenDa</span></button>
+                                <button class="slide-tab" role="tab" data-slide="slide-carrera"><span class="slide-tab-num">03</span><span class="slide-tab-label">Información Carrera</span></button>
+                                <button class="slide-tab" role="tab" data-slide="slide-biblioteca"><span class="slide-tab-num">04</span><span class="slide-tab-label">Biblioteca</span></button>
+                                <button class="slide-tab" role="tab" data-slide="slide-cipas"><span class="slide-tab-num">05</span><span class="slide-tab-label">CIPAS</span></button>
+                            </div>
+
+                            <div class="slides-content" id="slidesContent">
+                                <!-- ====== SLIDE 01: CAMPUS VIRTUAL ====== -->
+                                <div class="slide-panel active" id="slide-campus" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="home" class="icon-lucide-sm" aria-hidden="true"></i> Campus Virtual</h3>
+                                        <p class="campus-block-text">En el apartado de <strong>“Campus Virtual”</strong> podrás encontrar el periodo académico en el que estás inscrito y también los cursos correspondientes a ese periodo.</p>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/campus-panel-cursos.png</small></div>
+                                        <figcaption>Panel principal de cursos del Campus Virtual con periodo académico y avance.</figcaption>
+                                    </figure>
+                                    <div class="campus-block">
+                                        <p class="campus-block-text">Algo a tener en cuenta es que <strong>cada curso tiene su propia clasificación</strong> y se puede observar el <strong>avance realizado hasta el momento</strong>.</p>
+                                    </div>
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="alert-triangle" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Ten en cuenta</h4>
+                                            <p>El progreso realizado puede presentar algunas fallas, por lo que se recomienda <strong>revisar dentro del curso la calificación</strong> para confirmar el estado real de tus actividades.</p>
+                                        </div>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/campus-progreso-curso.png</small></div>
+                                        <figcaption>Detalle del progreso y calificación dentro de un curso.</figcaption>
+                                    </figure>
+                                    <div class="campus-box">
+                                        <div class="campus-box-header">
+                                            <i data-lucide="layers" class="icon-lucide-lg" aria-hidden="true"></i>
+                                            <div><h4>Clasificaciones de curso</h4><p class="campus-box-subtitle">Cada curso tiene una clasificación que define su tipo de aprendizaje. Toca cada una para ver la información.</p></div>
+                                        </div>
+                                        <div class="campus-accordion-group">
+                                            <div class="campus-accordion">
+                                                <button class="campus-accordion-header" aria-expanded="false" aria-controls="acc-teorico"><span class="campus-accordion-badge" style="--acc-color:#FFC72C;">T</span><span class="campus-accordion-title">Teórico</span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                                <div class="campus-accordion-body" id="acc-teorico"><p>Cursos centrados en la comprensión conceptual, la lectura crítica y el análisis de fundamentos teóricos. La evaluación se basa principalmente en actividades de apropiación del conocimiento.</p></div>
+                                            </div>
+                                            <div class="campus-accordion">
+                                                <button class="campus-accordion-header" aria-expanded="false" aria-controls="acc-metodologico"><span class="campus-accordion-badge" style="--acc-color:#FF6B1A;">M</span><span class="campus-accordion-title">Metodológico</span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                                <div class="campus-accordion-body" id="acc-metodologico"><p>Cursos orientados al desarrollo de procedimientos, métodos y estrategias. Combinan la reflexión conceptual con la aplicación práctica de metodologías propias del área.</p></div>
+                                            </div>
+                                            <div class="campus-accordion">
+                                                <button class="campus-accordion-header" aria-expanded="false" aria-controls="acc-teorico-practico"><span class="campus-accordion-badge" style="--acc-color:#0056B3;">T/P</span><span class="campus-accordion-title">Teórico / Práctico</span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                                <div class="campus-accordion-body" id="acc-teorico-practico"><p>Cursos que integran fundamentos teóricos con actividades prácticas, talleres o laboratorios. El estudiante aplica lo aprendido en contextos concretos y evalúa su desempeño en ambos frentes.</p></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/campus-clasificaciones.png</small></div>
+                                        <figcaption>Ejemplo de la clasificación visible en cada curso.</figcaption>
+                                    </figure>
+                                    <div class="campus-box">
+                                        <div class="campus-box-header">
+                                            <i data-lucide="shield-check" class="icon-lucide-lg" aria-hidden="true"></i>
+                                            <div><h4>Formas de habilitación</h4><p class="campus-box-subtitle">Si se presentan deficiencias dentro del curso, existen diferentes formas de habilitación. Toca cada una para ver la información.</p></div>
+                                        </div>
+                                        <div class="campus-accordion-group">
+                                            <div class="campus-accordion">
+                                                <button class="campus-accordion-header" aria-expanded="false" aria-controls="acc-supletoria"><span class="campus-accordion-badge" style="--acc-color:#0056B3;">S</span><span class="campus-accordion-title">Evaluación supletoria</span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                                <div class="campus-accordion-body" id="acc-supletoria"><p>Es una evaluación adicional que se presenta cuando el estudiante no alcanzó la nota mínima aprobatoria en el curso. Permite demostrar el dominio de los resultados de aprendizaje en una única prueba.</p></div>
+                                            </div>
+                                            <div class="campus-accordion">
+                                                <button class="campus-accordion-header" aria-expanded="false" aria-controls="acc-habilitacion"><span class="campus-accordion-badge" style="--acc-color:#FFC72C;">H</span><span class="campus-accordion-title">Habilitación</span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                                <div class="campus-accordion-body" id="acc-habilitacion"><p>Es el proceso mediante el cual el estudiante puede nivelar o aprobar un curso que quedó pendiente. Se realiza bajo las condiciones y fechas establecidas por la universidad para cada periodo académico.</p></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/campus-habilitaciones.png</small></div>
+                                        <figcaption>Opciones de habilitación visibles dentro del curso.</figcaption>
+                                    </figure>
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="mouse-pointer-click" class="icon-lucide-sm" aria-hidden="true"></i> Acceso y reportes</h3>
+                                        <p class="campus-block-text">Por medio del <strong class="text-blue">botón azul</strong> podrás acceder al curso directamente, y por medio del <strong class="text-yellow">botón amarillo</strong> podrás reportar algún incidente técnico que se pueda presentar durante el curso.</p>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/campus-botones-accion.png</small></div>
+                                        <figcaption>Botones de acceso al curso y reporte de incidentes.</figcaption>
+                                    </figure>
+                                </div>
+
+                                <!-- ====== SLIDE 02: UNAGENDA ====== -->
+                                <div class="slide-panel" id="slide-unagenda" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="calendar-days" class="icon-lucide-sm" aria-hidden="true"></i> UNAgenDa</h3>
+                                        <p class="campus-block-text">Dentro de este apartado podrás encontrar la <strong>agenda general de los cursos</strong>. En ella podrás consultar de manera rápida los tiempos de entrega de cada una de las fases disponibles.</p>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/unagenda-general.png</small></div>
+                                        <figcaption>Vista general de UNAgenDa con la agenda de todos los cursos.</figcaption>
+                                    </figure>
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="info" class="icon-lucide-sm" aria-hidden="true"></i> ¿Qué información encuentras?</h3>
+                                        <p class="campus-block-text">Dentro de este apartado se puede encontrar información variada como:</p>
+                                    </div>
+                                    <ul class="campus-info-list">
+                                        <li><i data-lucide="book" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Nombre del curso</strong> y <strong>código del curso</strong>.</span></li>
+                                        <li><i data-lucide="calendar" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Fechas de entrega</strong> de cada actividad.</span></li>
+                                        <li><i data-lucide="tag" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Tipo de actividad</strong> (tarea, foro, cuestionario, etc.).</span></li>
+                                        <li><i data-lucide="file-text" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Nombre de la actividad</strong>.</span></li>
+                                        <li><i data-lucide="award" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Puntaje de la actividad</strong>.</span></li>
+                                    </ul>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/unagenda-detalle-fase.png</small></div>
+                                        <figcaption>Detalle de una fase con fechas, tipo, nombre y puntaje de la actividad.</figcaption>
+                                    </figure>
+                                    <div class="campus-box">
+                                        <div class="campus-box-header">
+                                            <i data-lucide="traffic-cone" class="icon-lucide-lg" aria-hidden="true"></i>
+                                            <div><h4>Sistema de semaforización</h4><p class="campus-box-subtitle">UNAgenDa usa colores para indicarte rápidamente el estado de cada actividad según el tiempo restante.</p></div>
+                                        </div>
+                                        <div class="semaforo-grid">
+                                            <div class="semaforo-item semaforo-item--green"><div class="semaforo-swatch" aria-hidden="true"></div><div class="semaforo-text"><span class="semaforo-label">Verde</span><p>La actividad <strong>aún está disponible</strong>.</p></div></div>
+                                            <div class="semaforo-item semaforo-item--yellow"><div class="semaforo-swatch" aria-hidden="true"></div><div class="semaforo-text"><span class="semaforo-label">Amarillo</span><p>Quedan <strong>6 días</strong> para la entrega de la actividad.</p></div></div>
+                                            <div class="semaforo-item semaforo-item--red"><div class="semaforo-swatch" aria-hidden="true"></div><div class="semaforo-text"><span class="semaforo-label">Rojo</span><p>Quedan <strong>3 días</strong> para la entrega de la actividad.</p></div></div>
+                                        </div>
+                                        <div class="semaforo-note"><i data-lucide="info" class="icon-lucide-sm" aria-hidden="true"></i><p>Si aparece en <strong>gris</strong> significa que la actividad <strong>no está disponible</strong>.</p></div>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/unagenda-semaforizacion.png</small></div>
+                                        <figcaption>Ejemplo visual de la semaforización aplicada en la agenda.</figcaption>
+                                    </figure>
+                                </div>
+
+                                <!-- ====== SLIDE 03: INFORMACIÓN CARRERA ====== -->
+                                <div class="slide-panel" id="slide-carrera" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="user-round-check" class="icon-lucide-sm" aria-hidden="true"></i> Información Carrera</h3>
+                                        <p class="campus-block-text">Dentro del campus también se puede encontrar información sobre el <strong>avance académico de la carrera</strong> que se esté cursando. En este apartado se encuentra información general como:</p>
+                                    </div>
+                                    <ul class="campus-info-list">
+                                        <li><i data-lucide="book" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Nombre del programa</strong>.</span></li>
+                                        <li><i data-lucide="badge-check" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Estado del programa</strong>.</span></li>
+                                        <li><i data-lucide="file-badge" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Número de resolución</strong> (Plan de estudios).</span></li>
+                                        <li><i data-lucide="file-text" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Plan de estudios individual</strong>.</span></li>
+                                    </ul>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/carrera-info-general.png</small></div>
+                                        <figcaption>Vista general de la información de la carrera: programa, estado, resolución y plan individual.</figcaption>
+                                    </figure>
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="clipboard-list" class="icon-lucide-sm" aria-hidden="true"></i> Plan de Estudios Individual</h3>
+                                        <p class="campus-block-text">En el apartado de información, si damos click en <strong>“Ver Más”</strong> podremos observar un apartado del plan de estudios que llevamos sobre el proceso de nuestra carrera.</p>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/carrera-plan-estudios.png</small></div>
+                                        <figcaption>Vista del plan de estudios individual con las asignaturas por periodo.</figcaption>
+                                    </figure>
+                                    <div class="campus-block">
+                                        <p class="campus-block-text">Dentro de este apartado podremos seleccionar también la <strong>línea de profundización</strong> de nuestra carrera y la opción de <strong>grados disponibles</strong> para la carrera.</p>
+                                    </div>
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="info" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Nota</h4>
+                                            <p>Para consultar más información sobre las líneas de profundización y opciones de grados, <strong>consultar en el centro más cercano</strong>.</p>
+                                        </div>
+                                    </div>
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="book-open-check" class="icon-lucide-sm" aria-hidden="true"></i> Guía de lectura del plan de estudios</h3>
+                                        <p class="campus-block-text">Esta es una pequeña guía sobre la manera de lectura del plan de estudios. Toca cada estado para ver su descripción.</p>
+                                    </div>
+                                    <div class="lectura-grid">
+                                        <div class="campus-accordion lectura-acc lectura-acc--available">
+                                            <button class="campus-accordion-header" aria-expanded="false" aria-controls="acc-cursos-disponibles"><span class="lectura-swatch" aria-hidden="true"></span><span class="campus-accordion-title">Cursos Disponibles<small class="lectura-tag">Disponible para ver</small></span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                            <div class="campus-accordion-body" id="acc-cursos-disponibles"><p>Cursos que se encuentran <strong>disponibles para ver</strong>. Aún no has iniciado su matriculación, pero puedes consultar su contenido y programación.</p></div>
+                                        </div>
+                                        <div class="campus-accordion lectura-acc lectura-acc--enrolled">
+                                            <button class="campus-accordion-header" aria-expanded="false" aria-controls="acc-cursos-matriculados"><span class="lectura-swatch" aria-hidden="true"></span><span class="campus-accordion-title">Cursos Matriculados<small class="lectura-tag">En curso</small></span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                            <div class="campus-accordion-body" id="acc-cursos-matriculados"><p>Cursos que se encuentran <strong>en curso</strong>; es decir, ya estás matriculado o el curso está en proceso de calificación.</p></div>
+                                        </div>
+                                        <div class="campus-accordion lectura-acc lectura-acc--approved">
+                                            <button class="campus-accordion-header" aria-expanded="false" aria-controls="acc-cursos-aprobados"><span class="lectura-swatch" aria-hidden="true"></span><span class="campus-accordion-title">Cursos Aprobados<small class="lectura-tag">Aprobado</small></span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                            <div class="campus-accordion-body" id="acc-cursos-aprobados"><p>Cursos que ya han sido <strong>realizados y aprobados</strong>. Estos forman parte de tu historial académico dentro del programa.</p></div>
+                                        </div>
+                                        <div class="campus-accordion lectura-acc lectura-acc--not-required">
+                                            <button class="campus-accordion-header" aria-expanded="false" aria-controls="acc-cursos-no-requerido"><span class="lectura-swatch" aria-hidden="true"></span><span class="campus-accordion-title">Cursos No Requerido<small class="lectura-tag">No requerido</small></span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                            <div class="campus-accordion-body" id="acc-cursos-no-requerido"><p>Cursos en los que ya se completó el componente o que <strong>no es necesario matricular</strong>.</p></div>
+                                        </div>
+                                    </div>
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="pie-chart" class="icon-lucide-sm" aria-hidden="true"></i> Avance Total</h3>
+                                        <p class="campus-block-text">En esta sección se pueden encontrar cada uno de los <strong>componentes de formación</strong>, indicando el número de <strong>créditos aprobados</strong> y los <strong>periodos académicos completados</strong>.</p>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/carrera-avance-total.png</small></div>
+                                        <figcaption>Vista del avance total por componentes de formación y créditos aprobados.</figcaption>
+                                    </figure>
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="info" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Nota</h4>
+                                            <p>De igual manera, puedes consultar más información en el <strong>centro más cercano</strong> o consultando al <strong>líder zonal de tu escuela</strong> para información más individual.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ====== SLIDE 04: BIBLIOTECA ====== -->
+                                <div class="slide-panel" id="slide-biblioteca" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="library" class="icon-lucide-sm" aria-hidden="true"></i> Biblioteca</h3>
+                                        <p class="campus-block-text">En este apartado se puede encontrar la <strong>biblioteca de la universidad</strong>. Allí podrás acceder a <strong>simuladores</strong>, <strong>recursos didácticos</strong> y también a diferentes <strong>libros de la universidad</strong>. Por medio del <strong>correo institucional</strong> puedes hacer uso de esta.</p>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/campus-biblioteca.png</small></div>
+                                        <figcaption>Vista general de la biblioteca virtual con acceso a simuladores, recursos y libros.</figcaption>
+                                    </figure>
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="alert-triangle" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Reporte de errores en documentos</h4>
+                                            <p>Si presentas algún tipo de error en algún documento presentado en los contenidos o referentes bibliográficos de alguna fase encontrada en los cursos, puedes <strong>contactarte con la biblioteca</strong> para que se haga la debida revisión y se pueda acceder al recurso indicado. Recuerda comunicarte con los <strong>encargados de tu zona</strong>.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ====== SLIDE 05: CIPAS ====== -->
+                                <div class="slide-panel" id="slide-cipas" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="users-round" class="icon-lucide-sm" aria-hidden="true"></i> CIPAS</h3>
+                                        <p class="campus-block-text">Los <strong>CIPAS</strong>, también llamados <strong>(Comunidades de Interacción y Participación Académica y Social)</strong>, son los espacios programados por los docentes para el acompañamiento de los estudiantes frente a dudas, inquietudes o resolución de problemáticas presentadas en el curso.</p>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/cipas-general.png</small></div>
+                                        <figcaption>Vista general de los CIPAS disponibles en el Campus Virtual.</figcaption>
+                                    </figure>
+                                    <div class="cipas-grid">
+                                        <div class="cipas-card">
+                                            <div class="cipas-card-header">
+                                                <div class="cipas-card-icon" aria-hidden="true"><i data-lucide="users" class="icon-lucide-lg"></i></div>
+                                                <h4>CIPAS Generales</h4>
+                                            </div>
+                                            <p>Puedes acceder a <strong>CIPAS generales</strong> organizados por la universidad acerca de temas generales y diversos que pueden ayudarte en el proceso académico.</p>
+                                            <figure class="campus-img-figure">
+                                                <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/cipas-generales.png</small></div>
+                                            </figure>
+                                        </div>
+                                        <div class="cipas-card">
+                                            <div class="cipas-card-header">
+                                                <div class="cipas-card-icon" aria-hidden="true"><i data-lucide="book-marked" class="icon-lucide-lg"></i></div>
+                                                <h4>CIPAS de Cursos</h4>
+                                            </div>
+                                            <p>Y puedes encontrar los <strong>CIPAS de Cursos</strong>, que son organizados habitualmente por el director del curso para resolver inquietudes específicas sobre el curso y la resolución de la fase actual cursada.</p>
+                                            <figure class="campus-img-figure">
+                                                <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/cipas-cursos.png</small></div>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slides-controls" id="slidesControls">
+                                <button class="slides-nav-btn slides-prev" id="slidesPrev" aria-label="Diapositiva anterior"><i data-lucide="chevron-left" class="icon-lucide-sm"></i><span>Anterior</span></button>
+                                <div class="slides-progress" aria-hidden="true">
+                                    <span class="slides-counter" id="slidesCounter">01 / 05</span>
+                                    <div class="slides-dots" id="slidesDots">
+                                        <button class="slide-dot active" data-slide="slide-campus"></button>
+                                        <button class="slide-dot" data-slide="slide-unagenda"></button>
+                                        <button class="slide-dot" data-slide="slide-carrera"></button>
+                                        <button class="slide-dot" data-slide="slide-biblioteca"></button>
+                                        <button class="slide-dot" data-slide="slide-cipas"></button>
+                                    </div>
+                                </div>
+                                <button class="slides-nav-btn slides-next" id="slidesNext" aria-label="Diapositiva siguiente"><span>Siguiente</span><i data-lucide="chevron-right" class="icon-lucide-sm"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="campus-main-panel" id="panel-tips" role="tabpanel">
+                        <div class="campus-coming-soon reveal" data-reveal="fade-up">
+                            <div class="campus-coming-soon-icon" aria-hidden="true"><i data-lucide="sparkles" class="icon-lucide-xl"></i></div>
+                            <h3 class="campus-coming-soon-title">Tips y recomendaciones</h3>
+                            <p class="campus-coming-soon-text">Contenido en preparación.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer-waves" role="contentinfo" aria-label="Pie de página">
+            <div class="footer-waves-container">
+                <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                    <defs><path id="footer-gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
+                    <g class="parallax-footer">
+                        <use href="#footer-gentle-wave" x="48" y="0" fill="var(--wave-1)" />
+                        <use href="#footer-gentle-wave" x="48" y="3" fill="var(--wave-2)" />
+                        <use href="#footer-gentle-wave" x="48" y="5" fill="var(--wave-3)" />
+                        <use href="#footer-gentle-wave" x="48" y="7" fill="var(--wave-4)" />
+                    </g>
+                </svg>
+            </div>
+
+            <div class="footer-content">
+                <div class="footer-inner">
+                    <div class="footer-info">
+                        <div class="footer-logo"><i data-lucide="graduation-cap" class="icon-lucide-lg" aria-hidden="true"></i><span>Campus Virtual</span></div>
+                        <p class="footer-text">Desarrollado por <strong>Carlos José Puertas Casas</strong> · Todos los derechos reservados @2026</p>
+                    </div>
+                    <div class="footer-meta">
+                        <span class="footer-version">Taller v1.2</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <button class="back-to-top" id="backToTop" aria-label="Volver arriba"><i data-lucide="arrow-up" class="icon-lucide-sm"></i></button>
+
+    <div class="intro-overlay" id="introOverlay" aria-hidden="true">
+        <div class="intro-content">
+            <div class="intro-logo" aria-hidden="true"><i data-lucide="graduation-cap" class="icon-lucide-xl"></i></div>
+            <h2>Campus Virtual</h2>
+            <p>Cargando...</p>
+            <div class="intro-loader" role="progressbar" aria-label="Cargando"><div class="loader-bar"></div></div>
+        </div>
+    </div>
+
+    <div class="guide-overlay" id="guideOverlay" aria-hidden="true">
+        <div class="guide-spotlight" id="guideSpotlight" aria-hidden="true"></div>
+        <div class="guide-tooltip" id="guideTooltip" role="dialog" aria-modal="true" aria-labelledby="guideText">
+            <div class="guide-tooltip-header">
+                <span class="guide-step" id="guideStep">1/5</span>
+                <button class="guide-close" id="guideClose" aria-label="Cerrar guía">
+                    <i data-lucide="x" class="icon-lucide-sm" aria-hidden="true"></i>
+                </button>
+            </div>
+            <p class="guide-text" id="guideText">Texto de la guía</p>
+            <div class="guide-actions">
+                <button class="guide-btn guide-btn-prev" id="guidePrev" aria-label="Paso anterior" disabled>
+                    <i data-lucide="chevron-left" class="icon-lucide-sm" aria-hidden="true"></i>
+                    <span>Anterior</span>
+                </button>
+                <button class="guide-btn guide-btn-next" id="guideNext" aria-label="Siguiente paso">
+                    <span>Siguiente</span>
+                    <i data-lucide="chevron-right" class="icon-lucide-sm" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+    </script>
+    <script src="../JS/campus-script.js"></script>
+</body>
+</html>
