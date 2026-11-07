@@ -62,20 +62,15 @@
                 </div>
             </div>
 
-            <div class="header-wave" aria-hidden="true">
-                <svg class="header-waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-                    <defs><path id="header-gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
-                    <g class="parallax-header">
-                        <use href="#header-gentle-wave" x="48" y="0" fill="var(--wave-1)" />
-                        <use href="#header-gentle-wave" x="48" y="3" fill="var(--wave-2)" />
-                        <use href="#header-gentle-wave" x="48" y="5" fill="var(--wave-3)" />
-                        <use href="#header-gentle-wave" x="48" y="7" fill="var(--wave-4)" />
-                    </g>
-                </svg>
+            <!-- OLAS DE HEADER (CSS clip-path en lugar de SVG) -->
+            <div class="header-waves" aria-hidden="true">
+                <div class="wave-layer wave-yellow"></div>
+                <div class="wave-layer wave-orange"></div>
+                <div class="wave-layer wave-blue"></div>
             </div>
         </header>
 
-        <!-- MENÚ LATERAL (Ahora a la izquierda) -->
+        <!-- MENÚ LATERAL -->
         <nav class="side-menu" id="sideMenu" role="navigation" aria-label="Navegación entre etapas">
             <div class="side-menu-header">
                 <span class="side-menu-title">Menú de etapas</span>
@@ -450,16 +445,11 @@
         </main>
 
         <footer class="footer-waves" role="contentinfo" aria-label="Pie de página">
-            <div class="footer-waves-container">
-                <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-                    <defs><path id="footer-gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
-                    <g class="parallax-footer">
-                        <use href="#footer-gentle-wave" x="48" y="0" fill="var(--wave-1)" />
-                        <use href="#footer-gentle-wave" x="48" y="3" fill="var(--wave-2)" />
-                        <use href="#footer-gentle-wave" x="48" y="5" fill="var(--wave-3)" />
-                        <use href="#footer-gentle-wave" x="48" y="7" fill="var(--wave-4)" />
-                    </g>
-                </svg>
+            <!-- OLAS DE FOOTER (CSS clip-path) -->
+            <div class="footer-waves-container" aria-hidden="true">
+                <div class="wave-layer-footer wave-yellow-footer"></div>
+                <div class="wave-layer-footer wave-orange-footer"></div>
+                <div class="wave-layer-footer wave-blue-footer"></div>
             </div>
 
             <div class="footer-content">
