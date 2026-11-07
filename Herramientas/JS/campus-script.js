@@ -6,6 +6,28 @@
     console.log('✅ campus-script.js cargado');
 
     // ============================================================
+    // 0. FORZAR SCROLL AL INICIO AL CARGAR
+    //    - Desactiva la restauración automática del navegador
+    //    - Fuerza scroll(0,0) varias veces para asegurar
+    // ============================================================
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+
+    // Forzar scroll arriba en cuanto el script se ejecuta
+    window.scrollTo(0, 0);
+
+    // Y otra vez cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', () => {
+        window.scrollTo(0, 0);
+    });
+
+    // Y una vez más cuando la página termine de cargar completamente
+    window.addEventListener('load', () => {
+        window.scrollTo(0, 0);
+    });
+
+    // ============================================================
     // 1. FONDO DE BURBUJAS (Canvas 2D Ligero)
     // ============================================================
     function initBubbles() {
@@ -90,7 +112,7 @@
     }
 
     // ============================================================
-    // 2. MENÚ LATERAL (Izquierda)
+    // 2. MENÚ LATERAL
     // ============================================================
     function initMenu() {
         const menuToggle = document.getElementById('menuToggle');
@@ -182,13 +204,18 @@
 
     // ============================================================
     // 6. INTRO OVERLAY
+    //    - Al ocultarse, forzamos scroll arriba de nuevo
     // ============================================================
     function initIntro() {
         const intro = document.getElementById('introOverlay');
         if (!intro) return;
         setTimeout(() => {
             intro.classList.add('hidden');
-            setTimeout(() => intro.style.display = 'none', 800);
+            setTimeout(() => {
+                intro.style.display = 'none';
+                // Al quitar el intro, volvemos a forzar scroll arriba
+                window.scrollTo(0, 0);
+            }, 800);
         }, 1400);
     }
 
@@ -304,12 +331,6 @@
             if (counter) counter.textContent = `${pad(index + 1)} / ${pad(totalSlides)}`;
             if (prevBtn) prevBtn.disabled = index === 0;
             if (nextBtn) nextBtn.disabled = index === totalSlides - 1;
-
-            const container = document.getElementById('slidesContainer');
-            if (container) {
-                const y = container.getBoundingClientRect().top + window.scrollY - 80;
-                window.scrollTo({ top: y, behavior: 'smooth' });
-            }
         }
 
         slideTabs.forEach((tab, i) => tab.addEventListener('click', () => goToSlide(i)));
@@ -318,6 +339,7 @@
         if (nextBtn) nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
         
         window.goToSlide = goToSlide;
+        // Inicializamos sin hacer scroll, ya que el scroll lo fuerza init()
         goToSlide(0);
 
         // Acordeones
@@ -478,15 +500,21 @@
                 guideStep.textContent = (index + 1) + '/' + steps.length;
                 guideText.textContent = step.text;
 
-                requestAnimationFrame(() => {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    setTimeout(() => {
-                        updateSpotlight(element);
-                        requestAnimationFrame(() => {
-                            positionTooltip(element, step.position);
-                        });
-                    }, 200);
-                });
+                setTimeout(() => {
+                    if (step.selector === '.side-menu') {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        const y = element.getBoundingClientRect().top + window.scrollY - 120;
+                        window.scrollTo({ top: y, behavior: 'smooth' });
+                    }
+                }, 50);
+
+                setTimeout(() => {
+                    updateSpotlight(element);
+                    requestAnimationFrame(() => {
+                        positionTooltip(element, step.position);
+                    });
+                }, 400);
 
                 guidePrev.disabled = index === 0;
 
@@ -521,6 +549,11 @@
             document.body.style.overflow = '';
             
             if (steps[currentStep].after) steps[currentStep].after();
+
+            // Al cerrar la guía, volver arriba de todo
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
         }
 
         guideToggle.addEventListener('click', () => {
@@ -583,6 +616,9 @@
     // 11. INICIALIZAR TODO
     // ============================================================
     function init() {
+        // Forzar scroll arriba ANTES de inicializar cualquier cosa
+        window.scrollTo(0, 0);
+
         initBubbles();
         initThemeToggle();
         initMenu();
@@ -597,6 +633,16 @@
         setTimeout(() => {
             if (typeof lucide !== 'undefined') lucide.createIcons();
         }, 100);
+
+        // Un último empujón por si algo tomó el foco
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 300);
+
+        // Y otro más, tras el intro overlay (1400ms + 800ms fade)
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 2400);
     }
 
     if (document.readyState === 'loading') {
