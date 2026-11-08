@@ -1,12 +1,10 @@
 // ============================================================
 // RENDER REUTILIZABLE DE HERRAMIENTAS
-// No se toca al agregar nuevas herramientas.
 // ============================================================
 
 window.HerramientasRender = (function() {
   'use strict';
 
-  // --- Helpers de icono ---
   function esImagen(icon) {
     return icon && /\.(svg|png|jpg|jpeg|webp|gif)$/i.test(icon);
   }
@@ -27,7 +25,6 @@ window.HerramientasRender = (function() {
     return `<i data-lucide="${tool.icon}" class="icon-lucide-xl" style="color:${tool.color};"></i>`;
   }
 
-  // --- Card de la grilla ---
   function card(tool) {
     const desc = (tool.descripcion || '').substring(0, 70);
     return `
@@ -43,24 +40,49 @@ window.HerramientasRender = (function() {
     `;
   }
 
-  // --- Info items (De qué trata / Para qué / Cómo) ---
+  // --- Info items: usa los campos nuevos si existen, si no cae a info.* ---
   function infoItems(tool) {
     const map = [
-      { key: 'deQueTrata',      icon: 'book-open', title: '¿De qué trata?' },
-      { key: 'paraQueFunciona', icon: 'target',    title: '¿Para qué funciona?' },
-      { key: 'comoFunciona',    icon: 'settings',  title: '¿Cómo funciona?' }
+      {
+        icon: 'book-open',
+        title: '¿De qué trata?',
+        text: tool.queEs || (tool.info && tool.info.deQueTrata)
+      },
+      {
+        icon: 'target',
+        title: '¿Para qué sirve?',
+        text: tool.paraQue || (tool.info && tool.info.paraQueFunciona)
+      },
+      {
+        icon: 'settings',
+        title: '¿Cómo funciona?',
+        text: tool.comoFunciona || (tool.info && tool.info.comoFunciona)
+      }
     ];
     return map
-      .filter(m => tool.info && tool.info[m.key])
+      .filter(m => m.text)
       .map(m => `
         <div class="detalle-info-item">
           <div class="info-icon"><i data-lucide="${m.icon}" class="icon-lucide-sm"></i></div>
-          <div class="info-content"><h4>${m.title}</h4><p>${tool.info[m.key]}</p></div>
+          <div class="info-content"><h4>${m.title}</h4><p>${m.text}</p></div>
         </div>
       `).join('');
   }
 
-  // --- Plataformas ---
+  // --- Recomendaciones (bloque destacado aparte) ---
+  function recomendaciones(tool) {
+    if (!tool.recomendaciones) return '';
+    return `
+      <div class="detalle-recomendaciones">
+        <div class="detalle-recomendaciones-header">
+          <i data-lucide="lightbulb" class="icon-lucide-sm"></i>
+          <h4>Usos y recomendaciones</h4>
+        </div>
+        <p>${tool.recomendaciones}</p>
+      </div>
+    `;
+  }
+
   function plataformas(tool) {
     if (!tool.plataformas || !tool.plataformas.length) return '';
     return `
@@ -73,7 +95,6 @@ window.HerramientasRender = (function() {
     `;
   }
 
-  // --- Galería (carrusel) ---
   function galeria(tool) {
     if (!tool.galeria || !tool.galeria.length) return '';
     const items = tool.galeria.map((img, i) =>
@@ -101,7 +122,6 @@ window.HerramientasRender = (function() {
     `;
   }
 
-  // --- Tutoriales ---
   function tutoriales(tool) {
     if (!tool.tutoriales || !tool.tutoriales.length) return '';
     return `
@@ -121,7 +141,6 @@ window.HerramientasRender = (function() {
     `;
   }
 
-  // --- Tips ---
   function tips(tool) {
     if (!tool.tips || !tool.tips.length) return '';
     return `<ul class="detalle-tips-list">
@@ -129,7 +148,6 @@ window.HerramientasRender = (function() {
     </ul>`;
   }
 
-  // --- Contenido completo del detalle ---
   function detalle(tool) {
     const color = tool.color || '#2563eb';
     return `
@@ -155,6 +173,7 @@ window.HerramientasRender = (function() {
       <div class="detalle-panels">
         <div class="detalle-panel active" data-panel="informacion">
           <div class="detalle-info-grid">${infoItems(tool)}</div>
+          ${recomendaciones(tool)}
           ${galeria(tool)}
         </div>
         <div class="detalle-panel" data-panel="tutoriales">${tutoriales(tool)}</div>
@@ -163,6 +182,5 @@ window.HerramientasRender = (function() {
     `;
   }
 
-  // --- API pública ---
   return { card, detalle };
 })();

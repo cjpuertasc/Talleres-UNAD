@@ -37,7 +37,6 @@
         let animationId = null;
         let isVisible = true;
 
-        // En móvil, menos burbujas y más pequeñas
         const numBubbles = lowPerformanceMode ? 6 : 20;
         const maxRadius = lowPerformanceMode ? 140 : 180;
         const minRadius = lowPerformanceMode ? 60 : 80;
@@ -46,7 +45,6 @@
         function resize() {
             width = window.innerWidth;
             height = window.innerHeight;
-            // En modo ligero, DPR 1 para aliviar la GPU
             const dpr = lowPerformanceMode ? 1 : Math.min(window.devicePixelRatio || 1, 2);
             canvas.width = width * dpr;
             canvas.height = height * dpr;
@@ -69,7 +67,6 @@
                     r: Math.random() * (maxRadius - minRadius) + minRadius,
                     vx: (Math.random() - 0.5) * speedFactor,
                     vy: (Math.random() - 0.5) * speedFactor,
-                    // Colores IA (morado + azul)
                     color: Math.random() > 0.5 ? 'rgba(168, 85, 247, 0.15)' : 'rgba(59, 130, 246, 0.1)'
                 });
             }
@@ -234,7 +231,6 @@
         const reveals = document.querySelectorAll('.reveal');
         if (!reveals.length) return;
 
-        // En móvil o reduced-motion, mostrar todo de inmediato
         if (lowPerformanceMode || !('IntersectionObserver' in window)) {
             reveals.forEach(el => el.classList.add('revealed'));
             return;
@@ -293,9 +289,9 @@
     }
 
     // ============================================================
-    // 10. TABS PRINCIPALES, SLIDES Y ACORDEONES
+    // 10. TABS PRINCIPALES Y SLIDES
     // ============================================================
-    function initTabsAndSlides() {
+    function initMainTabs() {
         const mainTabs = document.querySelectorAll('.campus-main-tab');
         const mainPanels = document.querySelectorAll('.campus-main-panel');
 
@@ -309,16 +305,24 @@
                 mainPanels.forEach(p => p.classList.remove('active'));
                 tab.classList.add('active');
                 tab.setAttribute('aria-selected', 'true');
-                document.getElementById(targetId).classList.add('active');
+                const target = document.getElementById(targetId);
+                if (target) target.classList.add('active');
             });
         });
+    }
 
-        const slideTabs = document.querySelectorAll('.slide-tab');
-        const slidePanels = document.querySelectorAll('.slide-panel');
-        const dots = document.querySelectorAll('.slide-dot');
+    // ============================================================
+    // 11. SLIDES DE PENSAR CON IA
+    // ============================================================
+    function initPensarSlides() {
+        const slideTabs = document.querySelectorAll('#miniTabs .slide-tab');
+        const slidePanels = document.querySelectorAll('#slidesContent .slide-panel');
+        const dots = document.querySelectorAll('#slidesDots .slide-dot');
         const counter = document.getElementById('slidesCounter');
         const prevBtn = document.getElementById('slidesPrev');
         const nextBtn = document.getElementById('slidesNext');
+        if (!slideTabs.length) return;
+
         let currentSlide = 0;
         const totalSlides = slideTabs.length;
 
@@ -347,7 +351,54 @@
 
         window.goToSlide = goToSlide;
         goToSlide(0);
+    }
 
+    // ============================================================
+    // 12. SLIDES DE USO RESPONSABLE
+    // ============================================================
+    function initResponsableSlides() {
+        const respTabs = document.querySelectorAll('#respTabs .slide-tab');
+        const respPanels = document.querySelectorAll('#respSlidesContent .slide-panel');
+        const dots = document.querySelectorAll('#respDots .slide-dot');
+        const counter = document.getElementById('respCounter');
+        const prevBtn = document.getElementById('respPrev');
+        const nextBtn = document.getElementById('respNext');
+        if (!respTabs.length) return;
+
+        let currentResp = 0;
+        const totalResp = respTabs.length;
+
+        function goToResp(index) {
+            if (index < 0) index = 0;
+            if (index >= totalResp) index = totalResp - 1;
+
+            currentResp = index;
+            respTabs.forEach((t, i) => {
+                t.classList.toggle('active', i === index);
+                t.setAttribute('aria-selected', i === index ? 'true' : 'false');
+            });
+            respPanels.forEach((p, i) => p.classList.toggle('active', i === index));
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+
+            const pad = n => n < 10 ? '0' + n : '' + n;
+            if (counter) counter.textContent = `${pad(index + 1)} / ${pad(totalResp)}`;
+            if (prevBtn) prevBtn.disabled = index === 0;
+            if (nextBtn) nextBtn.disabled = index === totalResp - 1;
+        }
+
+        respTabs.forEach((tab, i) => tab.addEventListener('click', () => goToResp(i)));
+        dots.forEach((dot, i) => dot.addEventListener('click', () => goToResp(i)));
+        if (prevBtn) prevBtn.addEventListener('click', () => goToResp(currentResp - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => goToResp(currentResp + 1));
+
+        window.goToResp = goToResp;
+        goToResp(0);
+    }
+
+    // ============================================================
+    // 13. ACORDEONES
+    // ============================================================
+    function initAccordions() {
         const accordions = document.querySelectorAll('.campus-accordion');
         accordions.forEach(acc => {
             const header = acc.querySelector('.campus-accordion-header');
@@ -376,7 +427,7 @@
     }
 
     // ============================================================
-    // 11. GUÍA INTERACTIVA
+    // 14. GUÍA INTERACTIVA
     // ============================================================
     function initGuide() {
         const guideToggle = document.getElementById('guideToggle');
@@ -408,7 +459,7 @@
             },
             {
                 selector: '.slides-tabs',
-                text: 'Mini pestañas: te permiten navegar entre Comprender, Analizar, Teorizar, Lo que se pierde y Buenas prácticas.',
+                text: 'Mini pestañas: te permiten navegar entre las secciones de cada pestaña principal.',
                 position: 'bottom',
                 before: null,
                 after: null
@@ -617,7 +668,7 @@
     }
 
     // ============================================================
-    // 12. INICIALIZAR TODO
+    // 15. INICIALIZAR TODO
     // ============================================================
     function init() {
         window.scrollTo(0, 0);
@@ -630,7 +681,10 @@
         initIntro();
         initRevealAnimations();
         initScrollFeatures();
-        initTabsAndSlides();
+        initMainTabs();
+        initPensarSlides();
+        initResponsableSlides();
+        initAccordions();
         initGuide();
 
         setTimeout(() => {

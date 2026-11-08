@@ -15,24 +15,18 @@
     const lowPerformanceMode = isMobileDevice || prefersReducedMotion;
 
     // ============================================================
-    // 1. FORZAR SCROLL AL INICIO AL CARGAR
+    // 1. FORZAR SCROLL AL INICIO
     // ============================================================
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
     }
 
     window.scrollTo(0, 0);
-
-    document.addEventListener('DOMContentLoaded', () => {
-        window.scrollTo(0, 0);
-    });
-
-    window.addEventListener('load', () => {
-        window.scrollTo(0, 0);
-    });
+    document.addEventListener('DOMContentLoaded', () => window.scrollTo(0, 0));
+    window.addEventListener('load', () => window.scrollTo(0, 0));
 
     // ============================================================
-    // 2. FONDO DE BURBUJAS (Canvas 2D Ligero)
+    // 2. FONDO DE BURBUJAS
     // ============================================================
     function initBubbles() {
         const canvas = document.getElementById('starfieldCanvas');
@@ -44,7 +38,6 @@
         let animationId = null;
         let isVisible = true;
 
-        // En móvil, menos burbujas y más pequeñas
         const numBubbles = lowPerformanceMode ? 6 : 20;
         const maxRadius = lowPerformanceMode ? 140 : 180;
         const minRadius = lowPerformanceMode ? 60 : 80;
@@ -53,7 +46,6 @@
         function resize() {
             width = window.innerWidth;
             height = window.innerHeight;
-            // En modo ligero, DPR 1 para aliviar la GPU
             const dpr = lowPerformanceMode ? 1 : Math.min(window.devicePixelRatio || 1, 2);
             canvas.width = width * dpr;
             canvas.height = height * dpr;
@@ -240,7 +232,6 @@
         const reveals = document.querySelectorAll('.reveal');
         if (!reveals.length) return;
 
-        // En móvil o reduced-motion, mostrar todo de inmediato
         if (lowPerformanceMode || !('IntersectionObserver' in window)) {
             reveals.forEach(el => el.classList.add('revealed'));
             return;
@@ -299,10 +290,9 @@
     }
 
     // ============================================================
-    // 10. TABS PRINCIPALES, SLIDES Y ACORDEONES
+    // 10. TABS PRINCIPALES
     // ============================================================
-    function initTabsAndSlides() {
-        // Tabs principales
+    function initMainTabs() {
         const mainTabs = document.querySelectorAll('.campus-main-tab');
         const mainPanels = document.querySelectorAll('.campus-main-panel');
 
@@ -316,17 +306,24 @@
                 mainPanels.forEach(p => p.classList.remove('active'));
                 tab.classList.add('active');
                 tab.setAttribute('aria-selected', 'true');
-                document.getElementById(targetId).classList.add('active');
+                const target = document.getElementById(targetId);
+                if (target) target.classList.add('active');
             });
         });
+    }
 
-        // Mini Slides
-        const slideTabs = document.querySelectorAll('.slide-tab');
-        const slidePanels = document.querySelectorAll('.slide-panel');
-        const dots = document.querySelectorAll('.slide-dot');
+    // ============================================================
+    // 11. SLIDES DE CAMPUS VIRTUAL
+    // ============================================================
+    function initCampusSlides() {
+        const slideTabs = document.querySelectorAll('#miniTabs .slide-tab');
+        const slidePanels = document.querySelectorAll('#slidesContent .slide-panel');
+        const dots = document.querySelectorAll('#slidesDots .slide-dot');
         const counter = document.getElementById('slidesCounter');
         const prevBtn = document.getElementById('slidesPrev');
         const nextBtn = document.getElementById('slidesNext');
+        if (!slideTabs.length) return;
+
         let currentSlide = 0;
         const totalSlides = slideTabs.length;
 
@@ -353,10 +350,98 @@
         if (prevBtn) prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
         if (nextBtn) nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
 
-        window.goToSlide = goToSlide;
+        window.goToCampusSlide = goToSlide;
         goToSlide(0);
+    }
 
-        // Acordeones
+    // ============================================================
+    // 12. SLIDES DE TIPS Y RECOMENDACIONES
+    // ============================================================
+    function initTipsSlides() {
+        const tipTabs = document.querySelectorAll('#tipsTabs .slide-tab');
+        const tipPanels = document.querySelectorAll('#tipsSlidesContent .slide-panel');
+        const dots = document.querySelectorAll('#tipsDots .slide-dot');
+        const counter = document.getElementById('tipsCounter');
+        const prevBtn = document.getElementById('tipsPrev');
+        const nextBtn = document.getElementById('tipsNext');
+        if (!tipTabs.length) return;
+
+        let currentTip = 0;
+        const totalTips = tipTabs.length;
+
+        function goToTip(index) {
+            if (index < 0) index = 0;
+            if (index >= totalTips) index = totalTips - 1;
+
+            currentTip = index;
+            tipTabs.forEach((t, i) => {
+                t.classList.toggle('active', i === index);
+                t.setAttribute('aria-selected', i === index ? 'true' : 'false');
+            });
+            tipPanels.forEach((p, i) => p.classList.toggle('active', i === index));
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+
+            const pad = n => n < 10 ? '0' + n : '' + n;
+            if (counter) counter.textContent = `${pad(index + 1)} / ${pad(totalTips)}`;
+            if (prevBtn) prevBtn.disabled = index === 0;
+            if (nextBtn) nextBtn.disabled = index === totalTips - 1;
+        }
+
+        tipTabs.forEach((tab, i) => tab.addEventListener('click', () => goToTip(i)));
+        dots.forEach((dot, i) => dot.addEventListener('click', () => goToTip(i)));
+        if (prevBtn) prevBtn.addEventListener('click', () => goToTip(currentTip - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => goToTip(currentTip + 1));
+
+        window.goToTip = goToTip;
+        goToTip(0);
+    }
+
+    // ============================================================
+    // 13. SLIDES DE INFORMACIÓN UNAD
+    // ============================================================
+    function initInfoSlides() {
+        const infoTabs = document.querySelectorAll('#infoTabs .slide-tab');
+        const infoPanels = document.querySelectorAll('#infoSlidesContent .slide-panel');
+        const dots = document.querySelectorAll('#infoDots .slide-dot');
+        const counter = document.getElementById('infoCounter');
+        const prevBtn = document.getElementById('infoPrev');
+        const nextBtn = document.getElementById('infoNext');
+        if (!infoTabs.length) return;
+
+        let currentInfo = 0;
+        const totalInfo = infoTabs.length;
+
+        function goToInfo(index) {
+            if (index < 0) index = 0;
+            if (index >= totalInfo) index = totalInfo - 1;
+
+            currentInfo = index;
+            infoTabs.forEach((t, i) => {
+                t.classList.toggle('active', i === index);
+                t.setAttribute('aria-selected', i === index ? 'true' : 'false');
+            });
+            infoPanels.forEach((p, i) => p.classList.toggle('active', i === index));
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+
+            const pad = n => n < 10 ? '0' + n : '' + n;
+            if (counter) counter.textContent = `${pad(index + 1)} / ${pad(totalInfo)}`;
+            if (prevBtn) prevBtn.disabled = index === 0;
+            if (nextBtn) nextBtn.disabled = index === totalInfo - 1;
+        }
+
+        infoTabs.forEach((tab, i) => tab.addEventListener('click', () => goToInfo(i)));
+        dots.forEach((dot, i) => dot.addEventListener('click', () => goToInfo(i)));
+        if (prevBtn) prevBtn.addEventListener('click', () => goToInfo(currentInfo - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => goToInfo(currentInfo + 1));
+
+        window.goToInfo = goToInfo;
+        goToInfo(0);
+    }
+
+    // ============================================================
+    // 14. ACORDEONES
+    // ============================================================
+    function initAccordions() {
         const accordions = document.querySelectorAll('.campus-accordion');
         accordions.forEach(acc => {
             const header = acc.querySelector('.campus-accordion-header');
@@ -385,7 +470,7 @@
     }
 
     // ============================================================
-    // 11. GUÍA INTERACTIVA
+    // 15. GUÍA INTERACTIVA
     // ============================================================
     function initGuide() {
         const guideToggle = document.getElementById('guideToggle');
@@ -410,14 +495,14 @@
             },
             {
                 selector: '.campus-main-tabs',
-                text: 'Pestañas principales: desde aquí puedes cambiar entre la sección de Campus Virtual y los Tips y recomendaciones.',
+                text: 'Pestañas principales: desde aquí puedes cambiar entre Campus Virtual, Tips y recomendaciones e Información UNAD.',
                 position: 'bottom',
                 before: null,
                 after: null
             },
             {
                 selector: '.slides-tabs',
-                text: 'Mini pestañas: te permiten navegar entre las diferentes secciones dentro del Campus (UNAgenDa, Carrera, etc.).',
+                text: 'Mini pestañas: te permiten navegar entre las diferentes secciones dentro de cada pestaña principal.',
                 position: 'bottom',
                 before: null,
                 after: null
@@ -626,7 +711,7 @@
     }
 
     // ============================================================
-    // 12. INICIALIZAR TODO
+    // 16. INICIALIZAR TODO
     // ============================================================
     function init() {
         window.scrollTo(0, 0);
@@ -639,7 +724,11 @@
         initIntro();
         initRevealAnimations();
         initScrollFeatures();
-        initTabsAndSlides();
+        initMainTabs();
+        initCampusSlides();
+        initTipsSlides();
+        initInfoSlides();
+        initAccordions();
         initGuide();
 
         setTimeout(() => {
