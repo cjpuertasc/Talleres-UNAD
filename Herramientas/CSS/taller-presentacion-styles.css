@@ -1,17 +1,11 @@
 /* ============================================================
    ===== ESTILOS DE LA PRESENTACIÓN =====
    Comportamiento HÍBRIDO:
-   - Pantalla amplia (min-width:900px y min-height:650px):
-     contenedor "lleno" (height:100%). Timeline compacto para
-     que la slide 3 (Paradas) quepa. Scroll fino como respaldo.
-   - Pantalla reducida: contenedor compacto (max-height:100%,
-     sin height), con padding en el wrapper para ver el fondo.
-     Scroll vertical normal en .slide.
+   - Pantalla amplia: contenedor "lleno", timeline compacto.
+   - Pantalla reducida: contenedor compacto con scroll.
    - Regla .hidden para ocultar "Adelante" en la última slide.
-   - Sin emojis: botón Explorar etapas usa iconos Lucide.
    ============================================================ */
 
-/* ===== UTILIDAD: OCULTAR ===== */
 .hidden {
     display: none !important;
 }
@@ -20,7 +14,6 @@
    ===== BASE: MODO COMPACTO (por defecto) =====
    ============================================================ */
 
-/* Wrapper: padding relativo para que se vea el fondo */
 .page-wrapper {
     padding: clamp(0.75rem, 2vw, 1.5rem);
     align-items: center;
@@ -28,7 +21,6 @@
     overflow: hidden;
 }
 
-/* Contenedor: altura natural con tope, NO height:100% */
 .presentacion-container {
     max-width: 760px;
     width: 100%;
@@ -51,7 +43,7 @@
     gap: 0.7rem;
 }
 
-/* ===== SLIDES: en modo compacto SÍ hay scrollbar fina ===== */
+/* ===== SLIDES ===== */
 .slides-container {
     position: relative;
     flex: 1 1 auto;
@@ -403,7 +395,7 @@
     transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-/* ===== FOOTER WAVES (dentro del contenedor) ===== */
+/* ===== FOOTER WAVES ===== */
 .presentacion-container .footer-waves {
     flex-shrink: 0;
 }
@@ -677,7 +669,7 @@
 }
 
 /* ============================================================
-   ===== MODO AMPLIO (pantalla grande) =====
+   ===== MODO AMPLIO =====
    ============================================================ */
 @media (min-width: 900px) and (min-height: 650px) {
     .page-wrapper {
@@ -751,7 +743,6 @@
         gap: 11px;
     }
 
-    /* Timeline compacto en modo amplio para que la slide 3 quepa */
     .timeline {
         gap: 0.45rem;
         padding: 0.15rem 0;
@@ -824,53 +815,23 @@
    ===== AJUSTES PARA PANTALLAS BAJAS =====
    ============================================================ */
 @media (max-height: 700px) and (min-width: 700px) {
-    .page-wrapper {
-        padding: 0.9rem;
-    }
-    .presentacion-container {
-        max-height: calc(100vh - 1.8rem);
-    }
-    .slides-container {
-        min-height: clamp(140px, 22vh, 260px);
-        margin: 0.6rem 1.4rem 0.35rem;
-    }
-    .slide {
-        padding: 1rem 1.4rem;
-    }
-    .presentacion-container .header-content {
-        padding: 0.8rem 1.4rem 0.65rem;
-    }
-    .presentacion-container .slide-controls {
-        padding: 0.3rem 1.4rem 0.2rem;
-    }
-    .presentacion-container .progress-bar {
-        margin: 0.25rem 1.4rem 0.6rem;
-    }
+    .page-wrapper { padding: 0.9rem; }
+    .presentacion-container { max-height: calc(100vh - 1.8rem); }
+    .slides-container { min-height: clamp(140px, 22vh, 260px); margin: 0.6rem 1.4rem 0.35rem; }
+    .slide { padding: 1rem 1.4rem; }
+    .presentacion-container .header-content { padding: 0.8rem 1.4rem 0.65rem; }
+    .presentacion-container .slide-controls { padding: 0.3rem 1.4rem 0.2rem; }
+    .presentacion-container .progress-bar { margin: 0.25rem 1.4rem 0.6rem; }
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
-    .page-wrapper {
-        padding: 0.5rem;
-    }
-    .presentacion-container {
-        max-height: calc(100vh - 1rem);
-    }
-    .slides-container {
-        min-height: clamp(110px, 20vh, 200px);
-        margin: 0.45rem 1rem 0.3rem;
-    }
-    .slide {
-        padding: 0.8rem 1rem;
-    }
-    .presentacion-container .header-content {
-        padding: 0.6rem 1rem 0.5rem;
-    }
-    .presentacion-container .slide-controls {
-        padding: 0.25rem 1rem 0.15rem;
-    }
-    .presentacion-container .progress-bar {
-        margin: 0.2rem 1rem 0.45rem;
-    }
+    .page-wrapper { padding: 0.5rem; }
+    .presentacion-container { max-height: calc(100vh - 1rem); }
+    .slides-container { min-height: clamp(110px, 20vh, 200px); margin: 0.45rem 1rem 0.3rem; }
+    .slide { padding: 0.8rem 1rem; }
+    .presentacion-container .header-content { padding: 0.6rem 1rem 0.5rem; }
+    .presentacion-container .slide-controls { padding: 0.25rem 1rem 0.15rem; }
+    .presentacion-container .progress-bar { margin: 0.2rem 1rem 0.45rem; }
 }
 
 /* ============================================================
@@ -939,4 +900,76 @@
     .presentacion-container .progress-bar { margin: 0.2rem 0.55rem 0.35rem; }
     .btn-explorar-etapas { padding: 0.28rem 0.55rem; }
     .btn-explorar-icon { width: 11px; height: 11px; }
+}
+
+/* ============================================================
+   ===== RENDIMIENTO: PREFERENCIAS Y MÓVIL =====
+   No afecta al desktop estándar. Solo se activa si:
+   - El usuario tiene "reducir movimiento" en su SO.
+   - El ancho es <= 768px (móvil).
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .intro-content {
+        animation: none !important;
+    }
+
+    .btn-explorar-etapas.visible {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: scale(1) !important;
+    }
+
+    .btn-explorar-etapas.visible .btn-explorar-glow,
+    .btn-explorar-etapas.visible .btn-particle {
+        animation: none !important;
+        opacity: 0 !important;
+    }
+
+    #starfieldCanvas {
+        opacity: 0.4;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Quitar backdrop-filter: lo más caro en móvil */
+    .guide-tooltip {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: var(--bg-primary);
+    }
+
+    /* Spotlight más simple */
+    .guide-spotlight {
+        box-shadow:
+            0 0 0 9999px rgba(0, 0, 0, 0.72),
+            0 0 0 3px var(--unad-yellow) !important;
+    }
+
+    /* Botón "Explorar etapas": sin animaciones */
+    .btn-explorar-etapas.visible {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: scale(1) !important;
+    }
+
+    .btn-explorar-etapas.visible .btn-explorar-glow,
+    .btn-explorar-etapas.visible .btn-particle {
+        animation: none !important;
+        opacity: 0 !important;
+    }
+
+    /* Canvas más tenue */
+    #starfieldCanvas {
+        opacity: 0.55;
+    }
 }
