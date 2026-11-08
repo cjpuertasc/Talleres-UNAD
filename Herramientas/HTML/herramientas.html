@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Herramientas Digitales · Taller</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        (function() {
+            try {
+                var saved = localStorage.getItem('theme');
+                if (saved !== 'dark') {
+                    document.documentElement.classList.add('light-mode-preload');
+                }
+            } catch (e) {}
+        })();
+    </script>
+
+    <link rel="stylesheet" href="../CSS/herramientas-styles.css" />
+</head>
+<body>
+    <a href="#mainContent" class="skip-link" aria-label="Saltar al contenido principal">Saltar al contenido</a>
+
+    <canvas id="starfieldCanvas" aria-hidden="true"></canvas>
+    <div class="campus-bg-layer" aria-hidden="true"></div>
+
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="readingProgress"></div>
+    </div>
+
+    <!-- Controles flotantes superiores -->
+    <div class="top-controls" role="toolbar" aria-label="Controles de vista">
+        <button class="ctrl-btn" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false">
+            <i data-lucide="menu" class="icon-lucide-sm menu-open-icon" aria-hidden="true"></i>
+            <i data-lucide="x" class="icon-lucide-sm menu-close-icon" aria-hidden="true"></i>
+        </button>
+        <button class="ctrl-btn" id="guideToggle" aria-label="Activar guía interactiva de accesibilidad" aria-pressed="false">
+            <i data-lucide="help-circle" class="icon-lucide-sm" aria-hidden="true"></i>
+        </button>
+        <button class="ctrl-btn" id="themeToggle" aria-label="Cambiar tema (oscuro/claro)" aria-pressed="true">
+            <i data-lucide="moon" class="ctrl-icon-moon icon-lucide-sm" aria-hidden="true"></i>
+            <i data-lucide="sun" class="ctrl-icon-sun icon-lucide-sm" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div class="app-container" id="mainContent" role="main">
+
+        <header class="header" role="banner">
+            <div class="header-content">
+                <div class="header-left">
+                    <button class="btn-back" id="btnBack" aria-label="Volver a seleccionar etapas">
+                        <i data-lucide="arrow-left" class="icon-lucide-lg" aria-hidden="true"></i>
+                    </button>
+                    <div class="header-title">
+                        <span class="logo-icon" aria-hidden="true">
+                            <i data-lucide="wrench" class="icon-lucide"></i>
+                        </span>
+                        <h1>Herramientas Digitales</h1>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OLAS DE HEADER (CSS clip-path) -->
+            <div class="header-waves" aria-hidden="true">
+                <div class="wave-layer wave-yellow"></div>
+                <div class="wave-layer wave-orange"></div>
+                <div class="wave-layer wave-blue"></div>
+            </div>
+        </header>
+
+        <!-- MENÚ LATERAL (Izquierda) -->
+        <nav class="side-menu" id="sideMenu" role="navigation" aria-label="Navegación entre etapas">
+            <div class="side-menu-header">
+                <span class="side-menu-title">Menú de etapas</span>
+                <button class="side-menu-close" id="sideMenuClose" aria-label="Cerrar menú">
+                    <i data-lucide="x" class="icon-lucide-sm" aria-hidden="true"></i>
+                </button>
+            </div>
+            
+            <div class="side-menu-profile">
+                <div class="side-menu-profile-avatar">
+                    <i data-lucide="wrench" class="icon-lucide-lg"></i>
+                </div>
+                <div class="side-menu-profile-info">
+                    <span class="side-menu-profile-title">Explorando el taller</span>
+                    <span class="side-menu-profile-sub">Herramientas Digitales</span>
+                </div>
+            </div>
+
+            <ul class="side-menu-list">
+                <li>
+                    <a href="campus.html" class="side-menu-link" data-etapa="campus">
+                        <span class="side-menu-dot" style="background: #FF6B1A;"></span>
+                        <span class="side-menu-text">Campus Virtual</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="side-menu-link active" data-etapa="herramientas">
+                        <span class="side-menu-dot" style="background: #0056B3;"></span>
+                        <span class="side-menu-text">Herramientas Digitales</span>
+                        <i data-lucide="check-circle" class="side-menu-status icon-lucide-sm"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="ia.html" class="side-menu-link" data-etapa="ia">
+                        <span class="side-menu-dot" style="background: #a855f7;"></span>
+                        <span class="side-menu-text">Inteligencia Artificial</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="side-menu-footer">
+                <span class="side-menu-version">Taller v1.2</span>
+            </div>
+        </nav>
+
+        <div class="menu-overlay" id="menuOverlay"></div>
+
+        <main class="main-content" id="mainContentScroll">
+            <div class="hero-section" id="heroSection">
+                <div class="hero-content">
+                    <h2 class="hero-title">Herramientas Digitales</h2>
+                    <p class="hero-description">
+                        Las herramientas son muy importantes ya que nos permiten realizar o ejecutar procesos mucho más fáciles, más rápidos y que permitan comunicar la idea que deseamos. En el caso de las herramientas son importantes debido a la metodología que cuenta la universidad.
+                    </p>
+                    <p class="hero-description" style="margin-top: 0.5rem;">
+                        En este apartado podremos encontrar toda la información acerca de diversas herramientas digitales que ofrece tanto la universidad UNAD como también las plataformas Web.
+                    </p>
+                    <p class="hero-description" style="margin-top: 0.5rem;">
+                        Además de algunas aplicaciones que podría funcionar para la organización académica y el desarrollo de trabajos.
+                    </p>
+                    <button class="hero-toggle" id="heroToggle" aria-label="Ocultar o mostrar descripción">
+                        <span class="hero-toggle-text">Ocultar descripción</span>
+                        <i data-lucide="chevron-up" class="icon-lucide-sm" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="natural-divider" aria-hidden="true"></div>
+
+            <section class="campus-main-section" id="campusMainSection">
+                <!-- TABS PRINCIPALES (Ofimáticas, Almacenamiento, Organizadores, Presentaciones, IA) -->
+                <div class="tabs-categorias-container">
+                    <div class="tabs-categorias-nav" id="tabsCategoriasNav">
+                        <div class="tabs-scroll-wrapper">
+                            <div class="tabs-scroll-inner" id="tabsScrollInner">
+                                <button class="tab-categoria active" data-categoria="ofimaticas" style="--cat-color: #2563eb;">
+                                    <i data-lucide="file-text" class="icon-lucide-sm" aria-hidden="true"></i>
+                                    Ofimáticas
+                                </button>
+                                <button class="tab-categoria" data-categoria="almacenamiento" style="--cat-color: #0f9d58;">
+                                    <i data-lucide="cloud" class="icon-lucide-sm" aria-hidden="true"></i>
+                                    Almacenamiento
+                                </button>
+                                <button class="tab-categoria" data-categoria="organizadores" style="--cat-color: #f59e0b;">
+                                    <i data-lucide="calendar" class="icon-lucide-sm" aria-hidden="true"></i>
+                                    Organizadores
+                                </button>
+                                <button class="tab-categoria" data-categoria="presentaciones" style="--cat-color: #ec4899;">
+                                    <i data-lucide="presentation" class="icon-lucide-sm" aria-hidden="true"></i>
+                                    Presentaciones
+                                </button>
+                                <button class="tab-categoria" data-categoria="ia" style="--cat-color: #a855f7;">
+                                    <i data-lucide="bot" class="icon-lucide-sm" aria-hidden="true"></i>
+                                    Inteligencia Artificial
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tabs-categorias-content" id="tabsCategoriasContent">
+                        <div class="tab-categoria-panel active" data-categoria="ofimaticas">
+                            <div class="categoria-header-full">
+                                <h3>Ofimática y UNAD</h3>
+                                <p>Herramientas de productividad y suites ofimáticas que la UNAD pone a disposición de sus estudiantes para facilitar el desarrollo de actividades académicas y la creación de contenido de calidad.</p>
+                                <p>En esta sección encontrarás desde procesadores de texto tradicionales hasta asistentes de investigación impulsados por inteligencia artificial, todos diseñados para potenciar tu rendimiento académico.</p>
+                            </div>
+                            <div class="herramientas-grid-full" id="herramientasGridOfimaticas"></div>
+                        </div>
+
+                        <div class="tab-categoria-panel" data-categoria="almacenamiento">
+                            <div class="categoria-header-full">
+                                <h3>Almacenamiento en la Nube</h3>
+                                <p>Espacio en la nube para guardar, sincronizar y compartir archivos desde cualquier dispositivo, en cualquier momento y lugar.</p>
+                                <p>Estas herramientas te permiten tener acceso a tus documentos, fotos y archivos importantes sin importar dónde te encuentres, facilitando el trabajo colaborativo y la gestión de información.</p>
+                            </div>
+                            <div class="herramientas-grid-full" id="herramientasGridAlmacenamiento"></div>
+                        </div>
+
+                        <div class="tab-categoria-panel" data-categoria="organizadores">
+                            <div class="categoria-header-full">
+                                <h3>Organizadores Académicos</h3>
+                                <p>Herramientas para gestionar el tiempo, tareas y proyectos de manera eficiente, permitiendo una mejor planificación y seguimiento de tus actividades académicas.</p>
+                                <p>Desde calendarios inteligentes hasta sistemas de notas interconectadas, estas aplicaciones te ayudarán a mantener el orden y la productividad en tu vida estudiantil.</p>
+                            </div>
+                            <div class="herramientas-grid-full" id="herramientasGridOrganizadores"></div>
+                        </div>
+
+                        <div class="tab-categoria-panel" data-categoria="presentaciones">
+                            <div class="categoria-header-full">
+                                <h3>Presentaciones e Insumos</h3>
+                                <p>Herramientas para crear presentaciones impactantes, videos, contenido visual y materiales didácticos que faciliten la comunicación de ideas y conceptos.</p>
+                                <p>Desde diseño gráfico hasta edición de video, estas aplicaciones te permitirán dar vida a tus proyectos académicos con un alto nivel de calidad y creatividad.</p>
+                            </div>
+                            <div class="herramientas-grid-full" id="herramientasGridPresentaciones"></div>
+                        </div>
+
+                        <div class="tab-categoria-panel" data-categoria="ia">
+                            <div class="categoria-header-full">
+                                <h3>Inteligencia Artificial</h3>
+                                <p>Asistentes y herramientas impulsadas por inteligencia artificial para potenciar el aprendizaje, la investigación y la productividad académica.</p>
+                                <p>Estas plataformas utilizan modelos de lenguaje avanzados para ayudarte a generar contenido, analizar información, resolver problemas complejos y automatizar tareas repetitivas.</p>
+                            </div>
+                            <div class="herramientas-grid-full" id="herramientasGridIA"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER (Olas CSS + Info unificada) -->
+        <footer class="footer-waves" role="contentinfo" aria-label="Pie de página">
+            <div class="footer-waves-container" aria-hidden="true">
+                <div class="wave-layer-footer wave-yellow-footer"></div>
+                <div class="wave-layer-footer wave-orange-footer"></div>
+                <div class="wave-layer-footer wave-blue-footer"></div>
+            </div>
+
+            <div class="footer-content">
+                <div class="footer-inner">
+                    <div class="footer-info">
+                        <div class="footer-logo">
+                            <i data-lucide="wrench" class="icon-lucide-lg" aria-hidden="true"></i>
+                            <span>Herramientas Digitales</span>
+                        </div>
+                        <p class="footer-text">
+                            Desarrollado por <strong>Carlos José Puertas Casas</strong> · Todos los derechos reservados @2026
+                        </p>
+                    </div>
+                    <div class="footer-meta">
+                        <span class="footer-version">Taller v1.2</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- DETALLE -->
+    <div class="herramienta-detalle-overlay" id="herramientaDetalleOverlay">
+        <div class="herramienta-detalle-container" id="herramientaDetalleContainer">
+            <div class="detalle-divider-top" aria-hidden="true">
+                <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+                    <path d="M0,30 C300,60 600,0 900,30 C1100,50 1200,20 1200,20 L1200,60 L0,60 Z" fill="var(--detalle-divider-color, #2563eb)" opacity="0.8"/>
+                </svg>
+            </div>
+
+            <button class="detalle-close" id="detalleClose" aria-label="Cerrar detalle">
+                <i data-lucide="x" class="icon-lucide-lg" aria-hidden="true"></i>
+            </button>
+
+            <div class="detalle-content" id="detalleContent"></div>
+
+            <div class="detalle-divider-bottom" aria-hidden="true">
+                <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+                    <path d="M0,30 C300,0 600,60 900,30 C1100,10 1200,40 1200,40 L1200,0 L0,0 Z" fill="var(--detalle-divider-color, #2563eb)" opacity="0.8"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Volver Arriba (global) -->
+    <button class="back-to-top" id="backToTop" aria-label="Volver arriba"><i data-lucide="arrow-up" class="icon-lucide-sm"></i></button>
+
+    <!-- Intro Overlay -->
+    <div class="intro-overlay" id="introOverlay" aria-hidden="true">
+        <div class="intro-content">
+            <div class="intro-logo" aria-hidden="true">
+                <i data-lucide="wrench" class="icon-lucide-xl"></i>
+            </div>
+            <h2>Herramientas Digitales</h2>
+            <p>Cargando...</p>
+            <div class="intro-loader" role="progressbar" aria-label="Cargando">
+                <div class="loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GUÍA INTERACTIVA -->
+    <div class="guide-overlay" id="guideOverlay" aria-hidden="true">
+        <div class="guide-spotlight" id="guideSpotlight" aria-hidden="true"></div>
+        <div class="guide-tooltip" id="guideTooltip" role="dialog" aria-modal="true" aria-labelledby="guideText">
+            <div class="guide-tooltip-header">
+                <span class="guide-step" id="guideStep">1/4</span>
+                <button class="guide-close" id="guideClose" aria-label="Cerrar guía">
+                    <i data-lucide="x" class="icon-lucide-sm" aria-hidden="true"></i>
+                </button>
+            </div>
+            <p class="guide-text" id="guideText">Texto de la guía</p>
+            <div class="guide-actions">
+                <button class="guide-btn guide-btn-prev" id="guidePrev" aria-label="Paso anterior" disabled>
+                    <i data-lucide="chevron-left" class="icon-lucide-sm" aria-hidden="true"></i>
+                    <span>Anterior</span>
+                </button>
+                <button class="guide-btn guide-btn-next" id="guideNext" aria-label="Siguiente paso">
+                    <span>Siguiente</span>
+                    <i data-lucide="chevron-right" class="icon-lucide-sm" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+    <script src="../JS/herramientas-script.js"></script>
+</body>
+</html>
