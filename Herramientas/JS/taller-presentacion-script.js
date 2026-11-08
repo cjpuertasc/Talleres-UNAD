@@ -2,8 +2,15 @@
 // ===== SCRIPT AUTÓNOMO DE LA PRESENTACIÓN =====
 // Contiene: starfield, intro overlay, toggle de tema,
 // presentación (slides) y guía interactiva de accesibilidad.
-// Sin emojis. La guía no explica el título (4 pasos).
 // ============================================================
+
+// ===== DETECCIÓN DE MÓVIL Y PREFERENCIAS =====
+const isMobileDevice = window.matchMedia('(max-width: 768px)').matches ||
+    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const lowPerformanceMode = isMobileDevice || prefersReducedMotion;
 
 document.addEventListener('DOMContentLoaded', function() {
     initStarfield();
@@ -32,24 +39,35 @@ function initStarfield() {
     let isVisible = true;
 
     const SPEED_MULTIPLIER = 1.3;
-    const STAR_LAYERS = [
-        { speed: 0.015 * SPEED_MULTIPLIER, scale: 0.2, count: 220 },
-        { speed: 0.03 * SPEED_MULTIPLIER, scale: 0.5, count: 60 },
-        { speed: 0.05 * SPEED_MULTIPLIER, scale: 0.75, count: 30 }
-    ];
+
+    // ===== Capas de estrellas según rendimiento =====
+    const STAR_LAYERS = lowPerformanceMode
+        ? [
+            // Modo ligero: ~50 estrellas
+            { speed: 0.015 * SPEED_MULTIPLIER, scale: 0.2, count: 40 },
+            { speed: 0.03 * SPEED_MULTIPLIER, scale: 0.5, count: 10 }
+          ]
+        : [
+            // Modo completo: ~310 estrellas
+            { speed: 0.015 * SPEED_MULTIPLIER, scale: 0.2, count: 220 },
+            { speed: 0.03 * SPEED_MULTIPLIER, scale: 0.5, count: 60 },
+            { speed: 0.05 * SPEED_MULTIPLIER, scale: 0.75, count: 30 }
+          ];
 
     const STARS_ANGLE = 145;
     const SHOOTING_STAR_SPEED = { min: 15 * SPEED_MULTIPLIER, max: 20 * SPEED_MULTIPLIER };
     const SHOOTING_STAR_OPACITY_DELTA = 0.01;
     const TRAIL_LENGTH_DELTA = 0.01;
-    const SHOOTING_STAR_EMITTING_INTERVAL = 1200;
+    const SHOOTING_STAR_EMITTING_INTERVAL = lowPerformanceMode ? 4000 : 1200;
     const SHOOTING_STAR_LIFE_TIME = 500;
     const MAX_TRAIL_LENGTH = 300;
     const STAR_BASE_RADIUS = 2;
     const SHOOTING_STAR_RADIUS = 3;
 
     function resize() {
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        // En modo ligero usar 1x DPR
+        const maxDpr = lowPerformanceMode ? 1 : 2;
+        dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
         width = window.innerWidth;
         height = window.innerHeight;
         canvas.width = width * dpr;
@@ -105,6 +123,9 @@ function initStarfield() {
     }
 
     function createShootingStar() {
+        // En modo ligero, no se crean estrellas fugaces
+        if (lowPerformanceMode) return;
+
         const shootingStar = {
             x: randomRange(width / 2, width),
             y: randomRange(0, height / 2),
@@ -132,7 +153,7 @@ function initStarfield() {
         if (isLightMode) {
             ctx.fillStyle = `rgba(255, 255, 255, ${0.9 * twinkle})`;
             ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
-            ctx.shadowBlur = 4;
+            ctx.shadowBlur = lowPerformanceMode ? 2 : 4;
         } else {
             ctx.fillStyle = `rgba(255, 235, 180, ${0.8 * twinkle})`;
             ctx.shadowColor = 'transparent';
@@ -268,12 +289,15 @@ function initIntroOverlay() {
     const introOverlay = document.getElementById('introOverlay');
     if (!introOverlay) return;
 
+    const delay = lowPerformanceMode ? 700 : 1400;
+    const fadeOut = lowPerformanceMode ? 400 : 900;
+
     setTimeout(() => {
         introOverlay.classList.add('hidden');
         setTimeout(() => {
             introOverlay.style.display = 'none';
-        }, 900);
-    }, 1400);
+        }, fadeOut);
+    }, delay);
 }
 
 // ============================================================
@@ -328,13 +352,11 @@ function initPresentation() {
         const isLastSlide = currentSlide === totalSlides - 1;
 
         if (isLastSlide) {
-            // Mostrar "Explorar etapas" y ocultar "Adelante"
             btnExplorar.style.display = 'inline-flex';
             void btnExplorar.offsetWidth;
             btnExplorar.classList.add('visible');
             nextBtn.classList.add('hidden');
         } else {
-            // Ocultar "Explorar etapas" y mostrar "Adelante"
             btnExplorar.classList.remove('visible');
             btnExplorar.style.display = 'none';
             nextBtn.classList.remove('hidden');
@@ -377,7 +399,7 @@ function initPresentation() {
         setTimeout(() => {
             currentEl.classList.remove('exit-left', 'exit-right');
             isTransitioning = false;
-        }, 600);
+        }, lowPerformanceMode ? 200 : 600);
     }
 
     function nextSlide() {
@@ -434,17 +456,10 @@ function initPresentation() {
     }
 
     updateExplorarButton();
-
-    console.log('[Presentación] Inicializada correctamente. Total slides:', totalSlides);
 }
 
 // ============================================================
 // ===== 5. GUÍA INTERACTIVA (SPOTLIGHT + TOOLTIP) =====
-// 4 pasos. NO explica el título (.header).
-//   1. Top-controls (volver, accesibilidad, tema)
-//   2. Slides (contenido de la diapositiva)
-//   3. Controles (Atrás / indicadores / Adelante)
-//   4. Progreso + botón Explorar etapas
 // ============================================================
 function initGuide() {
     const guideToggle = document.getElementById('guideToggle');
@@ -459,7 +474,6 @@ function initGuide() {
 
     if (!guideToggle || !guideOverlay) return;
 
-    // Pasos de la guía (sin el header/título)
     const steps = [
         {
             selector: '.top-controls',
@@ -560,7 +574,10 @@ function initGuide() {
         guideText.textContent = step.text;
 
         requestAnimationFrame(() => {
-            element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            element.scrollIntoView({
+                behavior: lowPerformanceMode ? 'auto' : 'smooth',
+                block: 'nearest'
+            });
             setTimeout(() => {
                 updateSpotlight(element);
                 requestAnimationFrame(() => {
