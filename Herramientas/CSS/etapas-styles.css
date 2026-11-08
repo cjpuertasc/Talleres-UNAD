@@ -1,9 +1,11 @@
 /* ============================================================
    ===== ESTILOS DE ETAPAS =====
-   Incluye: fondo dinámico con crossfade, header con olas,
-   grid de etapas con scroll interno en modo compacto,
-   top-controls flotante, guía interactiva de accesibilidad,
-   footer glass actualizado.
+   Desktop-first con optimización agresiva para móviles.
+   - En desktop: TODO igual (blur 24px, delays 1.2s/1.5s,
+     sombras completas, todas las animaciones).
+   - En móvil (<=768px): sin backdrop-filter, fondos sólidos,
+     sombras ligeras, delays acortados, scroll suave iOS.
+   - prefers-reduced-motion: respeta la preferencia del SO.
    ============================================================ */
 
 :root {
@@ -114,6 +116,7 @@ body.light-mode {
 
 html, body {
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
 }
 
@@ -456,7 +459,7 @@ body.light-mode #themeToggle .ctrl-icon-sun {
 }
 
 /* ============================================================
-   ===== GRID DE ETAPAS (con scroll interno en compacto) =====
+   ===== GRID DE ETAPAS =====
    ============================================================ */
 .etapas-grid {
     display: grid;
@@ -469,6 +472,7 @@ body.light-mode #themeToggle .ctrl-icon-sun {
     overflow-x: hidden;
     scrollbar-width: thin;
     scrollbar-color: var(--unad-blue) transparent;
+    -webkit-overflow-scrolling: touch;
 }
 
 .etapas-grid::-webkit-scrollbar { width: 6px; }
@@ -637,7 +641,7 @@ body.light-mode #themeToggle .ctrl-icon-sun {
 }
 
 /* ============================================================
-   ===== FOOTER WAVE (3 capas) =====
+   ===== FOOTER WAVE =====
    ============================================================ */
 .footer-waves {
     position: relative;
@@ -862,7 +866,7 @@ body.light-mode .glass-footer-text strong {
 .icon-lucide-xl { width: 64px; height: 64px; stroke-width: 1.5; display: inline-block; flex-shrink: 0; }
 
 /* ============================================================
-   ===== GUÍA INTERACTIVA (SPOTLIGHT + TOOLTIP) =====
+   ===== GUÍA INTERACTIVA =====
    ============================================================ */
 .guide-overlay {
     position: fixed;
@@ -1144,4 +1148,93 @@ body.light-mode .glass-footer-text strong {
     .guide-tooltip { max-width: calc(100vw - 20px); padding: 0.75rem 0.85rem; }
     .guide-actions { flex-direction: column; align-items: stretch; }
     .guide-btn { justify-content: center; }
+}
+
+/* ============================================================
+   ===== RENDIMIENTO: PREFERENCIAS Y MÓVIL =====
+   No afecta al desktop estándar. Solo se activa si:
+   - El usuario tiene "reducir movimiento" en su SO.
+   - El ancho es <= 768px (móvil).
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .container,
+    .glass-footer {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+    }
+
+    .intro-content {
+        animation: none !important;
+    }
+
+    #etapasCanvas {
+        opacity: 0.4;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Quitar backdrop-filter: lo más caro en móvil */
+    .container,
+    .glass-footer,
+    .ctrl-btn,
+    .guide-tooltip {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    /* Fondos sólidos en lugar de glass */
+    .container,
+    .glass-footer,
+    .ctrl-btn,
+    .guide-tooltip {
+        background: var(--bg-primary);
+    }
+
+    /* Sombras más ligeras */
+    .container {
+        box-shadow: 0 10px 30px var(--shadow-color);
+    }
+
+    .glass-footer {
+        box-shadow: 0 -6px 20px var(--shadow-color);
+    }
+
+    .ctrl-btn {
+        box-shadow: 0 2px 10px var(--shadow-color);
+    }
+
+    /* Quitar animaciones de entrada en móvil */
+    .container,
+    .glass-footer {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+    }
+
+    .intro-content {
+        animation: none !important;
+    }
+
+    /* Spotlight de la guía: sombra más simple */
+    .guide-spotlight {
+        box-shadow:
+            0 0 0 9999px rgba(0, 0, 0, 0.72),
+            0 0 0 3px var(--unad-yellow) !important;
+    }
+
+    /* Canvas más tenue para no competir con la UI */
+    #etapasCanvas {
+        opacity: 0.55;
+    }
 }
