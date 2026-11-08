@@ -185,6 +185,7 @@ body.light-mode .ctrl-icon-sun { opacity: 1; transform: rotate(0) scale(1); }
 .hero-title { font-family: var(--font-title); font-size: 3rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem; text-shadow: 0 2px 20px rgba(0,0,0,0.3); }
 body.light-mode .hero-title { text-shadow: none; }
 .hero-description { font-size: 1.05rem; font-weight: 500; color: var(--text-muted); line-height: 1.8; max-width: 750px; margin: 0 auto 0.6rem; transition: all 0.5s ease; overflow: hidden; }
+.hero-description strong { color: var(--text-main); }
 .hero-section.collapsed .hero-description { opacity: 0; transform: translateY(-10px) scale(0.95); max-height: 0; padding: 0; margin: 0; pointer-events: none; }
 .hero-toggle { display: inline-flex; align-items: center; gap: 6px; background: var(--glass-bg); border: 1px solid var(--border-color); color: var(--text-main); font-weight: 600; cursor: pointer; padding: 8px 16px; border-radius: 20px; margin-top: 0.8rem; transition: all 0.3s; }
 .hero-toggle:hover { background: var(--bg-secondary); transform: scale(1.05); }
@@ -194,7 +195,7 @@ body.light-mode .hero-title { text-shadow: none; }
    TABS PRINCIPALES
    ============================================================ */
 .campus-main-section { width: 100%; max-width: 1100px; margin: 0 auto; padding: 2.5rem 2.5rem 4rem; display: flex; flex-direction: column; gap: 1.8rem; }
-.campus-main-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; max-width: 780px; width: 100%; margin: 0 auto; }
+.campus-main-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.9rem; max-width: 1080px; width: 100%; margin: 0 auto; }
 .campus-main-tab { display: flex; align-items: center; gap: 0.9rem; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-muted); cursor: pointer; transition: all 0.35s; text-align: left; }
 .campus-main-tab:hover { transform: translateY(-2px); border-color: var(--campus-color); color: var(--text-main); }
 .campus-main-tab.active { background: linear-gradient(135deg, var(--campus-color), var(--unad-yellow)); border-color: transparent; color: #fff; box-shadow: 0 10px 28px rgba(255, 107, 26, 0.35); }
@@ -306,6 +307,133 @@ body.light-mode .campus-alert-icon { color: #b45309; background: rgba(180, 83, 9
 .cipas-card-header h4 { font-family: var(--font-title); font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
 .cipas-card p { font-size: 0.94rem; line-height: 1.7; color: var(--text-muted); }
 .cipas-card p strong { color: var(--campus-color); }
+
+/* ============================================================
+   INFO UNAD — Link card y horarios
+   ============================================================ */
+.campus-link-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.85rem 1.2rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--campus-color);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--campus-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    word-break: break-all;
+}
+.campus-link-card:hover {
+    background: var(--bg-secondary);
+    transform: translateX(3px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+}
+.campus-link-card .icon-lucide-sm { color: var(--campus-color); flex-shrink: 0; }
+.campus-link-card a {
+    color: inherit;
+    text-decoration: none;
+    font-family: var(--font-text);
+}
+.campus-link-card a:hover { text-decoration: underline; }
+
+.campus-info-list--horario li {
+    background: var(--bg-secondary);
+    border-left-color: var(--unad-yellow);
+}
+.campus-info-list--horario li .icon-lucide-sm { color: var(--unad-yellow); }
+
+/* ============================================================
+   INFO UNAD — Tarjetas de escuelas
+   ============================================================ */
+.escuelas-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.escuela-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.1rem 1.2rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-left: 5px solid var(--escuela-color, var(--campus-color));
+    border-radius: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.escuela-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--escuela-color, var(--campus-color));
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+}
+
+.escuela-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--escuela-color, var(--campus-color));
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.escuela-card:hover::before { opacity: 0.08; }
+
+.escuela-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.escuela-sigla {
+    font-family: var(--font-title);
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--escuela-color, var(--campus-color));
+    letter-spacing: 0.5px;
+}
+
+.escuela-card-arrow {
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.escuela-card:hover .escuela-card-arrow {
+    color: var(--escuela-color, var(--campus-color));
+    transform: translate(2px, -2px);
+}
+
+.escuela-nombre {
+    font-family: var(--font-text);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-main);
+    line-height: 1.5;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+body.light-mode .escuela-card {
+    background: #ffffff;
+}
+body.light-mode .escuela-sigla { color: var(--escuela-color, var(--campus-color)); }
+body.light-mode .escuela-nombre { color: var(--text-main); }
 
 /* ============================================================
    CONTROLES DE SLIDE
@@ -425,8 +553,50 @@ body.light-mode .campus-alert-icon { color: #b45309; background: rgba(180, 83, 9
 .guide-btn-next:hover:not(:disabled) { background: #e6b300; border-color: #e6b300; color: #1a1a1d; }
 
 /* ============================================================
+   ACORDEÓN CON IMÁGENES (Normas APA)
+   ============================================================ */
+.campus-accordion.open .campus-accordion-body {
+    max-height: 1400px;
+}
+
+.campus-accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.45s ease;
+}
+
+.campus-accordion-body p {
+    padding: 0 1rem 0.75rem;
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: var(--text-muted);
+}
+
+.campus-accordion-body .campus-img-figure {
+    padding: 0 1rem 1rem;
+    margin: 0;
+}
+
+.campus-accordion-body .campus-img-placeholder {
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+}
+
+.campus-accordion-body .campus-img-figure figcaption {
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 0.4rem;
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
+@media (max-width: 1024px) {
+    .campus-main-tabs { grid-template-columns: 1fr 1fr; max-width: 100%; }
+}
+
 @media (max-width: 820px) {
     :root { --header-height: 90px; }
     .header-content { padding: 0.8rem 1.2rem 0.6rem; }
@@ -439,6 +609,7 @@ body.light-mode .campus-alert-icon { color: #b45309; background: rgba(180, 83, 9
     .lectura-grid { grid-template-columns: 1fr; }
     .cipas-grid { grid-template-columns: 1fr; }
     .semaforo-grid { grid-template-columns: 1fr 1fr; }
+    .escuelas-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {
@@ -478,12 +649,8 @@ body.light-mode .campus-alert-icon { color: #b45309; background: rgba(180, 83, 9
 }
 
 /* ============================================================
-   ===== RENDIMIENTO: PREFERENCIAS Y MÓVIL =====
-   No afecta al desktop estándar. Solo se activa si:
-   - El usuario tiene "reducir movimiento" en su SO.
-   - El ancho es <= 768px (móvil).
+   RENDIMIENTO: PREFERENCIAS Y MÓVIL
    ============================================================ */
-
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -504,7 +671,6 @@ body.light-mode .campus-alert-icon { color: #b45309; background: rgba(180, 83, 9
 }
 
 @media (max-width: 768px) {
-    /* Quitar backdrop-filter: lo más caro en móvil */
     .side-menu,
     .ctrl-btn,
     .hero-toggle,
@@ -514,7 +680,6 @@ body.light-mode .campus-alert-icon { color: #b45309; background: rgba(180, 83, 9
         -webkit-backdrop-filter: none !important;
     }
 
-    /* Fondos sólidos en lugar de glass */
     .side-menu,
     .ctrl-btn,
     .hero-toggle,
@@ -522,12 +687,10 @@ body.light-mode .campus-alert-icon { color: #b45309; background: rgba(180, 83, 9
         background: var(--bg-primary);
     }
 
-    /* Menú overlay sin blur */
     .menu-overlay.active {
         background: rgba(0, 0, 0, 0.6);
     }
 
-    /* Sombras más ligeras */
     .ctrl-btn {
         box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
@@ -536,21 +699,22 @@ body.light-mode .campus-alert-icon { color: #b45309; background: rgba(180, 83, 9
         box-shadow: 0 4px 16px rgba(255, 107, 26, 0.4);
     }
 
-    /* Spotlight de la guía: sombra más simple */
     .guide-spotlight {
         box-shadow:
             0 0 0 9999px rgba(0, 0, 0, 0.72),
             0 0 0 3px var(--unad-yellow) !important;
     }
 
-    /* Canvas más tenue */
     #starfieldCanvas {
         opacity: 0.55;
     }
 
-    /* Reducir animaciones de secciones (no las de UI crítica) */
     .campus-main-panel.active,
     .slide-panel.active {
         animation: none;
+    }
+
+    .semaforo-swatch {
+        box-shadow: none;
     }
 }

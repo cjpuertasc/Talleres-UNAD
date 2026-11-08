@@ -365,7 +365,7 @@ body.light-mode .tool-icon-wrapper-full { background: rgba(0,0,0,0.02); }
 .detalle-panel { display: none; animation: panelFadeIn 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
 .detalle-panel.active { display: block; margin-bottom: 0 !important; }
 
-/* INFO ITEMS */
+/* INFO ITEMS — tarjetas con borde de color */
 .detalle-info-grid { display: flex; flex-direction: column; gap: 1rem; }
 .detalle-info-item {
     display: flex;
@@ -412,7 +412,45 @@ body.light-mode .tool-icon-wrapper-full { background: rgba(0,0,0,0.02); }
     line-height: 1.7;
 }
 
-/* GALERÍA */
+/* ============================================================
+   BLOQUE DE RECOMENDACIONES (dentro del detalle)
+   ============================================================ */
+.detalle-recomendaciones {
+    margin-top: 1.5rem;
+    padding: 1.3rem 1.5rem;
+    background: color-mix(in srgb, var(--detalle-divider-color, #2563eb) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--detalle-divider-color, #2563eb) 30%, transparent);
+    border-left: 4px solid var(--detalle-divider-color, #2563eb);
+    border-radius: 16px;
+}
+
+.detalle-recomendaciones-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.6rem;
+    color: var(--detalle-divider-color, #2563eb);
+}
+
+.detalle-recomendaciones-header h4 {
+    font-family: var(--font-title);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.detalle-recomendaciones p {
+    font-family: var(--font-text);
+    font-size: 0.96rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ============================================================
+   GALERÍA
+   ============================================================ */
 .detalle-gallery { margin-top: 1.5rem; }
 .detalle-gallery h4 {
     font-family: var(--font-title);
@@ -507,7 +545,9 @@ body.light-mode .tool-icon-wrapper-full { background: rgba(0,0,0,0.02); }
     font-weight: 600;
 }
 
-/* TUTORIALES */
+/* ============================================================
+   TUTORIALES
+   ============================================================ */
 .detalle-tutoriales-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .detalle-tutorial-item {
     padding: 1.2rem;
@@ -549,7 +589,9 @@ body.light-mode .tool-icon-wrapper-full { background: rgba(0,0,0,0.02); }
     gap: 0.5rem;
 }
 
-/* TIPS */
+/* ============================================================
+   TIPS
+   ============================================================ */
 .detalle-panel .detalle-tips-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.6rem; }
 .detalle-panel .detalle-tips-list li {
     display: flex;
@@ -934,6 +976,34 @@ body.light-mode .tool-icon-wrapper-full { background: rgba(0,0,0,0.02); }
 
     .detalle-scroll-top {
         background: var(--detalle-divider-color, #2563eb);
+    }
+
+    /* Bloque de recomendaciones en móvil: fondo sólido, sin color-mix caro */
+    .detalle-recomendaciones {
+        background: var(--bg-primary);
+        border-color: var(--border-color);
+        border-left-color: var(--detalle-divider-color, #2563eb);
+    }
+
+    .detalle-info-item .info-icon {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+    }
+
+    .detalle-gallery .carrusel-thumb.active {
+        background: var(--bg-primary);
+    }
+
+    .detalle-tutorial-item .tutorial-placeholder {
+        background: var(--bg-primary);
+    }
+
+    .detalle-tutorial-item:hover {
+        border-color: var(--border-color);
+    }
+
+    .detalle-tab.active {
+        box-shadow: none;
     }
 
     /* Sombras más ligeras */
