@@ -236,7 +236,6 @@ body.light-mode .tool-icon-wrapper-full { background: rgba(0,0,0,0.02); }
 .herramienta-detalle-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(0, 0, 0, 0); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); opacity: 0; visibility: hidden; transition: all 0.5s ease; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
 .herramienta-detalle-overlay.active { opacity: 1; visibility: visible; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 
-/* CONTENEDOR: flex column para que el divisor inferior quede siempre pegado al fondo */
 .herramienta-detalle-container {
     max-width: 1500px;
     width: 96%;
@@ -263,7 +262,7 @@ body.light-mode .tool-icon-wrapper-full { background: rgba(0,0,0,0.02); }
 .herramienta-detalle-overlay.active .herramienta-detalle-container { transform: scale(1) translateY(0); opacity: 1; }
 
 /* ============================================================
-   DIVISORES DE OLAS (FIX anti-franja-blanca)
+   DIVISORES DE OLAS
    ============================================================ */
 .detalle-divider-top,
 .detalle-divider-bottom {
@@ -362,12 +361,11 @@ body.light-mode .tool-icon-wrapper-full { background: rgba(0,0,0,0.02); }
 }
 .detalle-tab .icon-lucide-sm { width: 16px; height: 18px; }
 
-/* PANELES: flex:1 para empujar el divisor inferior al fondo */
 .detalle-panels { padding: 1.8rem 3rem 2.5rem; flex: 1; overflow-y: auto; max-height: 450px; min-height: 250px; margin-bottom: 0 !important; }
 .detalle-panel { display: none; animation: panelFadeIn 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
 .detalle-panel.active { display: block; margin-bottom: 0 !important; }
 
-/* INFO ITEMS — tarjetas con borde de color */
+/* INFO ITEMS */
 .detalle-info-grid { display: flex; flex-direction: column; gap: 1rem; }
 .detalle-info-item {
     display: flex;
@@ -826,8 +824,7 @@ body.light-mode .tool-icon-wrapper-full { background: rgba(0,0,0,0.02); }
 }
 
 /* ============================================================
-   FIX: BOTÓN FLOTANTE DEL DETALLE (creado por JS)
-   — oculto por defecto para que no aparezca debajo del footer
+   FIX: BOTÓN FLOTANTE DEL DETALLE
    ============================================================ */
 .detalle-scroll-top {
     position: fixed;
@@ -865,5 +862,108 @@ body.light-mode .tool-icon-wrapper-full { background: rgba(0,0,0,0.02); }
         right: 1rem;
         width: 42px;
         height: 42px;
+    }
+}
+
+/* ============================================================
+   ===== RENDIMIENTO: PREFERENCIAS Y MÓVIL =====
+   No afecta al desktop estándar. Solo se activa si:
+   - El usuario tiene "reducir movimiento" en su SO.
+   - El ancho es <= 768px (móvil).
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .intro-content {
+        animation: none !important;
+    }
+
+    #starfieldCanvas {
+        opacity: 0.4;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Quitar backdrop-filter: lo más caro en móvil */
+    .side-menu,
+    .ctrl-btn,
+    .hero-toggle,
+    .guide-tooltip,
+    .menu-overlay.active,
+    .herramienta-detalle-overlay.active,
+    .herramienta-detalle-container,
+    .detalle-tabs-nav,
+    .detalle-close,
+    .detalle-scroll-top {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    /* Fondos sólidos en lugar de glass */
+    .side-menu,
+    .ctrl-btn,
+    .hero-toggle,
+    .guide-tooltip {
+        background: var(--bg-primary);
+    }
+
+    /* Detalle con fondo sólido */
+    .herramienta-detalle-overlay.active {
+        background: rgba(0, 0, 0, 0.75);
+    }
+
+    .herramienta-detalle-container {
+        background: var(--bg-secondary);
+    }
+
+    .detalle-tabs-nav {
+        background: var(--bg-secondary);
+    }
+
+    .detalle-close {
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    .detalle-scroll-top {
+        background: var(--detalle-divider-color, #2563eb);
+    }
+
+    /* Sombras más ligeras */
+    .ctrl-btn {
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .back-to-top {
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+    }
+
+    .herramienta-detalle-container {
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Spotlight de la guía: sombra más simple */
+    .guide-spotlight {
+        box-shadow:
+            0 0 0 9999px rgba(0, 0, 0, 0.72),
+            0 0 0 3px var(--unad-yellow) !important;
+    }
+
+    /* Canvas más tenue */
+    #starfieldCanvas {
+        opacity: 0.55;
+    }
+
+    /* Reducir animaciones de paneles */
+    .tab-categoria-panel.active,
+    .detalle-panel.active {
+        animation: none;
     }
 }
