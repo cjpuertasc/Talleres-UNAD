@@ -62,7 +62,6 @@
                 </div>
             </div>
 
-            <!-- OLAS DE HEADER (CSS clip-path) -->
             <div class="header-waves" aria-hidden="true">
                 <div class="wave-layer wave-yellow"></div>
                 <div class="wave-layer wave-orange"></div>
@@ -70,7 +69,7 @@
             </div>
         </header>
 
-        <!-- MENÚ LATERAL (Izquierda) -->
+        <!-- MENÚ LATERAL -->
         <nav class="side-menu" id="sideMenu" role="navigation" aria-label="Navegación entre etapas">
             <div class="side-menu-header">
                 <span class="side-menu-title">Menú de etapas</span>
@@ -141,7 +140,7 @@
             <div class="natural-divider" aria-hidden="true"></div>
 
             <section class="campus-main-section" id="campusMainSection">
-                <!-- TABS PRINCIPALES (Ofimáticas, Almacenamiento, Organizadores, Presentaciones, IA) -->
+                <!-- TABS PRINCIPALES -->
                 <div class="tabs-categorias-container">
                     <div class="tabs-categorias-nav" id="tabsCategoriasNav">
                         <div class="tabs-scroll-wrapper">
@@ -220,7 +219,7 @@
             </section>
         </main>
 
-        <!-- FOOTER (Olas CSS + Info unificada) -->
+        <!-- FOOTER -->
         <footer class="footer-waves" role="contentinfo" aria-label="Pie de página">
             <div class="footer-waves-container" aria-hidden="true">
                 <div class="wave-layer-footer wave-yellow-footer"></div>
@@ -270,7 +269,7 @@
         </div>
     </div>
 
-    <!-- Botón Volver Arriba (global) -->
+    <!-- Botón Volver Arriba -->
     <button class="back-to-top" id="backToTop" aria-label="Volver arriba"><i data-lucide="arrow-up" class="icon-lucide-sm"></i></button>
 
     <!-- Intro Overlay -->
@@ -292,7 +291,7 @@
         <div class="guide-spotlight" id="guideSpotlight" aria-hidden="true"></div>
         <div class="guide-tooltip" id="guideTooltip" role="dialog" aria-modal="true" aria-labelledby="guideText">
             <div class="guide-tooltip-header">
-                <span class="guide-step" id="guideStep">1/4</span>
+                <span class="guide-step" id="guideStep">1/5</span>
                 <button class="guide-close" id="guideClose" aria-label="Cerrar guía">
                     <i data-lucide="x" class="icon-lucide-sm" aria-hidden="true"></i>
                 </button>
@@ -318,6 +317,10 @@
             }
         });
     </script>
+
+    <!-- ORDEN IMPORTANTE: data → render → script principal -->
+    <script src="../JS/herramientas-data.js"></script>
+    <script src="../JS/herramientas-render.js"></script>
     <script src="../JS/herramientas-script.js"></script>
 </body>
 </html>
