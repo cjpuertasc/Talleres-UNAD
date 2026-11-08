@@ -1,6 +1,9 @@
 // ============================================================
 // ===== SCRIPT AUTÓNOMO DE ETAPAS =====
-// Starfield + Intro + Toggle + Hover dinámico + Guía (3 pasos)
+// Desktop-first: en PC se mantiene TODO igual (310 estrellas,
+// shooting stars, 60fps, DPR 2). En móvil se ALIGERA la carga
+// del canvas (menos estrellas, sin shooting stars, 30fps, DPR 1.5)
+// y las animaciones de entrada se omiten vía CSS.
 // ============================================================
 
 (function() {
@@ -9,14 +12,59 @@
     console.log('[Etapas] etapas-script.js cargado');
 
     // ============================================================
+    // ===== 0. HELPER LUCIDE =====
+    // ============================================================
+    function refreshIcons() {
+        if (typeof window.lucide !== 'undefined' && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
+    }
+
+    // ============================================================
+    // ===== 0b. DETECCIÓN DE DISPOSITIVO / PREFERENCIAS =====
+    // ============================================================
+    function isAndroidOrMobile() {
+        const ua = navigator.userAgent || '';
+        const isAndroid = /Android/i.test(ua);
+        const isMobileUA = /Mobi|iPhone|iPad|iPod|Android|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+        const isSmallScreen = window.innerWidth <= 768;
+        const hasTouch = navigator.maxTouchPoints > 0;
+        return isAndroid || isMobileUA || (isSmallScreen && hasTouch);
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const lowPerformanceMode = isAndroidOrMobile() || prefersReducedMotion;
+
+    // ============================================================
     // ===== 1. CANVAS DE ESTRELLAS =====
     // ============================================================
     function initCanvas() {
         const canvas = document.getElementById('etapasCanvas');
         if (!canvas) return;
 
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { alpha: true });
         if (!ctx) return;
+
+        const CONFIG = lowPerformanceMode
+            ? {
+                layers: [
+                    { speed: 0.02, scale: 0.35, count: 30 },
+                    { speed: 0.04, scale: 0.6, count: 12 }
+                ],
+                shootingStars: false,
+                targetFPS: 30,
+                maxDPR: 1.25
+            }
+            : {
+                layers: [
+                    { speed: 0.0195, scale: 0.2, count: 220 },
+                    { speed: 0.039, scale: 0.5, count: 60 },
+                    { speed: 0.065, scale: 0.75, count: 30 }
+                ],
+                shootingStars: true,
+                targetFPS: 60,
+                maxDPR: 2
+            };
 
         let width, height, dpr;
         let stars = [];
@@ -25,16 +73,11 @@
         let animationId = null;
         let resizeTimeout;
         let isVisible = true;
-
-        const SPEED_MULTIPLIER = 1.3;
-        const STAR_LAYERS = [
-            { speed: 0.015 * SPEED_MULTIPLIER, scale: 0.2, count: 220 },
-            { speed: 0.03 * SPEED_MULTIPLIER, scale: 0.5, count: 60 },
-            { speed: 0.05 * SPEED_MULTIPLIER, scale: 0.75, count: 30 }
-        ];
+        let lastFrameTime = 0;
+        const frameInterval = 1000 / CONFIG.targetFPS;
 
         const STARS_ANGLE = 145;
-        const SHOOTING_STAR_SPEED = { min: 15 * SPEED_MULTIPLIER, max: 20 * SPEED_MULTIPLIER };
+        const SHOOTING_STAR_SPEED = { min: 19.5, max: 26 };
         const SHOOTING_STAR_OPACITY_DELTA = 0.01;
         const TRAIL_LENGTH_DELTA = 0.01;
         const SHOOTING_STAR_EMITTING_INTERVAL = 1200;
@@ -44,7 +87,7 @@
         const SHOOTING_STAR_RADIUS = 3;
 
         function resize() {
-            dpr = Math.min(window.devicePixelRatio || 1, 2);
+            dpr = Math.min(window.devicePixelRatio || 1, CONFIG.maxDPR);
             width = window.innerWidth;
             height = window.innerHeight;
             canvas.width = width * dpr;
@@ -59,7 +102,7 @@
             resizeTimeout = setTimeout(() => {
                 resize();
                 initStars();
-            }, 150);
+            }, 200);
         });
 
         function checkLightMode() {
@@ -83,7 +126,7 @@
         function initStars() {
             stars = [];
             shootingStars = [];
-            STAR_LAYERS.forEach(layer => {
+            CONFIG.layers.forEach(layer => {
                 for (let i = 0; i < layer.count; i++) {
                     stars.push({
                         x: randomRange(0, width),
@@ -100,6 +143,8 @@
         }
 
         function createShootingStar() {
+            if (!CONFIG.shootingStars) return;
+
             const shootingStar = {
                 x: randomRange(width / 2, width),
                 y: randomRange(0, height / 2),
@@ -126,18 +171,12 @@
 
             if (isLightMode) {
                 ctx.fillStyle = `rgba(255, 255, 255, ${0.9 * twinkle})`;
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
-                ctx.shadowBlur = 4;
             } else {
                 ctx.fillStyle = `rgba(255, 235, 180, ${0.8 * twinkle})`;
-                ctx.shadowColor = 'transparent';
-                ctx.shadowBlur = 0;
             }
             ctx.beginPath();
             ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2, false);
             ctx.fill();
-            ctx.shadowColor = 'transparent';
-            ctx.shadowBlur = 0;
         }
 
         function drawShootingStar(p) {
@@ -147,16 +186,7 @@
             const heading = Math.atan2(p.vy, p.vx);
             const pos = lineToAngle(x, y, -currentTrailLength, heading);
 
-            let color;
-            if (isLightMode) {
-                color = '255, 255, 255';
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
-                ctx.shadowBlur = 6;
-            } else {
-                color = '255, 107, 26';
-                ctx.shadowColor = 'transparent';
-                ctx.shadowBlur = 0;
-            }
+            let color = isLightMode ? '255, 255, 255' : '255, 107, 26';
 
             ctx.fillStyle = `rgba(${color}, ${p.opacity})`;
             const starLength = 5;
@@ -182,16 +212,19 @@
             ctx.lineTo(x + 1, y + 1);
             ctx.closePath();
             ctx.fill();
-
-            ctx.shadowColor = 'transparent';
-            ctx.shadowBlur = 0;
         }
 
-        function animate() {
+        function animate(timestamp) {
             if (!isVisible) {
                 animationId = null;
                 return;
             }
+
+            if (timestamp - lastFrameTime < frameInterval) {
+                animationId = requestAnimationFrame(animate);
+                return;
+            }
+            lastFrameTime = timestamp;
 
             ctx.clearRect(0, 0, width, height);
 
@@ -237,13 +270,30 @@
             animationId = requestAnimationFrame(animate);
         }
 
-        setInterval(() => {
-            if (isVisible && !document.hidden) createShootingStar();
-        }, SHOOTING_STAR_EMITTING_INTERVAL);
+        if (prefersReducedMotion) {
+            checkLightMode();
+            resize();
+            initStars();
+            ctx.clearRect(0, 0, width, height);
+            for (let i = 0; i < stars.length; i++) {
+                drawStar(stars[i]);
+            }
+            console.log('[Etapas] Canvas estático (prefers-reduced-motion)');
+            return;
+        }
+
+        if (CONFIG.shootingStars) {
+            setInterval(() => {
+                if (isVisible && !document.hidden) createShootingStar();
+            }, SHOOTING_STAR_EMITTING_INTERVAL);
+        }
 
         document.addEventListener('visibilitychange', () => {
             isVisible = !document.hidden;
-            if (isVisible && !animationId) animationId = requestAnimationFrame(animate);
+            if (isVisible && !animationId) {
+                lastFrameTime = 0;
+                animationId = requestAnimationFrame(animate);
+            }
         });
 
         const themeObserver = new MutationObserver(() => checkLightMode());
@@ -252,7 +302,16 @@
         checkLightMode();
         resize();
         initStars();
-        animate();
+        animationId = requestAnimationFrame(animate);
+
+        console.log(
+            '[Etapas] Canvas iniciado ·',
+            lowPerformanceMode ? 'MODO LIGERO' : 'MODO COMPLETO',
+            '· Estrellas:', stars.length,
+            '· Shooting:', CONFIG.shootingStars,
+            '· FPS:', CONFIG.targetFPS,
+            '· DPR:', CONFIG.maxDPR
+        );
     }
 
     // ============================================================
@@ -262,12 +321,15 @@
         const intro = document.getElementById('introOverlay');
         if (!intro) return;
 
+        const delay = lowPerformanceMode ? 700 : 1400;
+        const fade = lowPerformanceMode ? 400 : 900;
+
         setTimeout(() => {
             intro.classList.add('hidden');
             setTimeout(() => {
                 intro.style.display = 'none';
-            }, 900);
-        }, 1400);
+            }, fade);
+        }, delay);
     }
 
     // ============================================================
@@ -298,7 +360,7 @@
     }
 
     // ============================================================
-    // ===== 4. HOVER DINÁMICO =====
+    // ===== 4. HOVER / FOCUS / TOUCH DINÁMICO =====
     // ============================================================
     function initHover() {
         const cards = document.querySelectorAll('.etapa-card');
@@ -318,6 +380,7 @@
         }
 
         cards.forEach(card => {
+            // Mouse (desktop e híbridos con ratón)
             card.addEventListener('mouseenter', function() {
                 clearTimeout(hoverTimeout);
                 activarEtapa(this.dataset.etapa);
@@ -328,6 +391,14 @@
                 hoverTimeout = setTimeout(desactivarEtapa, HOLD_TIME);
             });
 
+            // Touch (móvil): mantiene el fondo 1.5s
+            card.addEventListener('touchstart', function() {
+                clearTimeout(hoverTimeout);
+                activarEtapa(this.dataset.etapa);
+                hoverTimeout = setTimeout(desactivarEtapa, 1500);
+            }, { passive: true });
+
+            // Focus (teclado)
             card.addEventListener('focus', function() {
                 clearTimeout(hoverTimeout);
                 activarEtapa(this.dataset.etapa);
@@ -336,6 +407,21 @@
             card.addEventListener('blur', function() {
                 clearTimeout(hoverTimeout);
                 hoverTimeout = setTimeout(desactivarEtapa, HOLD_TIME);
+            });
+
+            // Respaldo con Pointer Events (híbridos raros)
+            card.addEventListener('pointerenter', function(e) {
+                if (e.pointerType === 'mouse') {
+                    clearTimeout(hoverTimeout);
+                    activarEtapa(this.dataset.etapa);
+                }
+            });
+
+            card.addEventListener('pointerleave', function(e) {
+                if (e.pointerType === 'mouse') {
+                    clearTimeout(hoverTimeout);
+                    hoverTimeout = setTimeout(desactivarEtapa, HOLD_TIME);
+                }
             });
         });
     }
@@ -367,13 +453,7 @@
     }
 
     // ============================================================
-    // ===== 6. GUÍA INTERACTIVA (SPOTLIGHT + TOOLTIP) =====
-    // 3 pasos, TODOS normales (sin interacción obligatoria):
-    //   1. Top-controls (volver, accesibilidad, tema)
-    //   2. Grid de etapas (contenido principal)
-    //   3. Tarjeta individual (último paso: botón "Cerrar")
-    // Al cerrar la guía, el usuario puede hacer clic normal en
-    // cualquier tarjeta para navegar a su etapa.
+    // ===== 6. GUÍA INTERACTIVA (3 pasos) =====
     // ============================================================
     function initGuide() {
         const guideToggle = document.getElementById('guideToggle');
@@ -392,20 +472,17 @@
             {
                 selector: '.top-controls',
                 text: 'Controles de vista: aquí tienes el botón de volver a la presentación, el botón de accesibilidad (esta guía) y el cambio de tema oscuro/claro.',
-                position: 'bottom',
-                mode: 'normal'
+                position: 'bottom'
             },
             {
                 selector: '.etapas-grid',
                 text: 'Etapas del taller: aquí se muestran las 3 etapas disponibles (Campus Virtual, Herramientas Digitales e Inteligencia Artificial). Pasa el cursor sobre cada una para ver el fondo cambiar.',
-                position: 'top',
-                mode: 'normal'
+                position: 'top'
             },
             {
                 selector: '.etapa-card',
                 text: 'Cada tarjeta es seleccionable. Haz clic en cualquiera de las etapas para comenzar su recorrido. La tarjeta resaltada te mostrará el botón "Comenzar".',
-                position: 'top',
-                mode: 'normal'
+                position: 'top'
             }
         ];
 
@@ -419,7 +496,7 @@
         function positionTooltip(element, position) {
             const rect = element.getBoundingClientRect();
             const tooltipRect = guideTooltip.getBoundingClientRect();
-            const padding = 20;
+            const padding = 16;
             let top, left;
 
             switch (position) {
@@ -482,7 +559,10 @@
             guideText.textContent = step.text;
 
             requestAnimationFrame(() => {
-                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                element.scrollIntoView({
+                    behavior: lowPerformanceMode ? 'auto' : 'smooth',
+                    block: 'nearest'
+                });
                 setTimeout(() => {
                     updateSpotlight(element);
                     requestAnimationFrame(() => {
@@ -493,7 +573,6 @@
 
             guidePrev.disabled = index === 0;
 
-            // Todos los pasos son normales. El último muestra "Cerrar".
             if (index === steps.length - 1) {
                 guideNext.disabled = false;
                 guideNext.innerHTML = '<span>Cerrar</span><i data-lucide="check" class="icon-lucide-sm"></i>';
@@ -502,7 +581,7 @@
                 guideNext.innerHTML = '<span>Continuar</span><i data-lucide="chevron-right" class="icon-lucide-sm"></i>';
             }
 
-            if (typeof lucide !== 'undefined') lucide.createIcons();
+            refreshIcons();
         }
 
         function openGuide() {
@@ -579,13 +658,15 @@
     // ===== 7. INICIALIZAR TODO =====
     // ============================================================
     function init() {
+        refreshIcons();
+
         initCanvas();
         initIntro();
         initThemeToggle();
         initHover();
         initEtapaClick();
         initGuide();
-        console.log('[Etapas] Inicializado');
+        console.log('[Etapas] Inicializado · Modo:', lowPerformanceMode ? 'LIGERO' : 'COMPLETO');
     }
 
     if (document.readyState === 'loading') {
