@@ -70,19 +70,17 @@ body.light-mode #starfieldCanvas { opacity: 0.55; }
 .skip-link:focus { top: 0; }
 
 /* ============================================================
-   BOTONES FLOTANTES (Menú + Tema + Accesibilidad)
+   BOTONES FLOTANTES
    ============================================================ */
 .top-controls { position: fixed; top: 1rem; right: 1rem; z-index: 200; display: flex; gap: 0.5rem; }
 .ctrl-btn { width: 44px; height: 44px; border-radius: 50%; background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border-color); color: var(--text-main); display: grid; place-items: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all 0.3s; position: relative; text-decoration: none; }
 .ctrl-btn:hover { transform: translateY(-2px); border-color: var(--campus-color); color: var(--campus-color); }
 
-/* Iconos de Tema */
 .ctrl-icon-moon, .ctrl-icon-sun { position: absolute; transition: all 0.4s ease; }
 .ctrl-icon-sun { opacity: 0; transform: rotate(-90deg) scale(0.5); }
 body.light-mode .ctrl-icon-moon { opacity: 0; transform: rotate(90deg) scale(0.5); }
 body.light-mode .ctrl-icon-sun { opacity: 1; transform: rotate(0) scale(1); }
 
-/* Iconos de Menú */
 .menu-open-icon, .menu-close-icon { position: absolute; transition: all 0.3s ease; }
 .menu-close-icon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
 #menuToggle.open .menu-open-icon { opacity: 0; transform: rotate(90deg) scale(0.5); }
@@ -97,7 +95,7 @@ body.light-mode .ctrl-icon-sun { opacity: 1; transform: rotate(0) scale(1); }
 .app-container { position: relative; z-index: 1; width: 100vw; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 .header { position: absolute; top: 0; left: 0; right: 0; z-index: 50; height: var(--header-height); display: flex; flex-direction: column; background: transparent; filter: drop-shadow(0 10px 22px rgba(0,0,0,0.2)); }
 .header-content { flex: 2; display: flex; align-items: center; justify-content: flex-start; padding: 1.2rem 2rem 0.8rem; gap: 1rem; background: var(--header-footer-bg); position: relative; z-index: 3; transition: background 0.4s ease; }
-.header-left { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; min-width: 0; padding-right: 140px; /* Espacio para botones flotantes */ }
+.header-left { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; min-width: 0; padding-right: 140px; }
 .btn-back { width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-main); cursor: pointer; transition: all 0.3s; }
 .btn-back:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); }
 .header-title { display: flex; align-items: center; gap: 8px; }
@@ -105,7 +103,7 @@ body.light-mode .ctrl-icon-sun { opacity: 1; transform: rotate(0) scale(1); }
 .header-title h1 { font-family: var(--font-title); font-weight: 800; font-size: 1.32rem; color: var(--text-main); }
 
 /* ============================================================
-   OLAS DEL HEADER (CSS clip-path)
+   OLAS DEL HEADER
    ============================================================ */
 .header-waves {
     position: relative;
@@ -156,14 +154,12 @@ body.light-mode .ctrl-icon-sun { opacity: 1; transform: rotate(0) scale(1); }
 .side-menu-close { background: none; border: none; color: var(--text-muted); cursor: pointer; transition: all 0.3s; padding: 4px; }
 .side-menu-close:hover { color: var(--text-main); transform: rotate(90deg); }
 
-/* Perfil en el menú */
 .side-menu-profile { display: flex; align-items: center; gap: 0.8rem; padding: 1rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 16px; margin-bottom: 1.5rem; }
 .side-menu-profile-avatar { width: 44px; height: 44px; border-radius: 12px; background: var(--campus-color); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .side-menu-profile-info { display: flex; flex-direction: column; }
 .side-menu-profile-title { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 .side-menu-profile-sub { font-family: var(--font-title); font-size: 1rem; font-weight: 700; color: var(--text-main); }
 
-/* Lista de enlaces */
 .side-menu-list { list-style: none; padding: 0; flex: 1; }
 .side-menu-list li { margin-bottom: 0.5rem; }
 .side-menu-link { display: flex; align-items: center; gap: 12px; padding: 0.9rem 1rem; border-radius: 14px; color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.3s; border: 1px solid transparent; }
@@ -176,7 +172,6 @@ body.light-mode .ctrl-icon-sun { opacity: 1; transform: rotate(0) scale(1); }
 .side-menu-footer { padding-top: 1.5rem; border-top: 1px solid var(--border-color); text-align: center; }
 .side-menu-version { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
 
-/* Overlay */
 .menu-overlay { position: fixed; inset: 0; z-index: 99; background: rgba(0,0,0,0); opacity: 0; visibility: hidden; transition: all 0.5s; }
 .menu-overlay.active { opacity: 1; visibility: visible; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); }
 
@@ -313,7 +308,7 @@ body.light-mode .campus-alert-icon { color: #b45309; background: rgba(180, 83, 9
 .cipas-card p strong { color: var(--campus-color); }
 
 /* ============================================================
-   CONTROLES DE SLIDE (Abajo)
+   CONTROLES DE SLIDE
    ============================================================ */
 .slides-controls { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color); flex-wrap: wrap; }
 .slides-nav-btn { display: inline-flex; align-items: center; gap: 6px; padding: 0.6rem 1.2rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main); font-weight: 600; cursor: pointer; transition: all 0.3s; }
@@ -480,4 +475,82 @@ body.light-mode .campus-alert-icon { color: #b45309; background: rgba(180, 83, 9
     .guide-tooltip { max-width: calc(100vw - 20px); padding: 0.75rem 0.85rem; }
     .guide-actions { flex-direction: column; align-items: stretch; }
     .guide-btn { justify-content: center; }
+}
+
+/* ============================================================
+   ===== RENDIMIENTO: PREFERENCIAS Y MÓVIL =====
+   No afecta al desktop estándar. Solo se activa si:
+   - El usuario tiene "reducir movimiento" en su SO.
+   - El ancho es <= 768px (móvil).
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .intro-content {
+        animation: none !important;
+    }
+
+    #starfieldCanvas {
+        opacity: 0.4;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Quitar backdrop-filter: lo más caro en móvil */
+    .side-menu,
+    .ctrl-btn,
+    .hero-toggle,
+    .guide-tooltip,
+    .menu-overlay.active {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    /* Fondos sólidos en lugar de glass */
+    .side-menu,
+    .ctrl-btn,
+    .hero-toggle,
+    .guide-tooltip {
+        background: var(--bg-primary);
+    }
+
+    /* Menú overlay sin blur */
+    .menu-overlay.active {
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    /* Sombras más ligeras */
+    .ctrl-btn {
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .back-to-top {
+        box-shadow: 0 4px 16px rgba(255, 107, 26, 0.4);
+    }
+
+    /* Spotlight de la guía: sombra más simple */
+    .guide-spotlight {
+        box-shadow:
+            0 0 0 9999px rgba(0, 0, 0, 0.72),
+            0 0 0 3px var(--unad-yellow) !important;
+    }
+
+    /* Canvas más tenue */
+    #starfieldCanvas {
+        opacity: 0.55;
+    }
+
+    /* Reducir animaciones de secciones (no las de UI crítica) */
+    .campus-main-panel.active,
+    .slide-panel.active {
+        animation: none;
+    }
 }
