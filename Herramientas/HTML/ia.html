@@ -149,6 +149,9 @@
                 </div>
 
                 <div class="campus-main-panels">
+                    <!-- ============================================================
+                         PANEL 1: PENSAR CON IA
+                         ============================================================ -->
                     <div class="campus-main-panel active" id="panel-ia" role="tabpanel">
                         <div class="campus-intro reveal" data-reveal="fade-up">
                             <p class="campus-intro-text">Antes de hablar de herramientas, prompts, técnicas o buenas prácticas, hay una pregunta que atraviesa todo: <strong>¿La IA está reemplazando mi razonamiento o lo está potenciando?</strong></p>
@@ -315,11 +318,145 @@
                         </div>
                     </div>
 
+                    <!-- ============================================================
+                         PANEL 2: USO RESPONSABLE (NUEVO CONTENIDO)
+                         ============================================================ -->
                     <div class="campus-main-panel" id="panel-principios" role="tabpanel">
-                        <div class="campus-coming-soon reveal" data-reveal="fade-up">
-                            <div class="campus-coming-soon-icon" aria-hidden="true"><i data-lucide="shield-check" class="icon-lucide-xl"></i></div>
-                            <h3 class="campus-coming-soon-title">Uso responsable</h3>
-                            <p class="campus-coming-soon-text">Contenido en preparación.</p>
+                        <div class="campus-intro reveal" data-reveal="fade-up">
+                            <p class="campus-intro-text">Usar la IA de forma responsable no es solo cumplir una norma: es una <strong>decisión personal</strong> sobre cómo quieres aprender, producir y firmar tu trabajo. Estas cuatro mini-pestañas reúnen las buenas prácticas que hacen la diferencia entre <em>usar</em> la IA y <em>dejar que la IA te use</em>.</p>
+                        </div>
+
+                        <div class="slides-container reveal" data-reveal="fade-up" data-delay="150" id="respSlidesContainer">
+                            <div class="slides-tabs" role="tablist" aria-label="Buenas prácticas de uso responsable" id="respTabs">
+                                <button class="slide-tab active" role="tab" data-resp="resp-verificar"><span class="slide-tab-num">01</span><span class="slide-tab-label">Verificar</span></button>
+                                <button class="slide-tab" role="tab" data-resp="resp-citar"><span class="slide-tab-num">02</span><span class="slide-tab-label">Citar</span></button>
+                                <button class="slide-tab" role="tab" data-resp="resp-revisar"><span class="slide-tab-num">03</span><span class="slide-tab-label">Revisar</span></button>
+                                <button class="slide-tab" role="tab" data-resp="resp-autoria"><span class="slide-tab-num">04</span><span class="slide-tab-label">Asumir la autoría</span></button>
+                            </div>
+
+                            <div class="slides-content" id="respSlidesContent">
+                                <!-- ====== RESP 01: VERIFICAR ====== -->
+                                <div class="slide-panel active" id="resp-verificar" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="search-check" class="icon-lucide-sm" aria-hidden="true"></i> Verificar</h3>
+                                        <p class="campus-block-text">La IA puede <strong>inventar datos, citas, fechas, leyes o referencias</strong> con una seguridad que confunde. Por eso, todo lo que la IA te entregue debe ser <strong>contrastado con fuentes confiables</strong> antes de usarlo. Verificar no es desconfianza: es rigor académico.</p>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="check-circle" class="icon-lucide-sm" aria-hidden="true"></i> Buenas prácticas</h3>
+                                    </div>
+                                    <ul class="campus-info-list">
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Contrasta cada <strong>dato numérico, fecha o cita</strong> con al menos dos fuentes confiables (libros, artículos, sitios oficiales).</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Pide a la IA que te indique <strong>de dónde sacó la información</strong> y luego comprueba esa fuente.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Si la IA cita un autor, un libro o una ley, <strong>búscalo tú mismo</strong> en la biblioteca o en buscadores académicos.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Desconfía de respuestas <strong>demasiado específicas</strong> (cifras exactas, fechas puntuales) que no puedas comprobar.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Cuando el tema sea sensible (salud, derecho, finanzas), <strong>consulta siempre a un profesional</strong>.</span></li>
+                                    </ul>
+
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="alert-triangle" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Error frecuente</h4>
+                                            <p>Confiar en la primera respuesta porque "suena bien". Una respuesta bien redactada puede ser <strong>completamente falsa</strong>. La claridad no es sinónimo de veracidad.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ====== RESP 02: CITAR ====== -->
+                                <div class="slide-panel" id="resp-citar" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="quote" class="icon-lucide-sm" aria-hidden="true"></i> Citar</h3>
+                                        <p class="campus-block-text">Cuando uses la IA para producir un texto, una idea o un análisis, <strong>decláralo</strong>. La transparencia es parte del trabajo académico honesto y, en muchos contextos, es una exigencia institucional. Citar correctamente también protege tu autoría: deja claro qué es tuyo y qué no.</p>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="check-circle" class="icon-lucide-sm" aria-hidden="true"></i> Buenas prácticas</h3>
+                                    </div>
+                                    <ul class="campus-info-list">
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Indica <strong>qué herramienta usaste</strong>, <strong>para qué</strong> y en qué <strong>parte del trabajo</strong>.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Si la IA generó un fragmento de texto, <strong>entrecomílalo</strong> o decláralo como "generado con IA".</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Sigue el <strong>formato de citación de tu institución</strong> (APA, IEEE, Vancouver, etc.) para las herramientas de IA.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>No cites la IA como si fuera un autor humano: <strong>es una herramienta</strong>, no una fuente académica.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Guarda un <strong>registro de tus prompts</strong> por si necesitas demostrar cómo llegaste al resultado.</span></li>
+                                    </ul>
+
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="alert-triangle" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Error frecuente</h4>
+                                            <p>Presentar como propio un texto generado por IA. Además de ser deshonesto, es <strong>fácilmente detectable</strong> por el estilo, los errores y las herramientas de detección. El costo académico puede ser alto.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ====== RESP 03: REVISAR ====== -->
+                                <div class="slide-panel" id="resp-revisar" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="eye" class="icon-lucide-sm" aria-hidden="true"></i> Revisar</h3>
+                                        <p class="campus-block-text">No uses la salida de la IA <strong>tal cual sale</strong>. Léela, cuestiónala, reformúlala con tus palabras. Si no puedes explicar lo que dice, no lo uses. Revisar es lo que convierte un borrador generado en <strong>conocimiento propio</strong>.</p>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="check-circle" class="icon-lucide-sm" aria-hidden="true"></i> Buenas prácticas</h3>
+                                    </div>
+                                    <ul class="campus-info-list">
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Lee el texto completo <strong>en voz alta</strong>: si algo no suena natural o no lo entiendes, reescríbelo.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Reemplaza palabras y frases que no usarías tú. <strong>Tu voz</strong> debe estar presente.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Verifica la <strong>coherencia interna</strong>: que las ideas se conecten, que no haya contradicciones.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Elimina la <strong>paja</strong>: la IA suele rellenar con frases genéricas que no aportan.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Pasa el texto por un <strong>corrector ortográfico y gramatical</strong>, pero no confíes solo en él.</span></li>
+                                    </ul>
+
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="alert-triangle" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Error frecuente</h4>
+                                            <p>Copiar y pegar sin leer. La IA comete errores de lógica, de coherencia y de estilo que <strong>solo un humano puede detectar</strong>. Revisar no es opcional: es parte del trabajo.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ====== RESP 04: ASUMIR LA AUTORÍA ====== -->
+                                <div class="slide-panel" id="resp-autoria" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="pen-line" class="icon-lucide-sm" aria-hidden="true"></i> Asumir la autoría</h3>
+                                        <p class="campus-block-text">Lo que firmas, es tuyo. Si la IA participó, <strong>tú sigues siendo el responsable</strong> del contenido, del criterio y de las consecuencias. Asumir la autoría es el principio que sostiene todos los demás: sin responsabilidad, no hay aprendizaje real.</p>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="check-circle" class="icon-lucide-sm" aria-hidden="true"></i> Buenas prácticas</h3>
+                                    </div>
+                                    <ul class="campus-info-list">
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Pregúntate: <strong>¿puedo defender cada idea de este texto</strong> si me la cuestionan en una exposición? Si no, no está listo.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Asume la responsabilidad <strong>académica, ética y legal</strong> de lo que entregas, aunque la IA haya participado.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Si la IA produjo un error, <strong>no culpes a la herramienta</strong>: el filtro final es tuyo.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Respeta las <strong>normas de tu institución</strong> y las indicaciones específicas de cada docente.</span></li>
+                                        <li><i data-lucide="check" class="icon-lucide-sm" aria-hidden="true"></i><span>Firma con tranquilidad: <strong>solo firma lo que puedas explicar</strong>.</span></li>
+                                    </ul>
+
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="alert-triangle" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Error frecuente</h4>
+                                            <p>Delegar la responsabilidad en la IA. "Es que la IA lo dijo" no es una justificación válida: <strong>el criterio y la firma siguen siendo tuyos</strong>.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slides-controls" id="respControls">
+                                <button class="slides-nav-btn slides-prev" id="respPrev" aria-label="Práctica anterior"><i data-lucide="chevron-left" class="icon-lucide-sm"></i><span>Anterior</span></button>
+                                <div class="slides-progress" aria-hidden="true">
+                                    <span class="slides-counter" id="respCounter">01 / 04</span>
+                                    <div class="slides-dots" id="respDots">
+                                        <button class="slide-dot active" data-resp="resp-verificar"></button>
+                                        <button class="slide-dot" data-resp="resp-citar"></button>
+                                        <button class="slide-dot" data-resp="resp-revisar"></button>
+                                        <button class="slide-dot" data-resp="resp-autoria"></button>
+                                    </div>
+                                </div>
+                                <button class="slides-nav-btn slides-next" id="respNext" aria-label="Práctica siguiente"><span>Siguiente</span><i data-lucide="chevron-right" class="icon-lucide-sm"></i></button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -147,9 +147,19 @@
                             <span class="campus-main-tab-sub">Consejos prácticos</span>
                         </span>
                     </button>
+                    <button class="campus-main-tab" role="tab" data-panel="panel-infounad" aria-selected="false">
+                        <span class="campus-main-tab-icon"><i data-lucide="building-2" class="icon-lucide-sm"></i></span>
+                        <span class="campus-main-tab-text">
+                            <span class="campus-main-tab-title">Información UNAD</span>
+                            <span class="campus-main-tab-sub">Bienestar y servicios</span>
+                        </span>
+                    </button>
                 </div>
 
                 <div class="campus-main-panels">
+                    <!-- ============================================================
+                         PANEL 1: CAMPUS VIRTUAL
+                         ============================================================ -->
                     <div class="campus-main-panel active" id="panel-cursos" role="tabpanel">
                         <div class="campus-intro reveal" data-reveal="fade-up">
                             <p class="campus-intro-text">En el apartado de <strong>Mis cursos virtuales</strong> se podrá encontrar todo el apartado para poder acceder a cada uno de los cursos inscritos.</p>
@@ -430,11 +440,442 @@
                         </div>
                     </div>
 
+                    <!-- ============================================================
+                         PANEL 2: TIPS Y RECOMENDACIONES
+                         ============================================================ -->
                     <div class="campus-main-panel" id="panel-tips" role="tabpanel">
-                        <div class="campus-coming-soon reveal" data-reveal="fade-up">
-                            <div class="campus-coming-soon-icon" aria-hidden="true"><i data-lucide="sparkles" class="icon-lucide-xl"></i></div>
-                            <h3 class="campus-coming-soon-title">Tips y recomendaciones</h3>
-                            <p class="campus-coming-soon-text">Contenido en preparación.</p>
+                        <div class="campus-intro reveal" data-reveal="fade-up">
+                            <p class="campus-intro-text">En esta sección encontrarás <strong>consejos prácticos</strong> para resolver las situaciones más comunes que se presentan durante el estudio en el Campus Virtual: cómo encontrar a tus compañeros de grupo, cómo contactar a tu tutor, qué hacer si un recurso bibliográfico no funciona y cómo aplicar las <strong>normas APA</strong> en tus trabajos.</p>
+                        </div>
+
+                        <div class="slides-container reveal" data-reveal="fade-up" data-delay="150" id="tipsSlidesContainer">
+                            <div class="slides-tabs" role="tablist" aria-label="Tips y recomendaciones" id="tipsTabs">
+                                <button class="slide-tab active" role="tab" data-tip="tip-companeros"><span class="slide-tab-num">01</span><span class="slide-tab-label">Compañeros de clase</span></button>
+                                <button class="slide-tab" role="tab" data-tip="tip-contacto"><span class="slide-tab-num">02</span><span class="slide-tab-label">Contacto</span></button>
+                                <button class="slide-tab" role="tab" data-tip="tip-fallas"><span class="slide-tab-num">03</span><span class="slide-tab-label">Fallas en contenidos</span></button>
+                                <button class="slide-tab" role="tab" data-tip="tip-apa"><span class="slide-tab-num">04</span><span class="slide-tab-label">Normas APA</span></button>
+                            </div>
+
+                            <div class="slides-content" id="tipsSlidesContent">
+                                <!-- ====== TIP 01: COMPAÑEROS DE CLASE ====== -->
+                                <div class="slide-panel active" id="tip-companeros" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="users" class="icon-lucide-sm" aria-hidden="true"></i> Compañeros de clase</h3>
+                                        <p class="campus-block-text">Durante el desarrollo de la vida académica nos podemos encontrar con diferentes trabajos en los cuales debemos colaborar en grupo para la resolución de las actividades académicas. Por esa misma razón es de gran importancia conocer la <strong>ruta para encontrar a nuestros compañeros de curso</strong>.</p>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="mouse-pointer-click" class="icon-lucide-sm" aria-hidden="true"></i> Paso 1: Ingresa a un curso</h3>
+                                        <p class="campus-block-text">Al ingresar a uno de los cursos, podremos observar en la parte izquierda un apartado que dice <strong>“Navegación”</strong>, en el cual podremos encontrar una pestaña desplegada que indica el nombre del curso.</p>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/tips-companeros-1.png</small></div>
+                                        <figcaption>Vista de la pestaña “Navegación” dentro de un curso.</figcaption>
+                                    </figure>
+
+                                    <div class="campus-block">
+                                        <p class="campus-block-text">Al abrir este apartado podremos encontrar una opción que dice <strong>“Participantes”</strong>, y al darle clic nos llevará a la siguiente interfaz:</p>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/tips-companeros-2.png</small></div>
+                                        <figcaption>Lista de participantes del curso: compañeros, tutor y grupo.</figcaption>
+                                    </figure>
+
+                                    <div class="campus-block">
+                                        <p class="campus-block-text">En esta podremos encontrar a nuestros <strong>compañeros de clase</strong> y al <strong>tutor o director de curso</strong>, al igual que también el <strong>grupo al que hacemos parte</strong>.</p>
+                                    </div>
+
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="info" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Dato</h4>
+                                            <p>El <strong>número de grupo</strong> es aquel que está siguiente al guion bajo <strong>“_”</strong>.</p>
+                                        </div>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/tips-companeros-3.png</small></div>
+                                        <figcaption>Identificación del número de grupo después del guion bajo.</figcaption>
+                                    </figure>
+
+                                    <div class="campus-block">
+                                        <p class="campus-block-text">Ahora ya sabes cómo encontrar a tus compañeros de grupo. Recuerda que si está comenzando recién el periodo académico, es muy posible que <strong>aún no aparezcan los compañeros</strong>.</p>
+                                    </div>
+                                </div>
+
+                                <!-- ====== TIP 02: CONTACTO ====== -->
+                                <div class="slide-panel" id="tip-contacto" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="message-circle" class="icon-lucide-sm" aria-hidden="true"></i> Contacto</h3>
+                                        <p class="campus-block-text">Si deseas buscar a tus compañeros de clase o deseas realizar alguna consulta a un tutor de algún curso, recuerda que puedes hacer uso de <strong>Teams</strong> para poder encontrarlo. Recuerda acceder a la plataforma por medio de tu <strong>correo institucional</strong>.</p>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/tips-contacto-1.png</small></div>
+                                        <figcaption>Acceso a Teams con el correo institucional.</figcaption>
+                                    </figure>
+
+                                    <div class="campus-block">
+                                        <p class="campus-block-text">En el apartado principal de búsqueda puedes buscar por el nombre a la persona con quien desees realizar contacto y, enviando un mensaje, podrás realizar la consulta o comunicación directa.</p>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/tips-contacto-2.png</small></div>
+                                        <figcaption>Envío de mensaje directo por Teams.</figcaption>
+                                    </figure>
+
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="info" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Recomendación</h4>
+                                            <p>Cuando escribas a un tutor, sé <strong>claro y breve</strong>: indica tu nombre, el curso, el grupo y el motivo de la consulta. Así podrá responderte con mayor precisión y rapidez.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ====== TIP 03: FALLAS EN CONTENIDOS ====== -->
+                                <div class="slide-panel" id="tip-fallas" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="file-warning" class="icon-lucide-sm" aria-hidden="true"></i> Fallas en contenidos</h3>
+                                        <p class="campus-block-text">Cuando presentes alguna falla en la que <strong>no puedes observar el recurso entregado</strong> desde el apartado de contenidos y referentes bibliográficos, recuerda que puedes hacer la consulta de dos maneras:</p>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="wrench" class="icon-lucide-sm" aria-hidden="true"></i> Primera: Foro de Soporte técnico</h3>
+                                        <p class="campus-block-text">Habitualmente, al momento de iniciar el proceso académico dentro de cada uno de los cursos, existe el <strong>Foro General</strong>. Dentro de este se encuentran diferentes apartados que sirven para cada tipo de consulta.</p>
+                                    </div>
+                                    <figure class="campus-img-figure">
+                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/tips-fallas-1.png</small></div>
+                                        <figcaption>Foro General con el apartado de Soporte técnico.</figcaption>
+                                    </figure>
+                                    <div class="campus-block">
+                                        <p class="campus-block-text">Para esta ocasión puedes hacer uso del apartado de <strong>soporte técnico</strong> y realizar la consulta sobre el recurso o contenido entregado que no es posible visualizar.</p>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="user-check" class="icon-lucide-sm" aria-hidden="true"></i> Segunda: Consulta al tutor</h3>
+                                        <p class="campus-block-text">La otra manera en la cual puedes consultar o informar acerca de la problemática es a través de la <strong>comunicación directa con el tutor</strong>, la cual se puede realizar por medio de <strong>Teams</strong> o a través de los <strong>foros de discusión</strong> según el trabajo presentado.</p>
+                                    </div>
+
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="lightbulb" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Recomendación</h4>
+                                            <p>Adjunta una <strong>captura de pantalla</strong> del error y describe qué recurso intentabas abrir. Esto ayuda a que el soporte o el tutor identifiquen el problema con mayor facilidad.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ====== TIP 04: NORMAS APA ====== -->
+                                <div class="slide-panel" id="tip-apa" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="book-marked" class="icon-lucide-sm" aria-hidden="true"></i> Normas APA</h3>
+                                        <p class="campus-block-text">Las <strong>normas APA</strong> son de suma importancia porque permiten <strong>comunicar el conocimiento de forma clara, ordenada y honesta</strong>. Gracias a ellas, cualquier lector puede identificar de dónde proviene la información que usaste, reconocer el trabajo de otros autores y verificar tus fuentes. Además, dan uniformidad a los trabajos académicos, lo que facilita su lectura y evaluación.</p>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <p class="campus-block-text">Para eso se deben tener en cuenta aspectos como: la <strong>forma de citar</strong> dentro del texto, la <strong>lista de referencias</strong> al final, el <strong>formato del documento</strong> (márgenes, tipografía, interlineado), el <strong>uso de tablas y figuras</strong> y la <strong>organización general</strong> del trabajo.</p>
+                                    </div>
+
+                                    <div class="campus-box">
+                                        <div class="campus-box-header">
+                                            <i data-lucide="list-checks" class="icon-lucide-lg" aria-hidden="true"></i>
+                                            <div><h4>Los 5 apartados clave</h4><p class="campus-box-subtitle">Toca cada uno para ver las recomendaciones principales y una imagen de referencia.</p></div>
+                                        </div>
+                                        <div class="campus-accordion-group">
+                                            <div class="campus-accordion">
+                                                <button class="campus-accordion-header" aria-expanded="false" aria-controls="apa-citas"><span class="campus-accordion-badge" style="--acc-color:#FF6B1A;">1</span><span class="campus-accordion-title">Citas en el texto</span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                                <div class="campus-accordion-body" id="apa-citas">
+                                                    <p>Cuando retomes una idea de otro autor, debes citarla. La cita puede ser <strong>textual</strong> (copiar exactamente las palabras, entre comillas si es corta) o <strong>parafraseada</strong> (explicar la idea con tus propias palabras). En ambos casos debes incluir <strong>autor, año y página</strong> si es textual. Ejemplo: (Gómez, 2023, p. 45).</p>
+                                                    <figure class="campus-img-figure">
+                                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/apa-citas.png</small></div>
+                                                        <figcaption>Ejemplo de cita textual corta y cita parafraseada dentro del texto.</figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                            <div class="campus-accordion">
+                                                <button class="campus-accordion-header" aria-expanded="false" aria-controls="apa-referencias"><span class="campus-accordion-badge" style="--acc-color:#0056B3;">2</span><span class="campus-accordion-title">Lista de referencias</span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                                <div class="campus-accordion-body" id="apa-referencias">
+                                                    <p>Al final del trabajo debes incluir una lista con <strong>todas las fuentes citadas</strong>, ordenadas alfabéticamente por el apellido del autor. Cada referencia lleva: autor, año, título, fuente y enlace o editorial según el tipo. No incluyas fuentes que no citaste en el texto.</p>
+                                                    <figure class="campus-img-figure">
+                                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/apa-referencias.png</small></div>
+                                                        <figcaption>Ejemplo de lista de referencias ordenada alfabéticamente.</figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                            <div class="campus-accordion">
+                                                <button class="campus-accordion-header" aria-expanded="false" aria-controls="apa-formato"><span class="campus-accordion-badge" style="--acc-color:#FFC72C;">3</span><span class="campus-accordion-title">Formato del documento</span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                                <div class="campus-accordion-body" id="apa-formato">
+                                                    <p>APA recomienda: <strong>márgenes de 2,54 cm</strong>, letra legible (por ejemplo Arial 11 o Times New Roman 12), <strong>interlineado doble</strong>, texto alineado a la izquierda, sangría en la primera línea de cada párrafo y numeración de páginas en la esquina superior derecha.</p>
+                                                    <figure class="campus-img-figure">
+                                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/apa-formato.png</small></div>
+                                                        <figcaption>Ejemplo de portada y configuración de página según APA.</figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                            <div class="campus-accordion">
+                                                <button class="campus-accordion-header" aria-expanded="false" aria-controls="apa-tablas"><span class="campus-accordion-badge" style="--acc-color:#10b981;">4</span><span class="campus-accordion-title">Tablas y figuras</span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                                <div class="campus-accordion-body" id="apa-tablas">
+                                                    <p>Las <strong>tablas</strong> y <strong>figuras</strong> deben ir numeradas (Tabla 1, Figura 1…), con un título breve y una nota explicativa si es necesaria. Si tomaste la tabla o figura de otro autor, debes <strong>citar la fuente</strong> debajo de ella. No las uses solo para adornar: cada una debe aportar información.</p>
+                                                    <figure class="campus-img-figure">
+                                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/apa-tablas.png</small></div>
+                                                        <figcaption>Ejemplo de tabla con número, título y nota de fuente.</figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                            <div class="campus-accordion">
+                                                <button class="campus-accordion-header" aria-expanded="false" aria-controls="apa-errores"><span class="campus-accordion-badge" style="--acc-color:#a855f7;">5</span><span class="campus-accordion-title">Errores comunes</span><i data-lucide="chevron-down" class="campus-accordion-chevron icon-lucide-sm" aria-hidden="true"></i></button>
+                                                <div class="campus-accordion-body" id="apa-errores">
+                                                    <p>Algunos errores frecuentes: <strong>citar sin incluir la fuente en referencias</strong>, copiar y pegar sin comillas, mezclar estilos de citación, no ordenar las referencias alfabéticamente y olvidar la fecha de consulta en fuentes web. Revisar el trabajo antes de entregarlo evita la mayoría de estos problemas.</p>
+                                                    <figure class="campus-img-figure">
+                                                        <div class="campus-img-placeholder"><i data-lucide="image" class="icon-lucide-xl" aria-hidden="true"></i><span>Imagen de referencia</span><small>../img/apa-errores.png</small></div>
+                                                        <figcaption>Comparación entre una cita correcta y una incorrecta.</figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="info" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Nota</h4>
+                                            <p>Las normas APA se actualizan periódicamente. Siempre que puedas, consulta la <strong>versión más reciente</strong> y revisa las indicaciones específicas de tu programa o docente, ya que algunas carreras usan variantes.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slides-controls" id="tipsControls">
+                                <button class="slides-nav-btn slides-prev" id="tipsPrev" aria-label="Tip anterior"><i data-lucide="chevron-left" class="icon-lucide-sm"></i><span>Anterior</span></button>
+                                <div class="slides-progress" aria-hidden="true">
+                                    <span class="slides-counter" id="tipsCounter">01 / 04</span>
+                                    <div class="slides-dots" id="tipsDots">
+                                        <button class="slide-dot active" data-tip="tip-companeros"></button>
+                                        <button class="slide-dot" data-tip="tip-contacto"></button>
+                                        <button class="slide-dot" data-tip="tip-fallas"></button>
+                                        <button class="slide-dot" data-tip="tip-apa"></button>
+                                    </div>
+                                </div>
+                                <button class="slides-nav-btn slides-next" id="tipsNext" aria-label="Tip siguiente"><span>Siguiente</span><i data-lucide="chevron-right" class="icon-lucide-sm"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ============================================================
+                         PANEL 3: INFORMACIÓN UNAD
+                         ============================================================ -->
+                    <div class="campus-main-panel" id="panel-infounad" role="tabpanel">
+                        <div class="campus-intro reveal" data-reveal="fade-up">
+                            <p class="campus-intro-text">La UNAD cuenta con diferentes <strong>servicios de bienestar académico</strong> que acompañan al estudiante durante su proceso formativo. En esta sección encontrarás información sobre <strong>psicología en línea</strong>, <strong>eventos institucionales</strong>, <strong>semilleros de investigación</strong> y las <strong>escuelas</strong> a las que pertenecen los programas académicos.</p>
+                        </div>
+
+                        <div class="slides-container reveal" data-reveal="fade-up" data-delay="150" id="infoSlidesContainer">
+                            <div class="slides-tabs" role="tablist" aria-label="Información UNAD" id="infoTabs">
+                                <button class="slide-tab active" role="tab" data-info="info-psicologia"><span class="slide-tab-num">01</span><span class="slide-tab-label">Psicología en línea</span></button>
+                                <button class="slide-tab" role="tab" data-info="info-eventos"><span class="slide-tab-num">02</span><span class="slide-tab-label">Eventos</span></button>
+                                <button class="slide-tab" role="tab" data-info="info-semilleros"><span class="slide-tab-num">03</span><span class="slide-tab-label">Semilleros</span></button>
+                                <button class="slide-tab" role="tab" data-info="info-escuelas"><span class="slide-tab-num">04</span><span class="slide-tab-label">Escuelas</span></button>
+                            </div>
+
+                            <div class="slides-content" id="infoSlidesContent">
+                                <!-- ====== INFO 01: PSICOLOGÍA EN LÍNEA ====== -->
+                                <div class="slide-panel active" id="info-psicologia" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="heart-handshake" class="icon-lucide-sm" aria-hidden="true"></i> Psicología en línea</h3>
+                                        <p class="campus-block-text">La <strong>salud mental</strong> es un aspecto fundamental en el desarrollo personal y académico. Por esa razón, la universidad ofrece el <strong>servicio de psicología en línea</strong>, un espacio de acompañamiento profesional para estudiantes que necesiten orientación emocional, manejo del estrés, apoyo frente a situaciones difíciles o simplemente un espacio de escucha.</p>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="link" class="icon-lucide-sm" aria-hidden="true"></i> Acceso a la plataforma</h3>
+                                        <p class="campus-block-text">Puedes ingresar al servicio de psicología en línea desde el siguiente enlace oficial:</p>
+                                        <div class="campus-link-card">
+                                            <i data-lucide="external-link" class="icon-lucide-sm" aria-hidden="true"></i>
+                                            <a href="https://chatvisae.unad.edu.co/client.php?locale=es&style=default" target="_blank" rel="noopener noreferrer">chatvisae.unad.edu.co — Psicología en línea</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="clock" class="icon-lucide-sm" aria-hidden="true"></i> Horarios de atención</h3>
+                                        <p class="campus-block-text">El servicio se presta en los siguientes horarios:</p>
+                                    </div>
+                                    <ul class="campus-info-list campus-info-list--horario">
+                                        <li><i data-lucide="calendar" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Lunes:</strong> 9:00 a. m. – 12:00 p. m.</span></li>
+                                        <li><i data-lucide="calendar" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Martes:</strong> 2:00 p. m. – 5:00 p. m.</span></li>
+                                        <li><i data-lucide="calendar" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Miércoles:</strong> 8:00 a. m. – 11:00 a. m.</span></li>
+                                        <li><i data-lucide="calendar" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Jueves:</strong> 2:00 p. m. – 5:00 p. m.</span></li>
+                                        <li><i data-lucide="calendar" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Viernes:</strong> 10:00 a. m. – 1:00 p. m.</span></li>
+                                    </ul>
+
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="info" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Recomendación</h4>
+                                            <p>Antes de tu primera sesión, lee con atención las <strong>indicaciones del servicio</strong>. Esto te permitirá recibir el mejor acompañamiento posible y aprovechar al máximo el espacio.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ====== INFO 02: EVENTOS ====== -->
+                                <div class="slide-panel" id="info-eventos" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="calendar-heart" class="icon-lucide-sm" aria-hidden="true"></i> Eventos</h3>
+                                        <p class="campus-block-text">La universidad organiza de manera constante <strong>eventos académicos, culturales, deportivos y de bienestar</strong> en los que puedes participar para ampliar tu información, conocer a otros estudiantes y complementar tu formación. Estos eventos <strong>no son de carácter obligatorio</strong>, pero sí son una excelente oportunidad para integrarte con la comunidad universitaria.</p>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="list-checks" class="icon-lucide-sm" aria-hidden="true"></i> ¿Qué tipo de eventos encuentras?</h3>
+                                    </div>
+                                    <ul class="campus-info-list">
+                                        <li><i data-lucide="graduation-cap" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Académicos:</strong> charlas, conferencias, webinars y encuentros disciplinares.</span></li>
+                                        <li><i data-lucide="heart" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Bienestar:</strong> jornadas de salud, actividades físicas y espacios de integración.</span></li>
+                                        <li><i data-lucide="music" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Culturales:</strong> presentaciones artísticas, cine, música y celebraciones institucionales.</span></li>
+                                        <li><i data-lucide="trophy" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Deportivos:</strong> torneos internos y actividades recreativas.</span></li>
+                                    </ul>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="link" class="icon-lucide-sm" aria-hidden="true"></i> Cronograma oficial</h3>
+                                        <p class="campus-block-text">Consulta el cronograma actualizado de eventos en el sitio oficial:</p>
+                                        <div class="campus-link-card">
+                                            <i data-lucide="external-link" class="icon-lucide-sm" aria-hidden="true"></i>
+                                            <a href="https://eventos.unad.edu.co/" target="_blank" rel="noopener noreferrer">eventos.unad.edu.co — Cronograma de eventos</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="info" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Recomendación</h4>
+                                            <p>Revisa el cronograma <strong>periódicamente</strong> y aprovecha los eventos de bienestar: son espacios pensados para el estudiante y suelen ser gratuitos.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ====== INFO 03: SEMILLEROS ====== -->
+                                <div class="slide-panel" id="info-semilleros" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="flask-conical" class="icon-lucide-sm" aria-hidden="true"></i> Semilleros de investigación</h3>
+                                        <p class="campus-block-text">Los <strong>semilleros de investigación</strong> son espacios formativos donde estudiantes y docentes trabajan de manera conjunta en proyectos de investigación. Son importantes porque permiten <strong>aprender a investigar investigando</strong>: formulación de problemas, búsqueda de fuentes, aplicación de métodos, análisis de datos y comunicación de resultados. Además, fortalecen el pensamiento crítico, el trabajo colaborativo y la proyección académica y profesional del estudiante.</p>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="target" class="icon-lucide-sm" aria-hidden="true"></i> ¿Para qué sirven?</h3>
+                                    </div>
+                                    <ul class="campus-info-list">
+                                        <li><i data-lucide="flask-conical" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Formación en investigación:</strong> aprender el proceso completo de un proyecto.</span></li>
+                                        <li><i data-lucide="users" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Trabajo en equipo:</strong> colaborar con docentes y estudiantes de distintas disciplinas.</span></li>
+                                        <li><i data-lucide="award" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Proyección académica:</strong> participar en publicaciones, ponencias y convocatorias.</span></li>
+                                        <li><i data-lucide="lightbulb" class="icon-lucide-sm" aria-hidden="true"></i><span><strong>Desarrollo de competencias:</strong> lectura crítica, escritura académica y análisis de datos.</span></li>
+                                    </ul>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="link" class="icon-lucide-sm" aria-hidden="true"></i> Consulta los semilleros</h3>
+                                        <p class="campus-block-text">En la plataforma de investigaciones puedes consultar los semilleros disponibles, sus líneas temáticas y el contacto de sus líderes:</p>
+                                        <div class="campus-link-card">
+                                            <i data-lucide="external-link" class="icon-lucide-sm" aria-hidden="true"></i>
+                                            <a href="https://investigaciones.unad.edu.co/" target="_blank" rel="noopener noreferrer">investigaciones.unad.edu.co — Semilleros de investigación</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="lightbulb" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Recomendación</h4>
+                                            <p>Busca el semillero que <strong>mejor se adapte a lo que deseas investigar</strong> y contacta al líder encargado para conocer el proceso de vinculación.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ====== INFO 04: ESCUELAS ====== -->
+                                <div class="slide-panel" id="info-escuelas" role="tabpanel">
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="school" class="icon-lucide-sm" aria-hidden="true"></i> Información de las escuelas</h3>
+                                        <p class="campus-block-text">La UNAD está organizada en <strong>escuelas académicas</strong>. Cada programa de formación pertenece a una de ellas, y cada escuela tiene su propia página oficial con información sobre programas, directivos, contacto, líneas de investigación y servicios. Si tienes dudas sobre la unidad académica de tu programa, o quieres conocer más sobre sus actividades, consulta la página de tu escuela.</p>
+                                    </div>
+
+                                    <div class="campus-block">
+                                        <h3 class="campus-block-title"><i data-lucide="grid-2x2" class="icon-lucide-sm" aria-hidden="true"></i> Escuelas de la UNAD</h3>
+                                        <p class="campus-block-text">Cada tarjeta está identificada con el <strong>color oficial</strong> de la escuela. Haz clic para visitar su página.</p>
+                                    </div>
+
+                                    <div class="escuelas-grid">
+                                        <a class="escuela-card" href="https://academia.unad.edu.co/ecacen" target="_blank" rel="noopener noreferrer" style="--escuela-color: #E67016;">
+                                            <div class="escuela-card-header">
+                                                <span class="escuela-sigla">ECACEN</span>
+                                                <i data-lucide="external-link" class="escuela-card-arrow icon-lucide-sm" aria-hidden="true"></i>
+                                            </div>
+                                            <h4 class="escuela-nombre">Escuela de Ciencias Administrativas, Contables, Económicas y de Negocios</h4>
+                                        </a>
+
+                                        <a class="escuela-card" href="https://academia.unad.edu.co/ecapma" target="_blank" rel="noopener noreferrer" style="--escuela-color: #50B748;">
+                                            <div class="escuela-card-header">
+                                                <span class="escuela-sigla">ECAPMA</span>
+                                                <i data-lucide="external-link" class="escuela-card-arrow icon-lucide-sm" aria-hidden="true"></i>
+                                            </div>
+                                            <h4 class="escuela-nombre">Escuela de Ciencias Agrícolas, Pecuarias y del Medio Ambiente</h4>
+                                        </a>
+
+                                        <a class="escuela-card" href="https://academia.unad.edu.co/ecbti" target="_blank" rel="noopener noreferrer" style="--escuela-color: #0C4966;">
+                                            <div class="escuela-card-header">
+                                                <span class="escuela-sigla">ECBTI</span>
+                                                <i data-lucide="external-link" class="escuela-card-arrow icon-lucide-sm" aria-hidden="true"></i>
+                                            </div>
+                                            <h4 class="escuela-nombre">Escuela de Ciencias Básicas, Tecnología e Ingeniería</h4>
+                                        </a>
+
+                                        <a class="escuela-card" href="https://academia.unad.edu.co/ecedu" target="_blank" rel="noopener noreferrer" style="--escuela-color: #A54686;">
+                                            <div class="escuela-card-header">
+                                                <span class="escuela-sigla">ECEDU</span>
+                                                <i data-lucide="external-link" class="escuela-card-arrow icon-lucide-sm" aria-hidden="true"></i>
+                                            </div>
+                                            <h4 class="escuela-nombre">Escuela de Ciencias de la Educación</h4>
+                                        </a>
+
+                                        <a class="escuela-card" href="https://academia.unad.edu.co/ecisa" target="_blank" rel="noopener noreferrer" style="--escuela-color: #43C7F4;">
+                                            <div class="escuela-card-header">
+                                                <span class="escuela-sigla">ECISA</span>
+                                                <i data-lucide="external-link" class="escuela-card-arrow icon-lucide-sm" aria-hidden="true"></i>
+                                            </div>
+                                            <h4 class="escuela-nombre">Escuela de Ciencias de la Salud</h4>
+                                        </a>
+
+                                        <a class="escuela-card" href="https://academia.unad.edu.co/ecsah" target="_blank" rel="noopener noreferrer" style="--escuela-color: #F4AF00;">
+                                            <div class="escuela-card-header">
+                                                <span class="escuela-sigla">ECSAH</span>
+                                                <i data-lucide="external-link" class="escuela-card-arrow icon-lucide-sm" aria-hidden="true"></i>
+                                            </div>
+                                            <h4 class="escuela-nombre">Escuela de Ciencias Sociales, Artes y Humanidades</h4>
+                                        </a>
+
+                                        <a class="escuela-card" href="https://academia.unad.edu.co/ecjp" target="_blank" rel="noopener noreferrer" style="--escuela-color: #800020;">
+                                            <div class="escuela-card-header">
+                                                <span class="escuela-sigla">ECJP</span>
+                                                <i data-lucide="external-link" class="escuela-card-arrow icon-lucide-sm" aria-hidden="true"></i>
+                                            </div>
+                                            <h4 class="escuela-nombre">Escuela de Ciencias Jurídicas y Políticas</h4>
+                                        </a>
+                                    </div>
+
+                                    <div class="campus-alert" role="note">
+                                        <div class="campus-alert-icon" aria-hidden="true"><i data-lucide="info" class="icon-lucide-lg"></i></div>
+                                        <div class="campus-alert-body">
+                                            <h4>Recomendación</h4>
+                                            <p>Si no estás seguro de a qué escuela pertenece tu programa, revisa el <strong>plan de estudios</strong> o consulta con tu <strong>líder zonal</strong>. Ellos podrán orientarte sobre los canales de contacto específicos de cada escuela.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slides-controls" id="infoControls">
+                                <button class="slides-nav-btn slides-prev" id="infoPrev" aria-label="Información anterior"><i data-lucide="chevron-left" class="icon-lucide-sm"></i><span>Anterior</span></button>
+                                <div class="slides-progress" aria-hidden="true">
+                                    <span class="slides-counter" id="infoCounter">01 / 04</span>
+                                    <div class="slides-dots" id="infoDots">
+                                        <button class="slide-dot active" data-info="info-psicologia"></button>
+                                        <button class="slide-dot" data-info="info-eventos"></button>
+                                        <button class="slide-dot" data-info="info-semilleros"></button>
+                                        <button class="slide-dot" data-info="info-escuelas"></button>
+                                    </div>
+                                </div>
+                                <button class="slides-nav-btn slides-next" id="infoNext" aria-label="Información siguiente"><span>Siguiente</span><i data-lucide="chevron-right" class="icon-lucide-sm"></i></button>
+                            </div>
                         </div>
                     </div>
                 </div>
