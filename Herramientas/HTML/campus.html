@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Campus Virtual · Taller</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <script>
         (function() {
@@ -30,7 +30,6 @@
         <div class="reading-progress-bar" id="readingProgress"></div>
     </div>
 
-    <!-- Controles flotantes superiores -->
     <div class="top-controls" role="toolbar" aria-label="Controles de vista">
         <button class="ctrl-btn" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false">
             <i data-lucide="menu" class="icon-lucide-sm menu-open-icon" aria-hidden="true"></i>
@@ -62,7 +61,6 @@
                 </div>
             </div>
 
-            <!-- OLAS DE HEADER (CSS clip-path en lugar de SVG) -->
             <div class="header-waves" aria-hidden="true">
                 <div class="wave-layer wave-yellow"></div>
                 <div class="wave-layer wave-orange"></div>
@@ -70,7 +68,6 @@
             </div>
         </header>
 
-        <!-- MENÚ LATERAL -->
         <nav class="side-menu" id="sideMenu" role="navigation" aria-label="Navegación entre etapas">
             <div class="side-menu-header">
                 <span class="side-menu-title">Menú de etapas</span>
@@ -445,7 +442,6 @@
         </main>
 
         <footer class="footer-waves" role="contentinfo" aria-label="Pie de página">
-            <!-- OLAS DE FOOTER (CSS clip-path) -->
             <div class="footer-waves-container" aria-hidden="true">
                 <div class="wave-layer-footer wave-yellow-footer"></div>
                 <div class="wave-layer-footer wave-orange-footer"></div>
