@@ -6,7 +6,16 @@
     console.log('✅ herramientas-script.js cargado');
 
     // ============================================================
-    // 0. FORZAR SCROLL AL INICIO
+    // 0. DETECCIÓN DE DISPOSITIVO / PREFERENCIAS
+    // ============================================================
+    const isMobileDevice = window.matchMedia('(max-width: 768px)').matches ||
+        /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const lowPerformanceMode = isMobileDevice || prefersReducedMotion;
+
+    // ============================================================
+    // 1. FORZAR SCROLL AL INICIO
     // ============================================================
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
@@ -14,23 +23,30 @@
     window.addEventListener('load', () => window.scrollTo(0, 0));
 
     // ============================================================
-    // 1. FONDO DE BURBUJAS
+    // 2. FONDO DE BURBUJAS
     // ============================================================
     function initBubbles() {
         const canvas = document.getElementById('starfieldCanvas');
         if (!canvas) return;
         const ctx = canvas.getContext('2d', { alpha: true });
         let width, height, bubbles = [], animationId = null, isVisible = true;
-        const isMobile = window.innerWidth <= 768;
-        const numBubbles = isMobile ? 10 : 20;
+
+        // En móvil, menos burbujas y más pequeñas
+        const numBubbles = lowPerformanceMode ? 6 : 20;
+        const maxRadius = lowPerformanceMode ? 140 : 180;
+        const minRadius = lowPerformanceMode ? 60 : 80;
+        const speedFactor = lowPerformanceMode ? 0.25 : 0.4;
 
         function resize() {
             width = window.innerWidth;
             height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
+            // En modo ligero, DPR 1 para aliviar la GPU
+            const dpr = lowPerformanceMode ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
             canvas.style.width = width + 'px';
             canvas.style.height = height + 'px';
+            if (dpr !== 1) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
         window.addEventListener('resize', () => { resize(); initBubbleData(); });
 
@@ -40,9 +56,9 @@
                 bubbles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    r: Math.random() * 180 + 80,
-                    vx: (Math.random() - 0.5) * 0.4,
-                    vy: (Math.random() - 0.5) * 0.4,
+                    r: Math.random() * (maxRadius - minRadius) + minRadius,
+                    vx: (Math.random() - 0.5) * speedFactor,
+                    vy: (Math.random() - 0.5) * speedFactor,
                     color: Math.random() > 0.5 ? 'rgba(37, 99, 235, 0.15)' : 'rgba(96, 165, 250, 0.1)'
                 });
             }
@@ -71,10 +87,12 @@
             if (isVisible && !animationId) animationId = requestAnimationFrame(animate);
         });
         resize(); initBubbleData(); animate();
+
+        console.log('[Herramientas] Canvas iniciado ·', lowPerformanceMode ? 'MODO LIGERO' : 'MODO COMPLETO', '· Burbujas:', numBubbles);
     }
 
     // ============================================================
-    // 2. VALIDACIÓN DE DATOS (opcional, avisa en consola)
+    // 3. VALIDACIÓN DE DATOS
     // ============================================================
     function validarHerramientas() {
         if (!window.HERRAMIENTAS) {
@@ -94,7 +112,7 @@
     }
 
     // ============================================================
-    // 3. TABS DE CATEGORÍAS
+    // 4. TABS DE CATEGORÍAS
     // ============================================================
     function initTabs() {
         const tabs = document.querySelectorAll('.tab-categoria');
@@ -132,9 +150,11 @@
     }
 
     // ============================================================
-    // 4. GENERAR TARJETAS (data-driven)
+    // 5. GENERAR TARJETAS (data-driven, con reintento)
     // ============================================================
-    function generarTarjetas() {
+    function generarTarjetas(intento) {
+        intento = intento || 0;
+
         const grids = {
             ofimaticas:     document.getElementById('herramientasGridOfimaticas'),
             almacenamiento: document.getElementById('herramientasGridAlmacenamiento'),
@@ -143,12 +163,26 @@
             ia:             document.getElementById('herramientasGridIA')
         };
 
-        if (!window.HERRAMIENTAS || !window.HerramientasRender) {
-            console.error('[Herramientas] Faltan datos o render. Verifica los scripts cargados.');
+        const gridsExisten = Object.values(grids).some(g => g);
+        if (!gridsExisten) {
+            console.error('[Herramientas] No se encontró ningún grid en el HTML. Verifica los IDs.');
             return;
         }
 
-        // Agrupar por categoría automáticamente
+        if (!window.HERRAMIENTAS || !window.HerramientasRender) {
+            if (intento < 30) {
+                setTimeout(() => generarTarjetas(intento + 1), 100);
+                return;
+            }
+            console.error('[Herramientas] No se pudieron cargar los datos/render tras 3s.');
+            console.error('  window.HERRAMIENTAS =', !!window.HERRAMIENTAS);
+            console.error('  window.HerramientasRender =', !!window.HerramientasRender);
+            Object.values(grids).forEach(grid => {
+                if (grid) grid.innerHTML = '<p style="color:#ef4444;text-align:center;padding:1rem;">Error: no se cargaron los datos.</p>';
+            });
+            return;
+        }
+
         const agrupadas = {};
         Object.values(window.HERRAMIENTAS).forEach(tool => {
             const cat = tool.categoria || 'ofimaticas';
@@ -156,18 +190,32 @@
             agrupadas[cat].push(tool);
         });
 
+        let totalPintadas = 0;
+
         Object.keys(grids).forEach(cat => {
             const grid = grids[cat];
-            if (!grid) return;
+            if (!grid) {
+                console.warn('[Herramientas] No existe el grid para categoría:', cat);
+                return;
+            }
             const tools = agrupadas[cat] || [];
-            grid.innerHTML = tools.length
-                ? tools.map(t => window.HerramientasRender.card(t)).join('')
-                : '<p style="color:var(--text-muted);text-align:center;padding:1rem;">No hay herramientas</p>';
+            if (tools.length === 0) {
+                grid.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:1rem;">No hay herramientas en esta categoría.</p>';
+                return;
+            }
+            grid.innerHTML = tools.map(t => window.HerramientasRender.card(t)).join('');
+            totalPintadas += tools.length;
         });
+
+        console.log('[Herramientas] Tarjetas pintadas:', totalPintadas);
+
+        if (typeof lucide !== 'undefined') {
+            setTimeout(() => lucide.createIcons(), 50);
+        }
     }
 
     // ============================================================
-    // 5. DETALLE
+    // 6. DETALLE
     // ============================================================
     function initDetalle() {
         const overlay = document.getElementById('herramientaDetalleOverlay');
@@ -187,7 +235,10 @@
             if (typeof lucide !== 'undefined') lucide.createIcons();
         }
 
-        scrollTopBtn.addEventListener('click', () => container.scrollTo({ top: 0, behavior: 'smooth' }));
+        scrollTopBtn.addEventListener('click', () => container.scrollTo({
+            top: 0,
+            behavior: lowPerformanceMode ? 'auto' : 'smooth'
+        }));
 
         // ===== LIGHTBOX =====
         let lightboxEl = null, lightboxImg = null, lightboxStage = null, lightboxCounter = null, lightboxZoomValue = null;
@@ -376,7 +427,7 @@
                 if (typeof lucide !== 'undefined') lucide.createIcons();
                 container.scrollTop = 0;
                 if (scrollTopBtn) scrollTopBtn.classList.remove('visible');
-            }, 100);
+            }, lowPerformanceMode ? 30 : 100);
 
             overlay.classList.add('active');
             overlay.setAttribute('aria-hidden', 'false');
@@ -406,7 +457,7 @@
     }
 
     // ============================================================
-    // 6. MENÚ LATERAL
+    // 7. MENÚ LATERAL
     // ============================================================
     function initMenu() {
         const menuToggle = document.getElementById('menuToggle');
@@ -440,7 +491,7 @@
     }
 
     // ============================================================
-    // 7. BOTÓN DE VOLVER
+    // 8. BOTÓN DE VOLVER
     // ============================================================
     function initBackButton() {
         const btnBack = document.getElementById('btnBack');
@@ -449,7 +500,7 @@
     }
 
     // ============================================================
-    // 8. TOGGLE DE DESCRIPCIÓN
+    // 9. TOGGLE DE DESCRIPCIÓN
     // ============================================================
     function initHeroToggle() {
         const heroSection = document.getElementById('heroSection');
@@ -464,7 +515,7 @@
     }
 
     // ============================================================
-    // 9. TOGGLE DE TEMA
+    // 10. TOGGLE DE TEMA
     // ============================================================
     function initThemeToggle() {
         const toggle = document.getElementById('themeToggle');
@@ -490,25 +541,30 @@
     }
 
     // ============================================================
-    // 10. INTRO OVERLAY
+    // 11. INTRO OVERLAY
     // ============================================================
     function initIntro() {
         const intro = document.getElementById('introOverlay');
         if (!intro) return;
+        const delay = lowPerformanceMode ? 700 : 1400;
+        const fade = lowPerformanceMode ? 400 : 800;
         setTimeout(function() {
             intro.classList.add('hidden');
-            setTimeout(function() { intro.style.display = 'none'; window.scrollTo(0, 0); }, 800);
-        }, 1400);
+            setTimeout(function() { intro.style.display = 'none'; window.scrollTo(0, 0); }, fade);
+        }, delay);
     }
 
     // ============================================================
-    // 11. SCROLL FEATURES
+    // 12. SCROLL FEATURES
     // ============================================================
     function initScrollFeatures() {
         const progressBar = document.getElementById('readingProgress');
         const backToTop = document.getElementById('backToTop');
         let ticking = false;
-        if (backToTop) backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        if (backToTop) backToTop.addEventListener('click', () => window.scrollTo({
+            top: 0,
+            behavior: lowPerformanceMode ? 'auto' : 'smooth'
+        }));
         window.addEventListener('scroll', () => {
             if (!ticking) {
                 requestAnimationFrame(() => {
@@ -525,7 +581,7 @@
     }
 
     // ============================================================
-    // 12. GUÍA INTERACTIVA
+    // 13. GUÍA INTERACTIVA
     // ============================================================
     function initGuide() {
         const guideToggle = document.getElementById('guideToggle');
@@ -628,10 +684,10 @@
                 disableInteractiveClick();
 
                 setTimeout(() => {
-                    if (step.selector === '.side-menu') window.scrollTo({ top: 0, behavior: 'smooth' });
+                    if (step.selector === '.side-menu') window.scrollTo({ top: 0, behavior: lowPerformanceMode ? 'auto' : 'smooth' });
                     else {
                         const y = element.getBoundingClientRect().top + window.scrollY - 120;
-                        window.scrollTo({ top: y, behavior: 'smooth' });
+                        window.scrollTo({ top: y, behavior: lowPerformanceMode ? 'auto' : 'smooth' });
                     }
                 }, 50);
 
@@ -677,7 +733,7 @@
             guideToggle.setAttribute('aria-pressed', 'false');
             document.body.style.overflow = '';
             if (steps[currentStep].after) steps[currentStep].after();
-            setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+            setTimeout(() => window.scrollTo({ top: 0, behavior: lowPerformanceMode ? 'auto' : 'smooth' }), 100);
         }
 
         guideToggle.addEventListener('click', () => { if (isActive) closeGuide(); else openGuide(); });
@@ -713,7 +769,7 @@
     }
 
     // ============================================================
-    // 13. INICIALIZAR
+    // 14. INICIALIZAR
     // ============================================================
     function init() {
         window.scrollTo(0, 0);
@@ -726,12 +782,14 @@
         initIntro();
         initScrollFeatures();
         initTabs();
-        generarTarjetas();
+        generarTarjetas(0);
         initDetalle();
         initGuide();
         setTimeout(() => { if (typeof lucide !== 'undefined') lucide.createIcons(); }, 100);
         setTimeout(() => window.scrollTo(0, 0), 300);
-        setTimeout(() => window.scrollTo(0, 0), 2400);
+        setTimeout(() => window.scrollTo(0, 0), lowPerformanceMode ? 1200 : 2400);
+
+        console.log('[Herramientas] Inicializado · Modo:', lowPerformanceMode ? 'LIGERO' : 'COMPLETO');
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
