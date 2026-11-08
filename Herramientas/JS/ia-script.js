@@ -6,7 +6,16 @@
     console.log('✅ ia-script.js cargado');
 
     // ============================================================
-    // 0. FORZAR SCROLL AL INICIO AL CARGAR
+    // 0. DETECCIÓN DE DISPOSITIVO / PREFERENCIAS
+    // ============================================================
+    const isMobileDevice = window.matchMedia('(max-width: 768px)').matches ||
+        /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const lowPerformanceMode = isMobileDevice || prefersReducedMotion;
+
+    // ============================================================
+    // 1. FORZAR SCROLL AL INICIO AL CARGAR
     // ============================================================
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
@@ -16,28 +25,34 @@
     window.addEventListener('load', () => window.scrollTo(0, 0));
 
     // ============================================================
-    // 1. FONDO DE BURBUJAS (Canvas 2D, con colores IA)
+    // 2. FONDO DE BURBUJAS (Canvas 2D, con colores IA)
     // ============================================================
     function initBubbles() {
         const canvas = document.getElementById('starfieldCanvas');
         if (!canvas) return;
         const ctx = canvas.getContext('2d', { alpha: true });
-        
+
         let width, height;
         let bubbles = [];
         let animationId = null;
         let isVisible = true;
 
-        const isMobile = window.innerWidth <= 768;
-        const numBubbles = isMobile ? 10 : 20; 
+        // En móvil, menos burbujas y más pequeñas
+        const numBubbles = lowPerformanceMode ? 6 : 20;
+        const maxRadius = lowPerformanceMode ? 140 : 180;
+        const minRadius = lowPerformanceMode ? 60 : 80;
+        const speedFactor = lowPerformanceMode ? 0.25 : 0.4;
 
         function resize() {
             width = window.innerWidth;
             height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
+            // En modo ligero, DPR 1 para aliviar la GPU
+            const dpr = lowPerformanceMode ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
             canvas.style.width = width + 'px';
             canvas.style.height = height + 'px';
+            if (dpr !== 1) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
 
         window.addEventListener('resize', () => {
@@ -51,11 +66,11 @@
                 bubbles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    r: Math.random() * 180 + 80,
-                    vx: (Math.random() - 0.5) * 0.4,
-                    vy: (Math.random() - 0.5) * 0.4,
+                    r: Math.random() * (maxRadius - minRadius) + minRadius,
+                    vx: (Math.random() - 0.5) * speedFactor,
+                    vy: (Math.random() - 0.5) * speedFactor,
                     // Colores IA (morado + azul)
-                    color: Math.random() > 0.5 ? 'rgba(168, 85, 247, 0.15)' : 'rgba(59, 130, 246, 0.1)' 
+                    color: Math.random() > 0.5 ? 'rgba(168, 85, 247, 0.15)' : 'rgba(59, 130, 246, 0.1)'
                 });
             }
         }
@@ -98,10 +113,12 @@
         resize();
         initBubbleData();
         animate();
+
+        console.log('[IA] Canvas iniciado ·', lowPerformanceMode ? 'MODO LIGERO' : 'MODO COMPLETO', '· Burbujas:', numBubbles);
     }
 
     // ============================================================
-    // 2. MENÚ LATERAL
+    // 3. MENÚ LATERAL
     // ============================================================
     function initMenu() {
         const menuToggle = document.getElementById('menuToggle');
@@ -140,7 +157,7 @@
     }
 
     // ============================================================
-    // 3. BOTÓN DE VOLVER
+    // 4. BOTÓN DE VOLVER
     // ============================================================
     function initBackButton() {
         const btnBack = document.getElementById('btnBack');
@@ -151,7 +168,7 @@
     }
 
     // ============================================================
-    // 4. TOGGLE DE DESCRIPCIÓN (HERO)
+    // 5. TOGGLE DE DESCRIPCIÓN (HERO)
     // ============================================================
     function initHeroToggle() {
         const heroSection = document.getElementById('heroSection');
@@ -166,7 +183,7 @@
     }
 
     // ============================================================
-    // 5. TOGGLE DE TEMA
+    // 6. TOGGLE DE TEMA
     // ============================================================
     function initThemeToggle() {
         const toggle = document.getElementById('themeToggle');
@@ -192,28 +209,33 @@
     }
 
     // ============================================================
-    // 6. INTRO OVERLAY
+    // 7. INTRO OVERLAY
     // ============================================================
     function initIntro() {
         const intro = document.getElementById('introOverlay');
         if (!intro) return;
+
+        const delay = lowPerformanceMode ? 700 : 1400;
+        const fade = lowPerformanceMode ? 400 : 800;
+
         setTimeout(() => {
             intro.classList.add('hidden');
             setTimeout(() => {
                 intro.style.display = 'none';
                 window.scrollTo(0, 0);
-            }, 800);
-        }, 1400);
+            }, fade);
+        }, delay);
     }
 
     // ============================================================
-    // 7. ANIMACIONES REVEAL
+    // 8. ANIMACIONES REVEAL
     // ============================================================
     function initRevealAnimations() {
         const reveals = document.querySelectorAll('.reveal');
         if (!reveals.length) return;
 
-        if (!('IntersectionObserver' in window)) {
+        // En móvil o reduced-motion, mostrar todo de inmediato
+        if (lowPerformanceMode || !('IntersectionObserver' in window)) {
             reveals.forEach(el => el.classList.add('revealed'));
             return;
         }
@@ -233,7 +255,7 @@
     }
 
     // ============================================================
-    // 8. BARRA DE PROGRESO Y VOLVER ARRIBA
+    // 9. BARRA DE PROGRESO Y VOLVER ARRIBA
     // ============================================================
     function initScrollFeatures() {
         const progressBar = document.getElementById('readingProgress');
@@ -242,7 +264,7 @@
 
         if (backToTop) {
             backToTop.addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: lowPerformanceMode ? 'auto' : 'smooth' });
             });
         }
 
@@ -252,9 +274,9 @@
                     const scrollTop = window.scrollY || document.documentElement.scrollTop;
                     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
                     const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-                    
+
                     if (progressBar) progressBar.style.width = Math.min(progress, 100) + '%';
-                    
+
                     if (backToTop) {
                         if (scrollTop > 300) {
                             backToTop.classList.add('visible');
@@ -262,7 +284,7 @@
                             backToTop.classList.remove('visible');
                         }
                     }
-                    
+
                     ticking = false;
                 });
                 ticking = true;
@@ -271,12 +293,12 @@
     }
 
     // ============================================================
-    // 9. TABS PRINCIPALES, SLIDES Y ACORDEONES
+    // 10. TABS PRINCIPALES, SLIDES Y ACORDEONES
     // ============================================================
     function initTabsAndSlides() {
         const mainTabs = document.querySelectorAll('.campus-main-tab');
         const mainPanels = document.querySelectorAll('.campus-main-panel');
-        
+
         mainTabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const targetId = tab.dataset.panel;
@@ -303,7 +325,7 @@
         function goToSlide(index) {
             if (index < 0) index = 0;
             if (index >= totalSlides) index = totalSlides - 1;
-            
+
             currentSlide = index;
             slideTabs.forEach((t, i) => {
                 t.classList.toggle('active', i === index);
@@ -311,7 +333,7 @@
             });
             slidePanels.forEach((p, i) => p.classList.toggle('active', i === index));
             dots.forEach((d, i) => d.classList.toggle('active', i === index));
-            
+
             const pad = n => n < 10 ? '0' + n : '' + n;
             if (counter) counter.textContent = `${pad(index + 1)} / ${pad(totalSlides)}`;
             if (prevBtn) prevBtn.disabled = index === 0;
@@ -322,7 +344,7 @@
         dots.forEach((dot, i) => dot.addEventListener('click', () => goToSlide(i)));
         if (prevBtn) prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
         if (nextBtn) nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
-        
+
         window.goToSlide = goToSlide;
         goToSlide(0);
 
@@ -354,7 +376,7 @@
     }
 
     // ============================================================
-    // 10. GUÍA INTERACTIVA
+    // 11. GUÍA INTERACTIVA
     // ============================================================
     function initGuide() {
         const guideToggle = document.getElementById('guideToggle');
@@ -469,7 +491,7 @@
             if (index < 0 || index >= steps.length) return;
 
             const step = steps[index];
-            
+
             if (step.before) step.before();
 
             setTimeout(() => {
@@ -485,10 +507,10 @@
 
                 setTimeout(() => {
                     if (step.selector === '.side-menu') {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        window.scrollTo({ top: 0, behavior: lowPerformanceMode ? 'auto' : 'smooth' });
                     } else {
                         const y = element.getBoundingClientRect().top + window.scrollY - 120;
-                        window.scrollTo({ top: y, behavior: 'smooth' });
+                        window.scrollTo({ top: y, behavior: lowPerformanceMode ? 'auto' : 'smooth' });
                     }
                 }, 50);
 
@@ -530,11 +552,11 @@
             guideToggle.classList.remove('active');
             guideToggle.setAttribute('aria-pressed', 'false');
             document.body.style.overflow = '';
-            
+
             if (steps[currentStep].after) steps[currentStep].after();
 
             setTimeout(() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: lowPerformanceMode ? 'auto' : 'smooth' });
             }, 100);
         }
 
@@ -595,7 +617,7 @@
     }
 
     // ============================================================
-    // 11. INICIALIZAR TODO
+    // 12. INICIALIZAR TODO
     // ============================================================
     function init() {
         window.scrollTo(0, 0);
@@ -616,7 +638,9 @@
         }, 100);
 
         setTimeout(() => window.scrollTo(0, 0), 300);
-        setTimeout(() => window.scrollTo(0, 0), 2400);
+        setTimeout(() => window.scrollTo(0, 0), lowPerformanceMode ? 1200 : 2400);
+
+        console.log('[IA] Inicializado · Modo:', lowPerformanceMode ? 'LIGERO' : 'COMPLETO');
     }
 
     if (document.readyState === 'loading') {
