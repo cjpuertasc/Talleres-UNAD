@@ -1,3 +1,11 @@
+// ===== DETECCIÓN DE MÓVIL Y PREFERENCIAS =====
+const isMobileDevice = window.matchMedia('(max-width: 768px)').matches ||
+    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const lowPerformanceMode = isMobileDevice || prefersReducedMotion;
+
 // ===== FONDO ESTRELLADO =====
 const canvas = document.getElementById('starfieldCanvas');
 const ctx = canvas ? canvas.getContext('2d') : null;
@@ -16,17 +24,25 @@ let lastFocusable = null;
 
 const SPEED_MULTIPLIER = 1.3;
 
-const STAR_LAYERS = [
-    { speed: 0.015 * SPEED_MULTIPLIER, scale: 0.2, count: 220 },
-    { speed: 0.03 * SPEED_MULTIPLIER, scale: 0.5, count: 60 },
-    { speed: 0.05 * SPEED_MULTIPLIER, scale: 0.75, count: 30 }
-];
+// ===== Capas de estrellas según rendimiento =====
+const STAR_LAYERS = lowPerformanceMode
+    ? [
+        // Modo ligero: ~50 estrellas totales
+        { speed: 0.015 * SPEED_MULTIPLIER, scale: 0.2, count: 40 },
+        { speed: 0.03 * SPEED_MULTIPLIER, scale: 0.5, count: 10 }
+      ]
+    : [
+        // Modo completo (desktop): ~310 estrellas
+        { speed: 0.015 * SPEED_MULTIPLIER, scale: 0.2, count: 220 },
+        { speed: 0.03 * SPEED_MULTIPLIER, scale: 0.5, count: 60 },
+        { speed: 0.05 * SPEED_MULTIPLIER, scale: 0.75, count: 30 }
+      ];
 
 const STARS_ANGLE = 145;
 const SHOOTING_STAR_SPEED = { min: 15 * SPEED_MULTIPLIER, max: 20 * SPEED_MULTIPLIER };
 const SHOOTING_STAR_OPACITY_DELTA = 0.01;
 const TRAIL_LENGTH_DELTA = 0.01;
-const SHOOTING_STAR_EMITTING_INTERVAL = 1200;
+const SHOOTING_STAR_EMITTING_INTERVAL = lowPerformanceMode ? 4000 : 1200;
 const SHOOTING_STAR_LIFE_TIME = 500;
 const MAX_TRAIL_LENGTH = 300;
 const STAR_BASE_RADIUS = 2;
@@ -34,7 +50,9 @@ const SHOOTING_STAR_RADIUS = 3;
 
 function resize() {
     if (!canvas) return;
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // En modo ligero usar 1x DPR para aliviar la GPU
+    const maxDpr = lowPerformanceMode ? 1 : 2;
+    dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
     width = window.innerWidth;
     height = window.innerHeight;
     canvas.width = width * dpr;
@@ -91,6 +109,9 @@ function initStars() {
 }
 
 function createShootingStar() {
+    // En modo ligero, no se crean estrellas fugaces
+    if (lowPerformanceMode) return;
+
     const shootingStar = {
         x: randomRange(width / 2, width),
         y: randomRange(0, height / 2),
@@ -118,7 +139,7 @@ function drawStar(star) {
     if (isLightMode) {
         ctx.fillStyle = `rgba(255, 255, 255, ${0.9 * twinkle})`;
         ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
-        ctx.shadowBlur = 4;
+        ctx.shadowBlur = lowPerformanceMode ? 2 : 4;
     } else {
         ctx.fillStyle = `rgba(255, 235, 180, ${0.8 * twinkle})`;
         ctx.shadowColor = 'transparent';
@@ -256,12 +277,13 @@ if (canvas) {
 const introOverlay = document.getElementById('introOverlay');
 if (introOverlay) {
     window.addEventListener('load', () => {
+        const delay = lowPerformanceMode ? 700 : 1400;
         setTimeout(() => {
             introOverlay.classList.add('hidden');
             setTimeout(() => {
                 introOverlay.style.display = 'none';
-            }, 900);
-        }, 1400);
+            }, lowPerformanceMode ? 400 : 900);
+        }, delay);
     });
 }
 
@@ -416,7 +438,7 @@ if (modalOverlay && modalClose && modalBtn && modalContainer) {
 }
 
 // ============================================================
-// ===== GUÍA INTERACTIVA (FOCO CON AGUJERO REAL) =====
+// ===== GUÍA INTERACTIVA =====
 // ============================================================
 function initGuide() {
     const guideToggle = document.getElementById('guideToggle');
@@ -431,7 +453,6 @@ function initGuide() {
 
     if (!guideToggle || !guideOverlay) return;
 
-    // ===== Pasos de la guía =====
     const steps = [
         {
             selector: '.top-controls',
@@ -518,7 +539,6 @@ function initGuide() {
         guideSpotlight.style.borderRadius = (radius && radius !== '0px') ? radius : '16px';
     }
 
-    // ===== Limpia el handler de clic interactivo =====
     function clearInteractiveHandler() {
         if (interactiveClickHandler) {
             document.removeEventListener('click', interactiveClickHandler, true);
@@ -526,26 +546,14 @@ function initGuide() {
         }
     }
 
-    // ===== Habilita clics sobre el elemento señalado (modo interactivo) =====
     function enableInteractiveClick(element) {
         clearInteractiveHandler();
-
-        // El overlay de la guía tiene pointer-events: auto en el CSS base.
-        // Para permitir clics al elemento de debajo, hacemos que el overlay
-        // ignore los clics SOLO en el modo interactivo, y los botones del
-        // tooltip siguen funcionando porque están por encima con z-index.
         guideOverlay.style.pointerEvents = 'none';
         guideTooltip.style.pointerEvents = 'auto';
 
-        // Capturamos el clic en el elemento señalado para avanzar al paso 4.
-        // Usamos capture para interceptarlo antes y evitar que el modal
-        // abra y cierre al mismo tiempo.
         interactiveClickHandler = function(ev) {
             const target = ev.target.closest('.taller-link.active');
             if (!target || target !== element) return;
-
-            // Dejamos que el clic siga su curso (abre el modal por su propio listener)
-            // y en el siguiente tick avanzamos la guía al paso 4.
             setTimeout(() => {
                 if (isActive && currentStep === 2) {
                     showStep(3);
@@ -558,7 +566,6 @@ function initGuide() {
 
     function disableInteractiveClick() {
         clearInteractiveHandler();
-        // Restauramos el comportamiento normal del overlay
         guideOverlay.style.pointerEvents = '';
         guideTooltip.style.pointerEvents = '';
     }
@@ -577,9 +584,8 @@ function initGuide() {
         guideStep.textContent = (index + 1) + '/' + steps.length;
         guideText.textContent = step.text;
 
-        // Recalcular en el siguiente frame para asegurar geometría correcta
         requestAnimationFrame(() => {
-            element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            element.scrollIntoView({ behavior: lowPerformanceMode ? 'auto' : 'smooth', block: 'nearest' });
             setTimeout(() => {
                 updateSpotlight(element);
                 requestAnimationFrame(() => {
@@ -588,25 +594,18 @@ function initGuide() {
             }, 200);
         });
 
-        // Deshabilitar "Anterior" en el primer paso
         guidePrev.disabled = index === 0;
 
-        // Limpiar modo interactivo por defecto
         disableInteractiveClick();
 
-        // Configurar el botón "Siguiente" y el modo interactivo según el paso
         if (index === steps.length - 1) {
-            // Último paso: botón "Cerrar"
             guideNext.disabled = false;
             guideNext.innerHTML = '<span>Cerrar</span><i data-lucide="check" class="icon-lucide-sm"></i>';
         } else if (step.mode === 'interactive-modal') {
-            // Paso 3: botón deshabilitado, se debe hacer clic en el taller.
             guideNext.disabled = true;
             guideNext.innerHTML = '<span>Haz clic en el taller</span><i data-lucide="mouse-pointer-click" class="icon-lucide-sm"></i>';
-            // Habilitar clic sobre el taller señalado
             enableInteractiveClick(element);
         } else {
-            // Pasos normales
             guideNext.disabled = false;
             guideNext.innerHTML = '<span>Continuar</span><i data-lucide="chevron-right" class="icon-lucide-sm"></i>';
         }
@@ -614,18 +613,15 @@ function initGuide() {
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    // ====== OBSERVADOR DEL MODAL (respaldo por si el clic captura no dispara) ======
     let modalObserver = null;
 
     function startModalObserver() {
         if (!modalOverlay || modalObserver) return;
-
         modalObserver = new MutationObserver(() => {
             if (modalOverlay.classList.contains('active') && currentStep === 2 && isActive) {
                 showStep(3);
             }
         });
-
         modalObserver.observe(modalOverlay, { attributes: true, attributeFilter: ['class'] });
     }
 
@@ -676,29 +672,22 @@ function initGuide() {
 
     guideClose.addEventListener('click', closeGuide);
 
-    // ===== Botón Anterior =====
     guidePrev.addEventListener('click', () => {
         if (currentStep === 0) return;
-
         if (currentStep === 3 && modalOverlay && modalOverlay.classList.contains('active')) {
             closeModal();
         }
-
         showStep(currentStep - 1);
     });
 
-    // ===== Botón Siguiente / Cerrar =====
     guideNext.addEventListener('click', () => {
         if (currentStep === steps.length - 1) {
             closeGuide();
             return;
         }
-
         if (steps[currentStep].mode === 'interactive-modal') {
-            // No avanzar por botón: el usuario debe hacer clic en el taller.
             return;
         }
-
         showStep(currentStep + 1);
     });
 
