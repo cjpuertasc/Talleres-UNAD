@@ -74,32 +74,24 @@
     }
 
     // ============================================================
-    // 2. DATOS DE HERRAMIENTAS
+    // 2. VALIDACIÓN DE DATOS (opcional, avisa en consola)
     // ============================================================
-    const herramientasData = {
-        word: { nombre: 'Microsoft Word', color: '#2b579a', icon: '../icons/microsoft-word.svg', descripcion: 'Word es un procesador de textos profesional que permite crear, editar y dar formato a documentos de manera eficiente.', deQueTrata: 'Word es un procesador de textos que forma parte de Microsoft Office.', paraQueFunciona: 'Word se utiliza para la creación de documentos académicos como ensayos, informes, tesis.', comoFunciona: 'Word funciona con un sistema de "cinta de opciones".', tips: ['Usa estilos predefinidos.', 'Aprende atajos de teclado.', 'La función "Control de cambios" es ideal.', 'Guarda tus documentos en la nube.', 'Usa la herramienta de "Referencias".'], plataformas: ['Windows', 'macOS', 'Web', 'Android', 'iOS'], badge: 'Office', categoria: 'ofimaticas', imagenes: ['word-1.jpg', 'word-2.jpg', 'word-3.jpg'] },
-        excel: { nombre: 'Microsoft Excel', color: '#217346', icon: '../icons/microsoft-excel.svg', descripcion: 'Excel es una hoja de cálculo que permite realizar análisis de datos, crear gráficos, tablas dinámicas.', deQueTrata: 'Excel es una hoja de cálculo que forma parte de Microsoft Office.', paraQueFunciona: 'Excel se utiliza para todo tipo de análisis de datos.', comoFunciona: 'Excel funciona con un sistema de celdas donde se ingresan datos y fórmulas.', tips: ['Aprende las fórmulas básicas.', 'Usa formato condicional.', 'Las tablas dinámicas son poderosas.', 'Graba macros.', 'Usa la función "Validación de datos".'], plataformas: ['Windows', 'macOS', 'Web', 'Android', 'iOS'], badge: 'Office', categoria: 'ofimaticas', imagenes: ['excel-1.jpg', 'excel-2.jpg', 'excel-3.jpg'] },
-        powerpoint: { nombre: 'Microsoft PowerPoint', color: '#d24726', icon: '../icons/microsoft-powerpoint.svg', descripcion: 'PowerPoint es la herramienta líder para crear presentaciones impactantes.', deQueTrata: 'PowerPoint es una herramienta de presentaciones de Microsoft Office.', paraQueFunciona: 'PowerPoint se utiliza para crear presentaciones visuales.', comoFunciona: 'PowerPoint funciona con diapositivas organizadas secuencialmente.', tips: ['Mantén tus diapositivas limpias.', 'Usa imágenes de alta calidad.', 'Practica tu presentación.', 'Las animaciones deben ser sutiles.', 'Usa plantillas profesionales.'], plataformas: ['Windows', 'macOS', 'Web', 'Android', 'iOS'], badge: 'Office', categoria: 'ofimaticas', imagenes: ['ppt-1.jpg', 'ppt-2.jpg', 'ppt-3.jpg'] },
-        onenote: { nombre: 'Microsoft OneNote', color: '#7719aa', icon: '../icons/microsoft-onenote.svg', descripcion: 'OneNote es un cuaderno digital para tomar notas y organizar información.', deQueTrata: 'OneNote es un cuaderno digital.', paraQueFunciona: 'OneNote se utiliza para tomar apuntes en clase.', comoFunciona: 'OneNote funciona con una estructura de cuadernos, secciones y páginas.', tips: ['Usa etiquetas para categorizar.', 'La función de dibujo a mano alzada.', 'Comparte tus cuadernos.', 'Sincroniza OneNote.', 'Usa la función de "Grabación de audio".'], plataformas: ['Windows', 'macOS', 'Web', 'Android', 'iOS'], badge: 'Office', categoria: 'ofimaticas', imagenes: ['onenote-1.jpg', 'onenote-2.jpg'] },
-        notebooklm: { nombre: 'NotebookLM', color: '#f59e0b', icon: '../icons/notebooklm.svg', descripcion: 'NotebookLM es un asistente de investigación impulsado por IA de Google.', deQueTrata: 'NotebookLM es una herramienta de investigación basada en IA.', paraQueFunciona: 'NotebookLM se utiliza para investigar y analizar documentos.', comoFunciona: 'NotebookLM funciona subiendo documentos.', tips: ['Sube documentos relacionados.', 'Usa preguntas específicas.', 'La función de resumen automático.', 'NotebookLM es gratuito.', 'Puedes subir múltiples documentos.'], plataformas: ['Web'], badge: 'Google', categoria: 'ofimaticas', imagenes: ['notebooklm-1.jpg', 'notebooklm-2.jpg'] },
-        dobot: { nombre: 'Dobot', color: '#00a86b', icon: 'bot', descripcion: 'Dobot es una herramienta de automatización de tareas.', deQueTrata: 'Dobot es una plataforma de automatización.', paraQueFunciona: 'Dobot se utiliza para automatizar tareas.', comoFunciona: 'Dobot funciona con una interfaz visual.', tips: ['Comienza con flujos simples.', 'Dobot se integra con muchas aplicaciones.', 'Automatiza tareas frecuentes.', 'Explora los flujos predefinidos.', 'La programación visual facilita.'], plataformas: ['Web'], badge: 'IA', categoria: 'ofimaticas', imagenes: ['dobot-1.jpg', 'dobot-2.jpg'] },
-        onedrive: { nombre: 'Microsoft OneDrive', color: '#0078d4', icon: '../icons/microsoft-onedrive.svg', descripcion: 'OneDrive es el servicio de almacenamiento en la nube de Microsoft.', deQueTrata: 'OneDrive es el servicio de almacenamiento en la nube.', paraQueFunciona: 'OneDrive se utiliza para almacenar archivos en la nube.', comoFunciona: 'OneDrive funciona guardando archivos en una carpeta local.', tips: ['Organiza tus archivos.', 'Comparte archivos con enlaces.', 'La integración con Office.', 'La papelera de reciclaje.', 'Aprovecha el espacio gratuito.'], plataformas: ['Windows', 'macOS', 'Web', 'Android', 'iOS'], badge: 'Microsoft', categoria: 'almacenamiento', imagenes: ['onedrive-1.jpg', 'onedrive-2.jpg'] },
-        drive: { nombre: 'Google Drive', color: '#0f9d58', icon: '../icons/google-drive-2026.svg', descripcion: 'Google Drive es el servicio de almacenamiento en la nube de Google.', deQueTrata: 'Google Drive es el servicio de almacenamiento.', paraQueFunciona: 'Google Drive se utiliza para almacenar archivos.', comoFunciona: 'Google Drive funciona desde una cuenta de Google.', tips: ['Usa Documentos de Google.', 'Historial de versiones.', 'Carpetas compartidas.', 'Aprovecha los 15 GB gratuitos.', 'La función de "Sin conexión".'], plataformas: ['Web', 'Android', 'iOS'], badge: 'Google', categoria: 'almacenamiento', imagenes: ['drive-1.jpg', 'drive-2.jpg', 'drive-3.jpg'] },
-        notion: { nombre: 'Notion', color: '#000000', icon: '../icons/notion-icon.svg', descripcion: 'Notion es una plataforma todo-en-uno.', deQueTrata: 'Notion es una plataforma de productividad todo-en-uno.', paraQueFunciona: 'Notion se utiliza para organizar información.', comoFunciona: 'Notion funciona con un sistema de bloques.', tips: ['Comienza con una plantilla.', 'Usa bases de datos.', 'Notion es personalizable.', 'Aprovecha las integraciones.', 'La función de "Vistas".'], plataformas: ['Web', 'Windows', 'macOS', 'Android', 'iOS'], badge: 'Todo-en-uno', categoria: 'organizadores', imagenes: ['notion-1.jpg', 'notion-2.jpg'] },
-        obsidian: { nombre: 'Obsidian', color: '#7c3aed', icon: '../icons/obsidian-icon.svg', descripcion: 'Obsidian es un editor de notas con enlaces bidireccionales.', deQueTrata: 'Obsidian es un editor de notas.', paraQueFunciona: 'Obsidian se utiliza para crear una red de conocimiento.', comoFunciona: 'Obsidian funciona con archivos Markdown.', tips: ['Crea enlaces entre notas.', 'Usa la visualización de grafos.', 'Las plantillas ayudan.', 'Obsidian funciona offline.', 'Explora los plugins.'], plataformas: ['Windows', 'macOS', 'Linux', 'Android', 'iOS'], badge: 'Notas', categoria: 'organizadores', imagenes: ['obsidian-1.jpg', 'obsidian-2.jpg', 'obsidian-3.jpg'] },
-        calendar: { nombre: 'Google Calendar', color: '#4285f4', icon: '../icons/google-calendar-2026.svg', descripcion: 'Google Calendar es un calendario inteligente.', deQueTrata: 'Google Calendar es una aplicación de calendario.', paraQueFunciona: 'Google Calendar se utiliza para gestionar el tiempo.', comoFunciona: 'Google Calendar funciona creando eventos.', tips: ['Crea calendarios separados.', 'Usa recordatorios.', 'Comparte tu calendario.', 'La integración con Gmail.', 'Usa la vista de "Agenda".'], plataformas: ['Web', 'Android', 'iOS'], badge: 'Google', categoria: 'organizadores', imagenes: ['calendar-1.jpg', 'calendar-2.jpg'] },
-        tasks: { nombre: 'Google Tasks', color: '#fbbc04', icon: '../icons/google-tasks-2026.svg', descripcion: 'Google Tasks es una aplicación de gestión de tareas.', deQueTrata: 'Google Tasks es una aplicación simple.', paraQueFunciona: 'Google Tasks se utiliza para gestionar tareas.', comoFunciona: 'Google Tasks funciona creando listas de tareas.', tips: ['Crea listas separadas.', 'Fechas límite realistas.', 'Usa subtareas.', 'La integración con Gmail.', 'Revisa tu lista diariamente.'], plataformas: ['Web', 'Android', 'iOS'], badge: 'Google', categoria: 'organizadores', imagenes: ['tasks-1.jpg', 'tasks-2.jpg'] },
-        canva: { nombre: 'Canva', color: '#00c4cc', icon: '../icons/canva.svg', descripcion: 'Canva es una plataforma de diseño gráfico.', deQueTrata: 'Canva es una plataforma de diseño gráfico.', paraQueFunciona: 'Canva se utiliza para crear presentaciones.', comoFunciona: 'Canva funciona con una interfaz de arrastrar y soltar.', tips: ['Explora las plantillas.', 'Usa elementos gratuitos y premium.', 'La función de colaboración.', 'Guarda tus diseños en carpetas.', 'Canva ofrece herramientas de IA.'], plataformas: ['Web', 'Android', 'iOS'], badge: 'Diseño', categoria: 'presentaciones', imagenes: ['canva-1.jpg', 'canva-2.jpg', 'canva-3.jpg'] },
-        miro: { nombre: 'Miro', color: '#ffd02b', icon: '../icons/miro.svg', descripcion: 'Miro es una pizarra colaborativa.', deQueTrata: 'Miro es una pizarra digital colaborativa.', paraQueFunciona: 'Miro se utiliza para colaborar visualmente.', comoFunciona: 'Miro funciona con un tablero infinito.', tips: ['Usa notas adhesivas.', 'La función de videochat.', 'Crea marcos para organizar.', 'Comparte el enlace del tablero.', 'Utiliza las plantillas.'], plataformas: ['Web', 'Android', 'iOS'], badge: 'Colaboración', categoria: 'presentaciones', imagenes: ['miro-1.jpg', 'miro-2.jpg'] },
-        genially: { nombre: 'Genially', color: '#ff6b6b', icon: '../icons/genially-icon.png', descripcion: 'Genially es una herramienta para crear contenidos interactivos.', deQueTrata: 'Genially es una herramienta de contenidos interactivos.', paraQueFunciona: 'Genially se utiliza para contenidos educativos.', comoFunciona: 'Genially funciona con una interfaz visual.', tips: ['Los elementos interactivos.', 'Genially ofrece plantillas.', 'Puedes incrustar tus creaciones.', 'La versión gratuita.', 'Usa la gamificación.'], plataformas: ['Web'], badge: 'Interactivo', categoria: 'presentaciones', imagenes: ['genially-1.jpg', 'genially-2.jpg'] },
-        prezi: { nombre: 'Prezi', color: '#d4237a', icon: '../icons/prezi.svg', descripcion: 'Prezi es una herramienta de presentaciones con efectos de zoom.', deQueTrata: 'Prezi es una herramienta de presentaciones.', paraQueFunciona: 'Prezi se utiliza para presentaciones dinámicas.', comoFunciona: 'Prezi funciona con un lienzo.', tips: ['Planifica la estructura.', 'Usa el zoom para destacar.', 'Prezi es ideal para storytelling.', 'Prueba tu presentación.', 'Mantén la simplicidad.'], plataformas: ['Web', 'Android', 'iOS'], badge: 'Presentaciones', categoria: 'presentaciones', imagenes: ['prezi-1.jpg', 'prezi-2.jpg'] },
-        capcut: { nombre: 'CapCut', color: '#0a0a0a', icon: '../icons/capcut.svg', descripcion: 'CapCut es una aplicación de edición de video profesional.', deQueTrata: 'CapCut es una aplicación de edición de video.', paraQueFunciona: 'CapCut se utiliza para editar videos.', comoFunciona: 'CapCut funciona importando clips de video.', tips: ['Comienza con un proyecto simple.', 'Los efectos con moderación.', 'La música de fondo adecuada.', 'CapCut ofrece tutoriales.', 'Exporta en la calidad adecuada.'], plataformas: ['Web', 'Android', 'iOS'], badge: 'Video', categoria: 'presentaciones', imagenes: ['capcut-1.jpg', 'capcut-2.jpg'] },
-        inshot: { nombre: 'InShot', color: '#ff6b35', icon: '../icons/inshot-icon.svg', descripcion: 'InShot es una aplicación de edición de video y fotos.', deQueTrata: 'InShot es una aplicación de edición.', paraQueFunciona: 'InShot se utiliza para editar videos y fotos.', comoFunciona: 'InShot funciona importando clips.', tips: ['Ajusta la relación de aspecto.', 'Usa música de fondo.', 'Los efectos de transición.', 'La función de texto.', 'InShot es ideal para ediciones rápidas.'], plataformas: ['Android', 'iOS'], badge: 'Video', categoria: 'presentaciones', imagenes: ['inshot-1.jpg', 'inshot-2.jpg'] },
-        claude: { nombre: 'Claude', color: '#d97706', icon: '../icons/claude.svg', descripcion: 'Claude es un asistente de IA con razonamiento avanzado.', deQueTrata: 'Claude es un asistente de inteligencia artificial.', paraQueFunciona: 'Claude se utiliza para obtener asistencia.', comoFunciona: 'Claude funciona a través de una interfaz.', tips: ['Sé específico en tus preguntas.', 'Claude analiza documentos largos.', 'Pide ejemplos.', 'La versión gratuita.', 'Claude es bueno para análisis.'], plataformas: ['Web', 'Android', 'iOS'], badge: 'Anthropic', categoria: 'ia', imagenes: ['claude-1.jpg', 'claude-2.jpg'] },
-        deepseek: { nombre: 'DeepSeek', color: '#4d6bfe', icon: '../icons/deepseek.svg', descripcion: 'DeepSeek es un asistente de IA con razonamiento profundo.', deQueTrata: 'DeepSeek es un asistente de inteligencia artificial.', paraQueFunciona: 'DeepSeek se utiliza para tareas complejas.', comoFunciona: 'DeepSeek funciona con una interfaz conversacional.', tips: ['DeepSeek es bueno para tareas técnicas.', 'Pide explicaciones paso a paso.', 'La precisión es su punto fuerte.', 'La versión gratuita.', 'Es útil para validar hipótesis.'], plataformas: ['Web', 'Android', 'iOS'], badge: 'DeepSeek', categoria: 'ia', imagenes: ['deepseek-1.jpg', 'deepseek-2.jpg'] },
-        openai: { nombre: 'OpenAI', color: '#10a37f', icon: '../icons/openai.svg', descripcion: 'OpenAI es una plataforma de IA con modelos avanzados.', deQueTrata: 'OpenAI es una plataforma de inteligencia artificial.', paraQueFunciona: 'OpenAI se utiliza para múltiples tareas.', comoFunciona: 'OpenAI funciona a través de la web o API.', tips: ['Especifica claramente lo que necesitas.', 'OpenAI es útil para tareas creativas.', 'Puedes pedir revisiones.', 'La plataforma ofrece documentación.', 'Experimenta con formulaciones.'], plataformas: ['Web'], badge: 'OpenAI', categoria: 'ia', imagenes: ['openai-1.jpg', 'openai-2.jpg'] },
-        copilot: { nombre: 'Microsoft Copilot', color: '#6c5ce7', icon: '../icons/microsoft-copilot.svg', descripcion: 'Microsoft Copilot es un asistente de IA integrado en Microsoft 365.', deQueTrata: 'Microsoft Copilot es un asistente de IA.', paraQueFunciona: 'Copilot se utiliza para aumentar la productividad.', comoFunciona: 'Copilot funciona integrado en Office.', tips: ['Copilot se integra con Office.', 'Pide sugerencias de diseño.', 'Copilot puede analizar datos.', 'La integración con Outlook.', 'Aprovecha la generación de resúmenes.'], plataformas: ['Web', 'Windows', 'macOS'], badge: 'Microsoft', categoria: 'ia', imagenes: ['copilot-1.jpg', 'copilot-2.jpg'] }
-    };
+    function validarHerramientas() {
+        if (!window.HERRAMIENTAS) {
+            console.error('[Herramientas] No se encontró window.HERRAMIENTAS. ¿Cargaste herramientas-data.js?');
+            return;
+        }
+        const req = ['id', 'nombre', 'color', 'categoria', 'descripcion'];
+        const cats = ['ofimaticas', 'almacenamiento', 'organizadores', 'presentaciones', 'ia'];
+        Object.entries(window.HERRAMIENTAS).forEach(([key, tool]) => {
+            req.forEach(f => {
+                if (!tool[f]) console.warn(`[Herramientas] "${key}" le falta el campo obligatorio: ${f}`);
+            });
+            if (tool.categoria && !cats.includes(tool.categoria)) {
+                console.warn(`[Herramientas] "${key}" tiene categoría inválida: ${tool.categoria}`);
+            }
+        });
+    }
 
     // ============================================================
     // 3. TABS DE CATEGORÍAS
@@ -140,49 +132,37 @@
     }
 
     // ============================================================
-    // 4. GENERAR TARJETAS
+    // 4. GENERAR TARJETAS (data-driven)
     // ============================================================
     function generarTarjetas() {
         const grids = {
-            ofimaticas: document.getElementById('herramientasGridOfimaticas'),
+            ofimaticas:     document.getElementById('herramientasGridOfimaticas'),
             almacenamiento: document.getElementById('herramientasGridAlmacenamiento'),
-            organizadores: document.getElementById('herramientasGridOrganizadores'),
+            organizadores:  document.getElementById('herramientasGridOrganizadores'),
             presentaciones: document.getElementById('herramientasGridPresentaciones'),
-            ia: document.getElementById('herramientasGridIA')
+            ia:             document.getElementById('herramientasGridIA')
         };
+
+        if (!window.HERRAMIENTAS || !window.HerramientasRender) {
+            console.error('[Herramientas] Faltan datos o render. Verifica los scripts cargados.');
+            return;
+        }
+
+        // Agrupar por categoría automáticamente
         const agrupadas = {};
-        Object.keys(herramientasData).forEach(function(key) {
-            const tool = herramientasData[key];
+        Object.values(window.HERRAMIENTAS).forEach(tool => {
             const cat = tool.categoria || 'ofimaticas';
             if (!agrupadas[cat]) agrupadas[cat] = [];
-            agrupadas[cat].push({ id: key, ...tool });
+            agrupadas[cat].push(tool);
         });
-        Object.keys(grids).forEach(function(cat) {
+
+        Object.keys(grids).forEach(cat => {
             const grid = grids[cat];
             if (!grid) return;
             const tools = agrupadas[cat] || [];
-            if (tools.length === 0) {
-                grid.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 1rem;">No hay herramientas</p>';
-                return;
-            }
-            let html = '';
-            tools.forEach(function(tool) {
-                const iconHtml = tool.icon && tool.icon.endsWith('.svg')
-                    ? `<img src="${tool.icon}" alt="${tool.nombre}" class="tool-icon-img-full" />`
-                    : `<i data-lucide="${tool.icon}" class="icon-lucide-lg" style="color: ${tool.color};"></i>`;
-                html += `
-                    <button class="herramienta-card-full" data-herramienta="${tool.id}" style="--tool-color: ${tool.color};">
-                        <div class="tool-icon-wrapper-full">${iconHtml}</div>
-                        <div class="tool-info-full">
-                            <h4>${tool.nombre}</h4>
-                            <p>${tool.descripcion.substring(0, 70)}...</p>
-                            <span class="tool-badge">${tool.badge || 'Herramienta'}</span>
-                        </div>
-                        <i data-lucide="chevron-right" class="icon-lucide-sm"></i>
-                    </button>
-                `;
-            });
-            grid.innerHTML = html;
+            grid.innerHTML = tools.length
+                ? tools.map(t => window.HerramientasRender.card(t)).join('')
+                : '<p style="color:var(--text-muted);text-align:center;padding:1rem;">No hay herramientas</p>';
         });
     }
 
@@ -197,7 +177,6 @@
         if (!overlay || !container || !closeBtn || !content) return;
 
         let scrollTopBtn = document.querySelector('.detalle-scroll-top');
-        let isMobile = window.innerWidth <= 820;
 
         if (!scrollTopBtn) {
             scrollTopBtn = document.createElement('button');
@@ -365,64 +344,21 @@
 
         // ===== ABRIR DETALLE =====
         function abrirDetalle(herramientaId) {
-            const data = herramientasData[herramientaId];
-            if (!data) return;
-            const color = data.color || '#2563eb';
-            const iconHtml = data.icon && data.icon.endsWith('.svg')
-                ? `<img src="${data.icon}" alt="${data.nombre}" class="detalle-icon-img" />`
-                : `<i data-lucide="${data.icon}" class="icon-lucide-xl" style="color: ${color};"></i>`;
-            const plataformasHtml = data.plataformas.map(p => `<span class="plataforma-tag">${p}</span>`).join('');
-            const infoItems = [
-                { icon: 'book-open', title: '¿De qué trata?', text: data.deQueTrata || data.descripcion },
-                { icon: 'target', title: '¿Para qué funciona?', text: data.paraQueFunciona || data.descripcion },
-                { icon: 'settings', title: '¿Cómo funciona?', text: data.comoFunciona || data.descripcion }
-            ];
-            let infoHtml = infoItems.map(item => `
-                <div class="detalle-info-item">
-                    <div class="info-icon"><i data-lucide="${item.icon}" class="icon-lucide-sm"></i></div>
-                    <div class="info-content"><h4>${item.title}</h4><p>${item.text}</p></div>
-                </div>
-            `).join('');
-
-            let galleryHtml = '';
-            if (data.imagenes && data.imagenes.length > 0) {
-                let itemsHtml = data.imagenes.map((img, i) => `<div class="carrusel-item" data-index="${i}"><div class="carrusel-item-content"><i data-lucide="image" class="icon-lucide-xl"></i><span>${img}</span></div></div>`).join('');
-                let thumbsHtml = data.imagenes.map((img, i) => `<div class="carrusel-thumb" data-index="${i}"><i data-lucide="image" class="icon-lucide-sm"></i><span class="thumb-label">${i + 1}</span></div>`).join('');
-                galleryHtml = `<div class="detalle-gallery"><h4>Galería</h4><div class="carrusel-container"><div class="carrusel-track">${itemsHtml}</div><button class="carrusel-btn carrusel-prev"><i data-lucide="chevron-left" class="icon-lucide-sm"></i></button><button class="carrusel-btn carrusel-next"><i data-lucide="chevron-right" class="icon-lucide-sm"></i></button><div class="carrusel-thumbs">${thumbsHtml}</div></div></div>`;
+            const data = window.HERRAMIENTAS[herramientaId];
+            if (!data) {
+                console.warn('[Herramientas] No existe la herramienta:', herramientaId);
+                return;
             }
 
-            const tutorialesHtml = `<div class="detalle-tutoriales-grid">
-                <div class="detalle-tutorial-item"><div class="tutorial-icon"><i data-lucide="play-circle" class="icon-lucide-lg"></i><span>Video 1</span></div><div class="tutorial-placeholder"><i data-lucide="play" class="icon-lucide-sm"></i>Tutorial introductorio</div></div>
-                <div class="detalle-tutorial-item"><div class="tutorial-icon"><i data-lucide="play-circle" class="icon-lucide-lg"></i><span>Video 2</span></div><div class="tutorial-placeholder"><i data-lucide="play" class="icon-lucide-sm"></i>Funciones avanzadas</div></div>
-                <div class="detalle-tutorial-item"><div class="tutorial-icon"><i data-lucide="play-circle" class="icon-lucide-lg"></i><span>Video 3</span></div><div class="tutorial-placeholder"><i data-lucide="play" class="icon-lucide-sm"></i>Tips prácticos</div></div>
-                <div class="detalle-tutorial-item"><div class="tutorial-icon"><i data-lucide="play-circle" class="icon-lucide-lg"></i><span>Video 4</span></div><div class="tutorial-placeholder"><i data-lucide="play" class="icon-lucide-sm"></i>Proyecto completo</div></div>
-            </div>`;
-
-            let tipsHtml = '';
-            if (data.tips && data.tips.length > 0) tipsHtml = data.tips.map(tip => `<li><i data-lucide="check-circle" class="icon-lucide-sm"></i> ${tip}</li>`).join('');
-
-            content.innerHTML = `
-                <div class="detalle-header">
-                    <div class="detalle-icon-wrapper" style="border-color: ${color};">${iconHtml}</div>
-                    <div class="detalle-titulo"><h2 style="color: ${color};">${data.nombre}</h2><p>${data.descripcion}</p></div>
-                </div>
-                <div class="detalle-plataformas"><h4>Disponible en:</h4><div class="plataformas-list">${plataformasHtml}</div></div>
-                <div class="detalle-tabs-nav">
-                    <button class="detalle-tab active" data-tab="informacion" style="--tab-color: ${color};"><i data-lucide="info" class="icon-lucide-sm"></i> <span class="tab-label">Información</span></button>
-                    <button class="detalle-tab" data-tab="tutoriales" style="--tab-color: ${color};"><i data-lucide="play-circle" class="icon-lucide-sm"></i> <span class="tab-label">Tutoriales</span></button>
-                    <button class="detalle-tab" data-tab="tips" style="--tab-color: ${color};"><i data-lucide="lightbulb" class="icon-lucide-sm"></i> <span class="tab-label">Tips</span></button>
-                </div>
-                <div class="detalle-panels">
-                    <div class="detalle-panel active" data-panel="informacion"><div class="detalle-info-grid">${infoHtml}</div>${galleryHtml}</div>
-                    <div class="detalle-panel" data-panel="tutoriales">${tutorialesHtml}</div>
-                    <div class="detalle-panel" data-panel="tips"><ul class="detalle-tips-list">${tipsHtml}</ul></div>
-                </div>
-            `;
+            content.innerHTML = window.HerramientasRender.detalle(data);
 
             setTimeout(function() {
+                const color = data.color || '#2563eb';
                 const tabs = content.querySelectorAll('.detalle-tab');
                 const panels = content.querySelectorAll('.detalle-panel');
-                if (container) container.style.setProperty('--detalle-divider-color', color);
+
+                container.style.setProperty('--detalle-divider-color', color);
+
                 tabs.forEach(function(tab) {
                     tab.addEventListener('click', function() {
                         const target = this.dataset.tab;
@@ -433,12 +369,14 @@
                         if (targetPanel) targetPanel.classList.add('active');
                     });
                 });
+
                 const carruselContainer = content.querySelector('.detalle-gallery .carrusel-container');
                 if (carruselContainer) initCarrusel(carruselContainer);
+
                 if (typeof lucide !== 'undefined') lucide.createIcons();
                 container.scrollTop = 0;
                 if (scrollTopBtn) scrollTopBtn.classList.remove('visible');
-            }, 150);
+            }, 100);
 
             overlay.classList.add('active');
             overlay.setAttribute('aria-hidden', 'false');
@@ -779,6 +717,7 @@
     // ============================================================
     function init() {
         window.scrollTo(0, 0);
+        validarHerramientas();
         initBubbles();
         initThemeToggle();
         initMenu();
