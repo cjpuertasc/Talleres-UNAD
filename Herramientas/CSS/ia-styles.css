@@ -16,7 +16,6 @@ html.light-mode-preload .intro-overlay { background: #f3e8ff !important; }
     --unad-blue: #0056B3;
     --unad-orange: #FF6B1A;
     
-    /* IA COLOR (reemplaza al naranja) */
     --campus-color: #a855f7;
     --campus-color-dark: #7c3aed;
     
@@ -357,4 +356,82 @@ body.light-mode .campus-alert-icon { background: rgba(124, 58, 237, 0.15); }
     .guide-tooltip { max-width: calc(100vw - 20px); padding: 0.75rem 0.85rem; }
     .guide-actions { flex-direction: column; align-items: stretch; }
     .guide-btn { justify-content: center; }
+}
+
+/* ============================================================
+   ===== RENDIMIENTO: PREFERENCIAS Y MÓVIL =====
+   No afecta al desktop estándar. Solo se activa si:
+   - El usuario tiene "reducir movimiento" en su SO.
+   - El ancho es <= 768px (móvil).
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .intro-content {
+        animation: none !important;
+    }
+
+    #starfieldCanvas {
+        opacity: 0.4;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Quitar backdrop-filter: lo más caro en móvil */
+    .side-menu,
+    .ctrl-btn,
+    .hero-toggle,
+    .guide-tooltip,
+    .menu-overlay.active {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    /* Fondos sólidos en lugar de glass */
+    .side-menu,
+    .ctrl-btn,
+    .hero-toggle,
+    .guide-tooltip {
+        background: var(--bg-primary);
+    }
+
+    /* Menú overlay sin blur */
+    .menu-overlay.active {
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    /* Sombras más ligeras */
+    .ctrl-btn {
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .back-to-top {
+        box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
+    }
+
+    /* Spotlight de la guía: sombra más simple */
+    .guide-spotlight {
+        box-shadow:
+            0 0 0 9999px rgba(0, 0, 0, 0.72),
+            0 0 0 3px var(--unad-yellow) !important;
+    }
+
+    /* Canvas más tenue */
+    #starfieldCanvas {
+        opacity: 0.55;
+    }
+
+    /* Reducir animaciones de secciones (no las de UI crítica) */
+    .campus-main-panel.active,
+    .slide-panel.active {
+        animation: none;
+    }
 }
