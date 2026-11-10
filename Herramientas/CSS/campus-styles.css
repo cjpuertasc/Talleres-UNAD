@@ -240,8 +240,29 @@ body.light-mode .text-yellow { color: #b45309; }
 
 .campus-info-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
 .campus-info-list li { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.8rem 1rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-left: 3px solid var(--campus-color); border-radius: 12px; font-size: 0.95rem; color: var(--text-main); }
+
+/* ============================================================
+   FIGURAS E IMÁGENES
+   ============================================================ */
 .campus-img-figure { display: flex; flex-direction: column; gap: 0.5rem; margin: 0.4rem 0; }
-.campus-img-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; aspect-ratio: 16 / 9; background: var(--bg-primary); border: 2px dashed var(--border-color); border-radius: 16px; color: var(--text-muted); }
+
+.campus-img-figure img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 2px solid var(--border-color);
+    background: var(--bg-primary);
+    display: block;
+    cursor: zoom-in;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.campus-img-figure img:hover {
+    border-color: var(--campus-color);
+    transform: scale(1.01);
+}
+
 .campus-img-figure figcaption { font-size: 0.85rem; text-align: center; color: var(--text-muted); font-style: italic; }
 
 /* Alertas */
@@ -269,9 +290,12 @@ body.light-mode .campus-alert-icon { color: #b45309; background: rgba(180, 83, 9
 .campus-accordion-title { flex: 1; font-family: var(--font-title); font-size: 1rem; font-weight: 700; color: var(--text-main); }
 .campus-accordion-chevron { color: var(--text-muted); flex-shrink: 0; transition: transform 0.35s; }
 .campus-accordion.open .campus-accordion-chevron { transform: rotate(180deg); color: var(--campus-color); }
-.campus-accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
-.campus-accordion.open .campus-accordion-body { max-height: 400px; }
-.campus-accordion-body p { padding: 0 1rem 1rem; font-size: 0.92rem; line-height: 1.75; color: var(--text-muted); }
+.campus-accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.45s ease; }
+.campus-accordion.open .campus-accordion-body { max-height: 1400px; }
+.campus-accordion-body p { padding: 0 1rem 0.75rem; font-size: 0.92rem; line-height: 1.75; color: var(--text-muted); }
+.campus-accordion-body .campus-img-figure { padding: 0 1rem 1rem; margin: 0; }
+.campus-accordion-body .campus-img-figure img { aspect-ratio: 16 / 9; border-radius: 12px; }
+.campus-accordion-body .campus-img-figure figcaption { font-size: 0.8rem; text-align: center; color: var(--text-muted); font-style: italic; margin-top: 0.4rem; }
 
 /* Semaforización */
 .semaforo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; margin-top: 0.4rem; }
@@ -553,44 +577,6 @@ body.light-mode .escuela-nombre { color: var(--text-main); }
 .guide-btn-next:hover:not(:disabled) { background: #e6b300; border-color: #e6b300; color: #1a1a1d; }
 
 /* ============================================================
-   ACORDEÓN CON IMÁGENES (Normas APA)
-   ============================================================ */
-.campus-accordion.open .campus-accordion-body {
-    max-height: 1400px;
-}
-
-.campus-accordion-body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.45s ease;
-}
-
-.campus-accordion-body p {
-    padding: 0 1rem 0.75rem;
-    font-size: 0.92rem;
-    line-height: 1.75;
-    color: var(--text-muted);
-}
-
-.campus-accordion-body .campus-img-figure {
-    padding: 0 1rem 1rem;
-    margin: 0;
-}
-
-.campus-accordion-body .campus-img-placeholder {
-    aspect-ratio: 16 / 9;
-    border-radius: 12px;
-}
-
-.campus-accordion-body .campus-img-figure figcaption {
-    font-size: 0.8rem;
-    text-align: center;
-    color: var(--text-muted);
-    font-style: italic;
-    margin-top: 0.4rem;
-}
-
-/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1024px) {
@@ -637,6 +623,11 @@ body.light-mode .escuela-nombre { color: var(--text-main); }
     .footer-inner { flex-direction: column; text-align: center; }
     .footer-content { padding: 1.2rem 1rem; }
     .back-to-top { bottom: 1rem; right: 1rem; width: 42px; height: 42px; }
+
+    .campus-img-figure img {
+        border-radius: 12px;
+        border-width: 1px;
+    }
 }
 
 @media (max-width: 360px) {
@@ -717,4 +708,201 @@ body.light-mode .escuela-nombre { color: var(--text-main); }
     .semaforo-swatch {
         box-shadow: none;
     }
+}
+
+/* ============================================================
+   LIGHTBOX DE IMÁGENES (zoom)
+   ============================================================ */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s;
+    padding: 1rem;
+}
+
+.lightbox.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-stage {
+    position: relative;
+    max-width: 95vw;
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: grab;
+    touch-action: none;
+}
+
+.lightbox-stage.dragging { cursor: grabbing; }
+.lightbox-stage.zoomed { cursor: grab; }
+
+.lightbox-img {
+    max-width: 95vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    user-select: none;
+    -webkit-user-drag: none;
+    transform-origin: center center;
+    transition: transform 0.15s ease-out;
+    background: #0f172a;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    z-index: 2002;
+}
+
+.lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: rotate(90deg);
+}
+
+.lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    z-index: 2002;
+}
+
+.lightbox-nav:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.lightbox-prev { left: 1rem; }
+.lightbox-next { right: 1rem; }
+
+.lightbox-counter {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    font-family: var(--font-title);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    z-index: 2002;
+}
+
+.lightbox-hint {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.78rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    z-index: 2002;
+    text-align: center;
+    max-width: 90vw;
+}
+
+.lightbox-controls {
+    position: absolute;
+    bottom: 3.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.45rem 0.75rem;
+    border-radius: 30px;
+    z-index: 2002;
+}
+
+.lightbox-ctrl-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lightbox-ctrl-btn:hover { background: rgba(255, 255, 255, 0.28); }
+
+.lightbox-zoom-value {
+    color: #fff;
+    font-family: var(--font-title);
+    font-size: 0.75rem;
+    font-weight: 700;
+    min-width: 42px;
+    text-align: center;
+}
+
+.lightbox-reset-btn {
+    width: auto;
+    padding: 0 0.75rem;
+    border-radius: 20px;
+    font-family: var(--font-text);
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .lightbox {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+    .lightbox-hint { font-size: 0.68rem; padding: 0.3rem 0.7rem; }
+    .lightbox-close { top: 0.6rem; right: 0.6rem; width: 40px; height: 40px; }
+    .lightbox-nav { width: 42px; height: 42px; }
+    .lightbox-prev { left: 0.5rem; }
+    .lightbox-next { right: 0.5rem; }
+    .lightbox-counter { top: 0.6rem; left: 0.6rem; font-size: 0.72rem; padding: 0.28rem 0.7rem; }
+    .lightbox-controls { bottom: 2.8rem; }
 }
