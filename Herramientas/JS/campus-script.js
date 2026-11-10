@@ -711,7 +711,234 @@
     }
 
     // ============================================================
-    // 16. INICIALIZAR TODO
+    // 16. LIGHTBOX DE IMÁGENES (ZOOM)
+    // ============================================================
+    function initLightbox() {
+        const imgs = Array.from(document.querySelectorAll('.campus-img-figure img'));
+        if (!imgs.length) return;
+
+        let lb = document.querySelector('.lightbox');
+        if (!lb) {
+            lb = document.createElement('div');
+            lb.className = 'lightbox';
+            lb.setAttribute('role', 'dialog');
+            lb.setAttribute('aria-modal', 'true');
+            lb.setAttribute('aria-label', 'Visor de imágenes');
+            lb.innerHTML = `
+                <button class="lightbox-close" aria-label="Cerrar visor">
+                    <i data-lucide="x" class="icon-lucide-lg"></i>
+                </button>
+                <div class="lightbox-counter" aria-hidden="true">1 / 1</div>
+                <button class="lightbox-nav lightbox-prev" aria-label="Imagen anterior">
+                    <i data-lucide="chevron-left" class="icon-lucide-lg"></i>
+                </button>
+                <button class="lightbox-nav lightbox-next" aria-label="Imagen siguiente">
+                    <i data-lucide="chevron-right" class="icon-lucide-lg"></i>
+                </button>
+                <div class="lightbox-stage">
+                    <img class="lightbox-img" alt="" />
+                </div>
+                <div class="lightbox-hint">Rueda del ratón o pinza para zoom · Doble clic para alternar · Arrastra para mover · Esc para cerrar</div>
+                <div class="lightbox-controls">
+                    <button class="lightbox-ctrl-btn" data-lb-action="zoom-out" aria-label="Reducir zoom">
+                        <i data-lucide="zoom-out" class="icon-lucide-sm"></i>
+                    </button>
+                    <span class="lightbox-zoom-value">100%</span>
+                    <button class="lightbox-ctrl-btn" data-lb-action="zoom-in" aria-label="Aumentar zoom">
+                        <i data-lucide="zoom-in" class="icon-lucide-sm"></i>
+                    </button>
+                    <button class="lightbox-ctrl-btn lightbox-reset-btn" data-lb-action="reset" aria-label="Reiniciar zoom">Reiniciar</button>
+                </div>
+            `;
+            document.body.appendChild(lb);
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        const stage = lb.querySelector('.lightbox-stage');
+        const lbImg = lb.querySelector('.lightbox-img');
+        const counter = lb.querySelector('.lightbox-counter');
+        const zoomValue = lb.querySelector('.lightbox-zoom-value');
+        const btnClose = lb.querySelector('.lightbox-close');
+        const btnPrev = lb.querySelector('.lightbox-prev');
+        const btnNext = lb.querySelector('.lightbox-next');
+
+        let group = [];
+        let index = 0;
+        let scale = 1;
+        const MIN = 0.5;
+        const MAX = 5;
+        let offsetX = 0, offsetY = 0;
+        let dragging = false;
+        let dragStartX = 0, dragStartY = 0;
+        let startOffsetX = 0, startOffsetY = 0;
+        let lastTap = 0;
+        let touchStartDist = 0, touchStartScale = 1;
+
+        function applyTransform() {
+            lbImg.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+            if (zoomValue) zoomValue.textContent = Math.round(scale * 100) + '%';
+            stage.classList.toggle('zoomed', scale > 1.02);
+        }
+
+        function resetZoom() {
+            scale = 1; offsetX = 0; offsetY = 0;
+            applyTransform();
+        }
+
+        function zoomTo(s) {
+            scale = Math.max(MIN, Math.min(MAX, s));
+            if (scale <= 1.02) { offsetX = 0; offsetY = 0; }
+            applyTransform();
+        }
+
+        function goTo(i) {
+            if (!group.length) return;
+            index = (i + group.length) % group.length;
+            const img = group[index];
+            lbImg.src = img.currentSrc || img.src;
+            lbImg.alt = img.alt || 'Imagen';
+            counter.textContent = (index + 1) + ' / ' + group.length;
+            counter.style.display = group.length > 1 ? 'block' : 'none';
+            btnPrev.style.display = group.length > 1 ? 'flex' : 'none';
+            btnNext.style.display = group.length > 1 ? 'flex' : 'none';
+            resetZoom();
+        }
+
+        function abrir(imgsGroup, startIndex) {
+            group = imgsGroup;
+            index = startIndex;
+            goTo(index);
+            lb.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => btnClose.focus(), 50);
+        }
+
+        function cerrar() {
+            lb.classList.remove('active');
+            document.body.style.overflow = '';
+            resetZoom();
+        }
+
+        imgs.forEach((img) => {
+            img.addEventListener('click', () => {
+                const panel = img.closest('.slide-panel');
+                const parent = panel || img.closest('.campus-main-panel') || document;
+                const imgsGroup = Array.from(parent.querySelectorAll('.campus-img-figure img'));
+                const idx = imgsGroup.indexOf(img);
+                abrir(imgsGroup, idx >= 0 ? idx : 0);
+            });
+            img.setAttribute('tabindex', '0');
+            img.setAttribute('role', 'button');
+            img.setAttribute('aria-label', 'Ampliar imagen: ' + (img.alt || ''));
+            img.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    img.click();
+                }
+            });
+        });
+
+        btnClose.addEventListener('click', cerrar);
+        lb.addEventListener('click', (e) => {
+            if (e.target === lb || e.target === stage) cerrar();
+        });
+        btnPrev.addEventListener('click', (e) => { e.stopPropagation(); goTo(index - 1); });
+        btnNext.addEventListener('click', (e) => { e.stopPropagation(); goTo(index + 1); });
+
+        lb.querySelectorAll('.lightbox-ctrl-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const a = btn.dataset.lbAction;
+                if (a === 'zoom-in') zoomTo(scale + 0.5);
+                else if (a === 'zoom-out') zoomTo(scale - 0.5);
+                else resetZoom();
+            });
+        });
+
+        stage.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            zoomTo(scale + (e.deltaY > 0 ? -0.15 : 0.15));
+        }, { passive: false });
+
+        stage.addEventListener('mousedown', (e) => {
+            if (e.button !== 0) return;
+            dragging = true;
+            stage.classList.add('dragging');
+            dragStartX = e.clientX; dragStartY = e.clientY;
+            startOffsetX = offsetX; startOffsetY = offsetY;
+        });
+        document.addEventListener('mousemove', (e) => {
+            if (!dragging) return;
+            offsetX = startOffsetX + (e.clientX - dragStartX);
+            offsetY = startOffsetY + (e.clientY - dragStartY);
+            applyTransform();
+        });
+        document.addEventListener('mouseup', () => {
+            if (!dragging) return;
+            dragging = false;
+            stage.classList.remove('dragging');
+        });
+
+        stage.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                dragging = true;
+                dragStartX = e.touches[0].clientX;
+                dragStartY = e.touches[0].clientY;
+                startOffsetX = offsetX; startOffsetY = offsetY;
+                const now = Date.now();
+                if (now - lastTap < 300) {
+                    if (scale > 1.2) resetZoom(); else zoomTo(2.5);
+                    lastTap = 0;
+                    e.preventDefault();
+                } else {
+                    lastTap = now;
+                }
+            } else if (e.touches.length === 2) {
+                dragging = false;
+                touchStartDist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                touchStartScale = scale;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        stage.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1 && dragging) {
+                offsetX = startOffsetX + (e.touches[0].clientX - dragStartX);
+                offsetY = startOffsetY + (e.touches[0].clientY - dragStartY);
+                applyTransform();
+            } else if (e.touches.length === 2) {
+                const dist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                zoomTo(touchStartScale * (dist / touchStartDist));
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        stage.addEventListener('touchend', () => { dragging = false; });
+
+        stage.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            if (scale > 1.2) resetZoom(); else zoomTo(2.5);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!lb.classList.contains('active')) return;
+            if (e.key === 'Escape') cerrar();
+            if (e.key === 'ArrowLeft') goTo(index - 1);
+            if (e.key === 'ArrowRight') goTo(index + 1);
+            if (e.key === '+' || e.key === '=') zoomTo(scale + 0.5);
+            if (e.key === '-') zoomTo(scale - 0.5);
+            if (e.key === '0') resetZoom();
+        });
+    }
+
+    // ============================================================
+    // 17. INICIALIZAR TODO
     // ============================================================
     function init() {
         window.scrollTo(0, 0);
@@ -730,6 +957,7 @@
         initInfoSlides();
         initAccordions();
         initGuide();
+        initLightbox();
 
         setTimeout(() => {
             if (typeof lucide !== 'undefined') lucide.createIcons();
